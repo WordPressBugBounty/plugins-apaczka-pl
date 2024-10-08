@@ -2087,18 +2087,16 @@ $id = 'gateway';
 	<?php if ( true === $package_send ) : ?>
 
 	jQuery(document).on("click", '#apaczka_get_waybill', function (event) {
-		event.preventDefault();
-		window.location.href = document.location.toString() + '&apaczka_get_waybill=
-		<?php
-			echo esc_attr( $apaczka_wc_order_data['apaczka_order']->id );
-		?>
-		';
-	});
+        event.preventDefault();
+        let apaczka_waybill_id = "<?php echo esc_attr( $apaczka_wc_order_data['apaczka_order']->id ); ?>";
+        let apaczka_get_waybill_link = document.location.toString() + '&apaczka_get_waybill=' + apaczka_waybill_id;
+        window.location.href = apaczka_get_waybill_link;
+    });
 
 
 	jQuery("#apaczka_cancel").click(function () {
 
-		let cancelled_only_on_apaczka_pl = ['260', '220', '250', '230', '240', '150'];
+		const cancelled_only_on_apaczka_pl = new Array('260', '220', '250', '230', '240', '150');
 
 		let service_id = jQuery('#apaczka_choosed_carrier_id').attr('data-id');
 		let service_name = jQuery('#apaczka_choosed_carrier_id').text();

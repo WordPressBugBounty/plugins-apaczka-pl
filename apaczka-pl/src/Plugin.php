@@ -157,7 +157,7 @@ class Plugin extends Abstract_Ilabs_Plugin {
             wp_enqueue_script($this->get_admin_script_id(),
                 $this->get_plugin_js_url() . '/admin.js',
                 array( 'jquery' ),
-                file_exists( $admin_js_path ) ? filemtime( $admin_js_path ) : '1.2.2',
+                file_exists( $admin_js_path ) ? filemtime( $admin_js_path ) : '1.2.3',
             );
 
             wp_enqueue_script(self::APP_PREFIX . '_apaczka.map.js',

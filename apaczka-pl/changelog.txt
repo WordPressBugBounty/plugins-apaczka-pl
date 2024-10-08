@@ -88,3 +88,8 @@
 ### Feat.
 - New foreign shipping methods
 
+## [1.2.3] - 2024-10-08
+### Fix.
+- Creating waybill
+- Sender phone number validation when create parcel
+

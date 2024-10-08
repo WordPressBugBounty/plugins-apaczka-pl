@@ -370,10 +370,12 @@ jQuery(document).ready(function () {
 
     let sender_phone_number = jQuery('input[name="apaczka_woocommerce_settings_general_sender_phone"]');
     let sender_phone_number_order = jQuery('input[name="_apaczka[sender][phone]"]');
-    if(typeof sender_phone_number != 'undefined' ) {
+    /*
+	if(typeof sender_phone_number != 'undefined' ) {
         jQuery(sender_phone_number).mask("999999999",{placeholder:" "});
     }
     if(typeof sender_phone_number_order != 'undefined' ) {
         jQuery(sender_phone_number_order).mask("999999999",{placeholder:" "});
     }
+	*/
 });
