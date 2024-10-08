@@ -3,7 +3,7 @@ Contributors: inspirelabs
 Tags: apaczka, woocommerce
 Requires at least: 5.3
 Tested up to: 6.6
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -55,8 +55,13 @@ Tak. Zarejestruj się bezpłatnie na [Apaczka.pl](https://panel.apaczka.pl/rejes
 4.
 5.
 6.
+7.
 
 == Changelog ==
+
+= 1.2.2 =
+* Feat: enable foreign locations
+* Fix: Checkout Blocks validation
 
 = 1.2.1 =
 * Feat: new setting "Default way to send a parcel"

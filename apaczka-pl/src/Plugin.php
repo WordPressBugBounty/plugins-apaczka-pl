@@ -153,8 +153,11 @@ class Plugin extends Abstract_Ilabs_Plugin {
                 $this->get_plugin_js_url() . '/jquery.maskedinput.js'
             );
 
+            $admin_js_path = $this->get_plugin_dir() . 'assets/js/admin.js';            
             wp_enqueue_script($this->get_admin_script_id(),
-                $this->get_plugin_js_url() . '/admin.js'
+                $this->get_plugin_js_url() . '/admin.js',
+                array( 'jquery' ),
+                file_exists( $admin_js_path ) ? filemtime( $admin_js_path ) : '1.2.2',
             );
 
             wp_enqueue_script(self::APP_PREFIX . '_apaczka.map.js',

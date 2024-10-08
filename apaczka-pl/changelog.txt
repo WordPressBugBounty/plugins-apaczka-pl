@@ -84,3 +84,7 @@
 ### Feat.
 - New settings: default send method
 
+## [1.2.2] - 2024-10-03
+### Feat.
+- New foreign shipping methods
+
