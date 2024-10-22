@@ -93,3 +93,8 @@
 - Creating waybill
 - Sender phone number validation when create parcel
 
+## [1.2.4] - 2024-10-22
+### Fix.
+- Select delivery points if Courier method
+
+

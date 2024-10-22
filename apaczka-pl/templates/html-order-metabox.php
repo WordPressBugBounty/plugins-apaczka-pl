@@ -1659,14 +1659,11 @@ $id = 'gateway';
 
 	function serviceIdToApmSupplierId(serviceId) {
 		switch (serviceId) {
-			case 5:
-			case 6:
 			case 14:
 			case 15:
 			case 16:
 				return 'UPS';
 			case 20:
-			case 22:
 			case 23:
 			case 26:
 			case 29:
@@ -1750,17 +1747,17 @@ $id = 'gateway';
 
 		if (selectedService === UPSAPPunktPunkt
 			|| selectedService === UPSAPPunktDrzwi
-			|| selectedService === UPSAPPunktDrzwiFR
-			|| selectedService === UPSexpressSaver
-			|| selectedService === UPSstandard
+			//|| selectedService === UPSAPPunktDrzwiFR
+			//|| selectedService === UPSexpressSaver
+			//|| selectedService === UPSstandard
 		) {
 			method = 'ups';
 
 		}
 
 		if ( selectedService === AllegroSMARTDPDPickup
-			|| selectedService === DPDCourierEurope
-			|| selectedService === DPDPickupEurope
+			//|| selectedService === DPDCourierEurope
+			//|| selectedService === DPDPickupEurope
 		) {
 			method = 'dpd';
 
