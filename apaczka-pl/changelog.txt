@@ -97,4 +97,8 @@
 ### Fix.
 - Select delivery points if Courier method
 
+## [1.2.5] - 2024-10-23
+### Fix.
+- param "expires" value
+
 

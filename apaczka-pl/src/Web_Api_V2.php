@@ -21,7 +21,7 @@ class Web_Api_V2 {
 
 	const SIGN_ALGORITHM = 'sha256';
 
-	const EXPIRES = '+30min';
+	const EXPIRES = '+20min';
 
 	const SECONDS_24H = 86400;
 
@@ -154,6 +154,29 @@ class Web_Api_V2 {
 			} else {
 				( new Alerts() )->add_error( $response_decoded->message, $route );
 			}
+			
+			
+			if ( function_exists( 'wc_get_logger' ) ) {
+				$logger = wc_get_logger();
+
+				$logger->log(
+					'debug',
+					'REQUEST',
+					array(
+						'source'             => 'apaczka-api-status-log',
+						'additional_context' => array(
+							'expires_value_min'       => self::EXPIRES,
+							'expires_value_timestamp' => strtotime( self::EXPIRES ),
+							'current_timestamp'       => time(),
+							'timestamp_diff'          => ( strtotime( self::EXPIRES ) - time() ),
+						),
+						'route'              => $route,
+						'error'              => $response_decoded->message,
+						'request_data'       => $data,
+					)
+				);
+			}
+			
 
 			return false;
 		}
