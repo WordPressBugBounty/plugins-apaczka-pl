@@ -101,4 +101,10 @@
 ### Fix.
 - param "expires" value
 
+## [1.2.6] - 2024-10-28
+### Fix.
+- Company name if field "Shipping company" is not empty
+
+
+
 

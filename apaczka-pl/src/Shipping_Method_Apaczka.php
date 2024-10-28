@@ -1151,12 +1151,19 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		if ( ! $order || is_wp_error( $order ) ) {
 			return;
 		}
+		
+		$receiver_company = '';
+        if( ! empty( $order->get_shipping_company() ) ) {
+            $receiver_company = $order->get_shipping_company();
+        } else if ( ! empty( $order->get_billing_company() ) ) {
+            $receiver_company = $order->get_billing_company();
+        }
 
 		$receiver = array(
 			'country_code'       => $order->get_shipping_country(),
 			// Kod ISO 3166.
-			'name'               => ! empty( $order->get_billing_company() )
-				? $order->get_billing_company()
+			'name'               => ! empty( $receiver_company )
+				? $receiver_company 
 				: $order->get_shipping_first_name() . ' ' . $order->get_shipping_last_name(),
 			'line1'              => $order->get_shipping_address_1(),
 			'line2'              => $order->get_shipping_address_2(),
@@ -2295,12 +2302,19 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 				$order->save();
 			}
 		}
+		
+		$receiver_company = '';
+        if( ! empty( $order->get_shipping_company() ) ) {
+            $receiver_company = $order->get_shipping_company();
+        } else if ( ! empty( $order->get_billing_company() ) ) {
+            $receiver_company = $order->get_billing_company();
+        }
 
 		$receiver = array(
 			'country_code'       => $order->get_shipping_country(),
 			// Kod ISO 3166.
-			'name'               => ! empty( $order->get_billing_company() )
-				? $order->get_billing_company()
+			'name'               => ! empty( $receiver_company )
+				? $receiver_company
 				: $order->get_shipping_first_name() . ' ' . $order->get_shipping_last_name(),
 			'line1'              => $order->get_shipping_address_1(),
 			'line2'              => $order->get_shipping_address_2(),

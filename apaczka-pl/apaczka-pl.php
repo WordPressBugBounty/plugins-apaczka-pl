@@ -4,7 +4,7 @@
  * Plugin URI: https://www.apaczka.com/zostan-sprzedawca
  * Description: Nadawaj przesyłki za pośrednictwem Apaczka.pl bezpośrednio z panelu swojego sklepu
  * Product: Apaczka Woocommerce
- * Version: 1.2.5
+ * Version: 1.2.6
  * Tested up to: 6.6
  * Requires at least: 5.3
  * Requires PHP: 7.2

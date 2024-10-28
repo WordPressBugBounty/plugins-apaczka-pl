@@ -528,15 +528,15 @@ $id = 'gateway';
 						'_apaczka[receiver][%s]',
 						$key
 					),
-					'label'             => ! empty( $order->get_billing_company() )
+					'label'             => ! empty( $order->get_billing_company() ) || ! empty( $order->get_shipping_company() )
 							? __( 'Company name', 'apaczka-pl' )
 							: __( 'First name', 'apaczka-pl' ),
 					'desc_tip'          => false,
 					'type'              => 'text',
 					'custom_attributes' => $custom_attributes,
 					'data_type'         => 'text',
-					'value'             => $apaczka_wc_order_data['receiver'][ $key ],
-					'placeholder'       => ! empty( $order->get_billing_company() )
+					'value'             => ! empty( $order->get_shipping_company() ) ? $order->get_shipping_company() : $apaczka_wc_order_data['receiver'][ $key ],
+					'placeholder'       => ! empty( $order->get_billing_company() ) || ! empty( $order->get_shipping_company() )
 							? __( 'Company name', 'apaczka-pl' )
 							: __( 'First name', 'apaczka-pl' ),
 				)
