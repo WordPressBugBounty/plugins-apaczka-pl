@@ -105,6 +105,10 @@
 ### Fix.
 - Company name if field "Shipping company" is not empty
 
+## [1.2.7] - 2024-11-05
+### Fix.
+- double slash in some paths
+
 
 
 

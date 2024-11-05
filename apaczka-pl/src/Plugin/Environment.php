@@ -101,7 +101,7 @@ trait Environment {
 	 */
 	public function get_plugin_assets_url(): string {
 		if ( ! self::$plugin_assets_url ) {
-			self::$plugin_assets_url = $this->get_plugin_url() . '/assets';
+			self::$plugin_assets_url = $this->get_plugin_url() . 'assets';
 		}
 
 		return self::$plugin_assets_url;
