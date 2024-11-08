@@ -109,6 +109,10 @@
 ### Fix.
 - double slash in some paths
 
+## [1.2.8] - 2024-11-08
+### Fix.
+- double slash in some endpoint paths
+
 
 
 

@@ -3,7 +3,7 @@ Contributors: inspirelabs
 Tags: apaczka, woocommerce
 Requires at least: 5.3
 Tested up to: 6.6
-Stable tag: 1.2.7
+Stable tag: 1.2.8
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -58,6 +58,9 @@ Tak. Zarejestruj się bezpłatnie na [Apaczka.pl](https://panel.apaczka.pl/rejes
 7.
 
 == Changelog ==
+
+= 1.2.8 =
+* Fix: double slash in some endpoint paths
 
 = 1.2.7 =
 * Fix: double slash in some paths
