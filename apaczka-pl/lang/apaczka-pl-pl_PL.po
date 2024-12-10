@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.5\n"
 
 msgid "General settings"
 msgstr "Ustawienia"
@@ -418,3 +418,24 @@ msgstr "Musisz wybrać punkt dostawy!"
 
 msgid "Default way to send a parcel"
 msgstr "Domyślny sposób nadania paczki"
+
+msgid "Receiver street"
+msgstr "Ulica odbiorcy"
+
+msgid "Receiver building number"
+msgstr "Numer budynku odbiorcy"
+
+msgid "Sender street"
+msgstr "Ulica nadawcy"
+
+msgid "Sender building number"
+msgstr "Numer budynku nadawcy"
+
+msgid "must be between"
+msgstr "musi zawierać od"
+
+msgid " and"
+msgstr " do"
+
+msgid " symbols"
+msgstr " symboli"

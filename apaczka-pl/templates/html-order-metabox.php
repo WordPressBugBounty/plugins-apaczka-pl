@@ -1669,6 +1669,7 @@ $id = 'gateway';
 			case 29:
 				return 'DPD';
 			case 50:
+			case 53:
 				return 'PWR';
 			case 40:
 			case 41:

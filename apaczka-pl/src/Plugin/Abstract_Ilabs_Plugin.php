@@ -73,7 +73,7 @@ abstract class Abstract_Ilabs_Plugin {
 	private function init_translations() {
 		$lang_dir = $this->get_from_config( 'lang_dir' );
 
-		add_action( 'plugins_loaded', function () use ( $lang_dir ) {
+		add_action( 'after_setup_theme', function () use ( $lang_dir ) {
 			load_plugin_textdomain( $this->get_text_domain(), false,
 				$this->get_plugin_basename() . "/$lang_dir/" );
 		} );

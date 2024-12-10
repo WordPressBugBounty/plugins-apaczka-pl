@@ -197,7 +197,8 @@ class Web_Api_V2 {
 					$route
 				);
 			} else {
-				( new Alerts() )->add_error( $response_decoded->message, $route );
+				$error_message = $this->parse_api_error_message( $response_decoded->message );
+				( new Alerts() )->add_error( $error_message, $route );
 			}
 
 			if ( function_exists( 'wc_get_logger' ) ) {
@@ -205,7 +206,7 @@ class Web_Api_V2 {
 
 				$logger->log(
 					'debug',
-					'REQUEST',
+					'SOME_ERROR_ON_REQUEST',
 					array(
 						'source'             => 'apaczka-api-status-log',
 						'additional_context' => array(
@@ -530,7 +531,7 @@ class Web_Api_V2 {
 
 		$alerts = new Alerts();
 		$alerts->add_error(
-			'Woocommerce Inpost: '
+			'Apaczka_pl: '
 							. ( is_string( $errors ) ? $errors
 			: serialize( $errors ) . $message . ' ( ' . $status . ' )' )
 		);
@@ -608,4 +609,48 @@ class Web_Api_V2 {
 
 		return $ret;
 	}
+	
+	/**
+	 * Parse error message from API
+	 *
+	 * @param mixed $error_message
+	 * @return mixed
+	 */
+	public function parse_api_error_message( $error_message ) {
+		// Check if the message contains "must be between".
+		if ( is_string( $error_message ) ) {
+			if ( strpos( $error_message, 'must be between' ) !== false ) {
+
+				$too_long_data = '';
+
+				if ( strpos( $error_message, 'receiver.buildingNumber' ) !== false ) {
+					$too_long_data = esc_html__( 'Receiver building number', 'apaczka-pl' );
+				}
+				
+				if ( strpos( $error_message, 'sender.buildingNumber' ) !== false ) {
+					$too_long_data = esc_html__( 'Sender building number', 'apaczka-pl' );
+				}
+				
+				if ( strpos( $error_message, 'receiver.street' ) !== false ) {
+					$too_long_data = esc_html__( 'Receiver street', 'apaczka-pl' );
+				}
+
+				if ( strpos( $error_message, 'sender.street' ) !== false ) {
+					$too_long_data = esc_html__( 'Sender street', 'apaczka-pl' );
+				}
+
+				// Extract the numeric values.
+				preg_match_all( '/\d+/', $error_message, $numbers );
+				$min = $numbers[0][0] ?? 0;
+				$max = $numbers[0][1] ?? 0;
+
+				// Construct the user-friendly message.
+				return $too_long_data . ' ' . esc_html__( 'must be between', 'apaczka-pl' ) . ' ' . $min . esc_html__( ' and', 'apaczka-pl' ) . ' ' . $max . esc_html__( ' symbols', 'apaczka-pl' );
+			}
+		}
+
+		return $error_message;
+	}
+	
+	
 }

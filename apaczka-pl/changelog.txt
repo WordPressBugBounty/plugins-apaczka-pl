@@ -113,6 +113,10 @@
 ### Fix.
 - double slash in some endpoint paths
 
+## [1.2.9] - 2024-12-10
+### Fix.
+- shipping method Orlen "Drzwi-Punkt"
+
 
 
 

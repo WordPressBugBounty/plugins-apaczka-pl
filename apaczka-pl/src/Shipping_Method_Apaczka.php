@@ -1598,16 +1598,36 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		try {
 
 			if ( 'yes' === Plugin::get_option( 'apaczka_debug_mode' ) ) {
-				\wc_get_logger()->debug( 'Żądanie API (wycena) dla numeru zamówienia: ' . $order_id, array( 'source' => 'apaczka-log' ) );
-				\wc_get_logger()->debug( print_r( $apaczka_order, true ), array( 'source' => 'apaczka-log' ) );
+				if ( function_exists( 'wc_get_logger' ) ) {
+					$logger = wc_get_logger();
+					$logger->log(
+						'debug',
+						'Żądanie API (wycena) dla numeru zamówienia: ' . $order_id,
+						array(
+							'source'   => 'apaczka-wycena-log',
+							'order_id' => $order_id,
+							'wycena'   => $apaczka_order,
+						)
+					);
+				}
 			}
 
 			$apaczka_response  = ( new Web_Api_V2() )->order_valuation( $apaczka_order );
 			$response_messages = ( new Alerts() )->get_alerts_unformatted_by_context( 'order_valuation' );
 
 			if ( 'yes' === Plugin::get_option( 'apaczka_debug_mode' ) ) {
-				\wc_get_logger()->debug( 'API ODPOWIEDŹ (wycena) dla numeru zamówienia: ' . $order_id, array( 'source' => 'apaczka-log' ) );
-				\wc_get_logger()->debug( print_r( $apaczka_response, true ), array( 'source' => 'apaczka-log' ) );
+				if ( function_exists( 'wc_get_logger' ) ) {
+					$logger = wc_get_logger();
+					$logger->log(
+						'debug',
+						'API ODPOWIEDŹ (wycena) dla numeru zamówienia: ' . $order_id,
+						array(
+							'source'          => 'apaczka-wycena-log',
+							'order_id'        => $order_id,
+							'wycena_response' => $apaczka_response,
+						)
+					);
+				}
 			}
 
 			$services           = self::get_services();
@@ -1767,16 +1787,36 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		try {
 
 			if ( 'yes' === Plugin::get_option( 'apaczka_debug_mode' ) ) {
-				\wc_get_logger()->debug( 'Żądanie API dla numeru zamówienia: ' . $order_id, array( 'source' => 'apaczka-log' ) );
-				\wc_get_logger()->debug( print_r( $apaczka_order, true ), array( 'source' => 'apaczka-log' ) );
+				if ( function_exists( 'wc_get_logger' ) ) {
+					$logger = wc_get_logger();
+					$logger->log(
+						'debug',
+						'Żądanie API dla numeru zamówienia: ' . $order_id,
+						array(
+							'source'          => 'apaczka-create-package-log',
+							'order_id'        => $order_id,
+							'create_order' => $apaczka_order,
+						)
+					);
+				}
 			}
 
 			$apaczka_response  = ( new Web_Api_V2() )->order_send( $apaczka_order );
 			$response_messages = ( new Alerts() )->get_alerts_unformatted_by_context( 'order_send' );
 
 			if ( 'yes' === Plugin::get_option( 'apaczka_debug_mode' ) ) {
-				\wc_get_logger()->debug( 'API ODPOWIEDŹ dla numeru zamówienia: ' . $order_id, array( 'source' => 'apaczka-log' ) );
-				\wc_get_logger()->debug( print_r( $apaczka_response, true ), array( 'source' => 'apaczka-log' ) );
+				if ( function_exists( 'wc_get_logger' ) ) {
+					$logger = wc_get_logger();
+					$logger->log(
+						'debug',
+						'API ODPOWIEDŹ dla numeru zamówienia: ' . $order_id,
+						array(
+							'source'          => 'apaczka-create-package-log',
+							'order_id'        => $order_id,
+							'create_order_response' => $apaczka_response,
+						)
+					);
+				}
 			}
 
 			$services           = self::get_services();
@@ -2230,6 +2270,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 				return 'dhl';
 				break;
 			case 50:
+			case 53:
 				return 'orlen';
 				break;
 			case 60:
