@@ -4,7 +4,7 @@
  * Plugin URI: https://www.apaczka.com/zostan-sprzedawca
  * Description: Nadawaj przesyłki za pośrednictwem Apaczka.pl bezpośrednio z panelu swojego sklepu
  * Product: Apaczka Woocommerce
- * Version: 1.2.9
+ * Version: 1.3.0
  * Tested up to: 6.7
  * Requires at least: 5.3
  * Requires PHP: 7.2
@@ -68,12 +68,14 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 function apaczka_woo_needed_notice() {
 	$message = sprintf(
-	/* translators: Placeholders: %1$s and %2$s are <strong> tags. %3$s and %4$s are <a> tags */
-		esc_html__( '%1$sApaczka WooCommerce 2.0 %2$s requires WooCommerce to function.', 'apaczka-pl' ),
+	/* translators: Placeholders: %1$s and %3$s are <strong> tags. %2$s and %4$s are text */
+		'%1$s %2$s %3$s %4$s',
 		'<strong>',
-		'</strong>'
+		esc_html__( 'Apaczka WooCommerce 2.0', 'apaczka-pl' ),
+		'</strong>',
+		esc_html__( 'requires WooCommerce to function.', 'apaczka-pl' )
 	);
-	printf( '<div class="error"><p>%s</p></div>', esc_html( $message ) );
+	printf( '<div class="error"><p>%s</p></div>', wp_kses_post( $message ) );
 }
 
 add_filter(

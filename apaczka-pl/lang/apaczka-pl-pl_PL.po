@@ -439,3 +439,6 @@ msgstr " do"
 
 msgid " symbols"
 msgstr " symboli"
+
+msgid "requires WooCommerce to function."
+msgstr "wymaga WooCommerce do działania."

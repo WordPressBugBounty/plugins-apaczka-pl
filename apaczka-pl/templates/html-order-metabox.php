@@ -1157,6 +1157,17 @@ $id = 'gateway';
 			if ( $package_send ) {
 				$custom_attributes['disabled'] = 'disabled';
 			}
+			
+			$pickup_date = ! empty( $apaczka_wc_order_data['package_properties'][ $key ] ) ? $apaczka_wc_order_data['package_properties'][ $key ] : null;
+			if ($pickup_date && strtotime($pickup_date) !== false) {
+				if (strtotime($pickup_date) < strtotime('today')) {
+					$new_date = date('Y-m-d');					
+					$pickup_date = $new_date;
+				}
+			} else {				
+				$pickup_date = date('Y-m-d');
+			}
+			
 			woocommerce_wp_text_input(
 				array(
 					'id'                => sprintf(
@@ -1169,7 +1180,7 @@ $id = 'gateway';
 					),
 					'desc_tip'          => false,
 					'type'              => 'date',
-					'value'             => $apaczka_wc_order_data['package_properties'][ $key ],
+					'value'             => $pickup_date,
 					'custom_attributes' => $custom_attributes,
 				)
 			);
