@@ -488,6 +488,13 @@ body .woocommerce_options_panel p.form-field {
     display:none;
 }
 
+#selected-parcel-machine {
+	border: 3px solid #FCC905;
+	padding: 15px;
+	border-radius: 5px;
+	min-width: fit-content;
+}
+
 /*.apaczka_set_order_completed > label {*/
 /*    float: unset !important;*/
 /*    padding: unset !important;*/

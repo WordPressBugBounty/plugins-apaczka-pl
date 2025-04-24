@@ -35,6 +35,12 @@ $selected                = '';
 						if (false === initiated) {
 							jQuery('#geowidget_show_map').click(function (e) {
 								e.preventDefault();
+								
+								jQuery( '.apaczkaMapWrapper' ).each(
+                                    function (i, elem) {
+                                        jQuery( elem ).remove();
+                                    }
+                                );
 
 								var apaczkaMap = new ApaczkaMap({
 									app_id: 'demo',

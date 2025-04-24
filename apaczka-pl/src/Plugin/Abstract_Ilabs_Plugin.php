@@ -9,12 +9,15 @@ use Exception;
 
 abstract class Abstract_Ilabs_Plugin {
 
-	use Tools, Environment;
+	use Tools;
+	use Environment;
 
 
 	private static $config;
 
 	/**
+	 * Execute
+	 *
 	 * @param array $config
 	 *
 	 * @return void
@@ -23,25 +26,29 @@ abstract class Abstract_Ilabs_Plugin {
 	public function execute( array $config ) {
 		self::$config = $config;
 		$this->init_request();
-		$this->init_translations();
 		$this->before_init();
 
-		add_action( 'init', function () {
-			$this->enqueue_scripts();
-			$this->init();
-		} );
-
-		add_action( 'plugins_loaded', function () use ( $config ) {
-			if ( ! function_exists( 'is_plugin_active' ) ) {
-				$this->require_wp_core_file( 'wp-admin/includes/plugin.php' );
+		add_action(
+			'init',
+			function () {
+				$this->enqueue_scripts();
+				$this->init();
 			}
+		);
 
-			$this->plugins_loaded_hooks();
-		} );
-
+		add_action(
+			'plugins_loaded',
+			function () use ( $config ) {
+				if ( ! function_exists( 'is_plugin_active' ) ) {
+					$this->require_wp_core_file( 'wp-admin/includes/plugin.php' );
+				}
+			}
+		);
 	}
 
 	/**
+	 * Get request
+	 *
 	 * @return Request
 	 */
 	public function get_request(): Request {
@@ -63,27 +70,19 @@ abstract class Abstract_Ilabs_Plugin {
 	 * @return Request_Filter_Interface[]
 	 */
 	protected function register_request_filters(): array {
-		return [];
+		return array();
 	}
 
-	/**
-	 * @return void
-	 * @throws Exception
-	 */
-	private function init_translations() {
-		$lang_dir = $this->get_from_config( 'lang_dir' );
-
-		add_action( 'after_setup_theme', function () use ( $lang_dir ) {
-			load_plugin_textdomain( $this->get_text_domain(), false,
-				$this->get_plugin_basename() . "/$lang_dir/" );
-		} );
-	}
 
 	private function enqueue_scripts() {
-		add_action( 'admin_enqueue_scripts',
-			[ $this, 'enqueue_dashboard_scripts' ] );
-		add_action( 'wp_enqueue_scripts',
-			[ $this, 'enqueue_frontend_scripts' ] );
+		add_action(
+			'admin_enqueue_scripts',
+			array( $this, 'enqueue_dashboard_scripts' )
+		);
+		add_action(
+			'wp_enqueue_scripts',
+			array( $this, 'enqueue_frontend_scripts' )
+		);
 	}
 
 	abstract public function enqueue_frontend_scripts();
@@ -92,5 +91,5 @@ abstract class Abstract_Ilabs_Plugin {
 
 	abstract protected function before_init();
 
-	abstract protected function plugins_loaded_hooks();
+	abstract public function plugins_loaded_hooks();
 }

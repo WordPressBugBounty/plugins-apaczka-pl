@@ -207,12 +207,13 @@ document.addEventListener('click', function (e) {
 			);
 		}
 	}
-
+	
 	if ( target.classList.contains( 'wc-block-components-checkout-place-order-button' )
 		|| target.classList.contains( 'wc-block-checkout__actions_row' )
-		|| target.classList.contains( 'wc-block-components-button__text' ) )
+		|| target.classList.contains( 'wc-block-components-button__text' )
+		|| target.closest( '.wc-block-components-checkout-place-order-button' ) )
 	{
-
+	
 		let reactjs_input       = document.getElementById( 'apaczka-point' );
 		let reactjs_input_lalue = false;
 		if (typeof reactjs_input != 'undefined' && reactjs_input !== null) {

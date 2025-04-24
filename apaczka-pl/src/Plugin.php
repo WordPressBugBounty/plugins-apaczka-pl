@@ -29,6 +29,14 @@ class Plugin extends Abstract_Ilabs_Plugin {
 		if ( is_admin() ) {
 			$this->init_admin_features();
 		}
+
+		/*
+		add_action(
+			'after_setup_theme',
+			function () {
+				apaczka()->init_translations();
+			}
+		);*/
 	}
 
 	protected function register_request_filters(): array {
@@ -38,7 +46,8 @@ class Plugin extends Abstract_Ilabs_Plugin {
 	protected function before_init() {
 	}
 
-	protected function plugins_loaded_hooks() {
+	public function plugins_loaded_hooks() {
+
 		$this->shipping_methods['apaczka'] = new Shipping_Method_Apaczka();
 
 		if ( is_admin() ) {
@@ -232,4 +241,6 @@ class Plugin extends Abstract_Ilabs_Plugin {
 
 		return false;
 	}
+
+
 }

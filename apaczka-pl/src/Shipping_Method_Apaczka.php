@@ -110,11 +110,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		);
 
 		$this->method_title       = 'Apaczka';
-		$this->method_description
-			= __(
-				' Register on <a href="https://www.apaczka.pl/?register=1&register_promo_code=WooCommerce" target="_blank">www.apaczka.pl &rarr;</a>',
-				'apaczka-pl'
-			);
+		$this->method_description = 'Nadawaj przesyłki za pośrednictwem Apaczka.pl bezpośrednio z panelu swojego sklepu';
 
 		$this->title = $this->get_option( 'title' );
 
@@ -166,7 +162,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 				}
 			);
 
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_blocks_scripts' ) );			
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_blocks_scripts' ) );
 			// integration with Woocommerce blocks end.
 		}
 	}
@@ -189,7 +185,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		$this->cost               = $this->get_option( 'cost' );
 		$this->cost_cod           = $this->get_option( 'cost_cod' );
 		$this->free_shipping_cost
-			= 1.9;
+									= 1.9;
 		$this->flat_rate          = 1.9;
 		$this->cost_per_order     = 1.9;
 	}
@@ -858,7 +854,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			if ( 'cod' === $payment_method ) {
 				$apaczka_wc_order_data['package_properties']['declared_content'] = $order->get_total();
 			} elseif ( 'yes' === Plugin::get_option( 'declared_content_auto' ) ) {
-					$apaczka_wc_order_data['package_properties']['declared_content'] = $order->get_total();
+				$apaczka_wc_order_data['package_properties']['declared_content'] = $order->get_total();
 			} else {
 				$apaczka_wc_order_data['package_properties']['declared_content'] = 0;
 			}
@@ -954,8 +950,8 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 				}
 			}
 		} elseif ( isset( $apaczka_wc_order_data['apaczka_response']->order->id ) ) {
-				$apaczka_order_id = $apaczka_wc_order_data['apaczka_response']->order->id;
-				$status           = self::get_apaczka_order_status( $apaczka_order_id );
+			$apaczka_order_id = $apaczka_wc_order_data['apaczka_response']->order->id;
+			$status           = self::get_apaczka_order_status( $apaczka_order_id );
 
 			if ( 'CANCELLED' === $status ) {
 				// change order status.
@@ -965,7 +961,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 						$order->update_status( 'wc-processing' );
 					}
 				} elseif ( 'on-hold' !== $current_order_status ) {
-						$order->update_status( 'wc-on-hold' );
+					$order->update_status( 'wc-on-hold' );
 				}
 			}
 		}
@@ -1151,19 +1147,19 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		if ( ! $order || is_wp_error( $order ) ) {
 			return;
 		}
-		
+
 		$receiver_company = '';
-        if( ! empty( $order->get_shipping_company() ) ) {
-            $receiver_company = $order->get_shipping_company();
-        } else if ( ! empty( $order->get_billing_company() ) ) {
-            $receiver_company = $order->get_billing_company();
-        }
+		if ( ! empty( $order->get_shipping_company() ) ) {
+			$receiver_company = $order->get_shipping_company();
+		} elseif ( ! empty( $order->get_billing_company() ) ) {
+			$receiver_company = $order->get_billing_company();
+		}
 
 		$receiver = array(
 			'country_code'       => $order->get_shipping_country(),
 			// Kod ISO 3166.
 			'name'               => ! empty( $receiver_company )
-				? $receiver_company 
+				? $receiver_company
 				: $order->get_shipping_first_name() . ' ' . $order->get_shipping_last_name(),
 			'line1'              => $order->get_shipping_address_1(),
 			'line2'              => $order->get_shipping_address_2(),
@@ -1204,7 +1200,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		}
 		$shippings            = $order->get_shipping_methods();
 		$all_shipping_methods
-			= flexible_shipping_get_all_shipping_methods();
+								= flexible_shipping_get_all_shipping_methods();
 		if ( isset( $all_shipping_methods['flexible_shipping'] ) ) {
 			$flexible_shipping_rates
 				= $all_shipping_methods['flexible_shipping']->get_all_rates();
@@ -1276,13 +1272,13 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		$shipping_contact = '';
 		if ( $shipping_name == '' ) {
 			$shipping_name    = $order->get_shipping_first_name() . ' '
-				. $order->get_shipping_last_name();
+								. $order->get_shipping_last_name();
 			$shipping_contact = $order->get_shipping_first_name() . ' '
-				. $order->get_shipping_last_name();
+								. $order->get_shipping_last_name();
 
 		} else {
 			$shipping_contact = $order->get_shipping_first_name() . ' '
-				. $order->get_shipping_last_name();
+								. $order->get_shipping_last_name();
 		}
 
 		$data['receiver']['foreign_address_id'] = $point;
@@ -1329,9 +1325,9 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 					// Kod ISO 3166
 					'name'               => $sender_name,
 					'line1'              => $data['sender']['street']
-						. ' ' . $data['sender']['building_number']
-						. ( ! empty( $data['sender']['apartment_number'] ) ? '/'
-							. $data['sender']['apartment_number'] : '' ),
+											. ' ' . $data['sender']['building_number']
+											. ( ! empty( $data['sender']['apartment_number'] ) ? '/'
+																								. $data['sender']['apartment_number'] : '' ),
 					'line2'              => '',
 					'postal_code'        => $data['sender']['postal_code'],
 					'city'               => $data['sender']['city'],
@@ -1716,8 +1712,8 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			$calculate = $return_price_table;
 			ob_start();
 			include apaczka()->get_plugin_templates_dir()
-				. DIRECTORY_SEPARATOR
-				. 'html-order-metabox-calculate-result.php';
+					. DIRECTORY_SEPARATOR
+					. 'html-order-metabox-calculate-result.php';
 			$ret['calculate_html'] = ob_get_clean();
 			$ret['error_messages'] = '';
 		}
@@ -1773,8 +1769,8 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		}
 
 		$apaczka_delivery_point = apaczka()
-				->get_request()
-				->get_by_key( 'apaczka' )['delivery_point_id'] ?? '';
+										->get_request()
+										->get_by_key( 'apaczka' )['delivery_point_id'] ?? '';
 
 		$apaczka_order = self::create_api_order(
 			$order,
@@ -1793,8 +1789,8 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 						'debug',
 						'Żądanie API dla numeru zamówienia: ' . $order_id,
 						array(
-							'source'          => 'apaczka-create-package-log',
-							'order_id'        => $order_id,
+							'source'       => 'apaczka-create-package-log',
+							'order_id'     => $order_id,
 							'create_order' => $apaczka_order,
 						)
 					);
@@ -1811,8 +1807,8 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 						'debug',
 						'API ODPOWIEDŹ dla numeru zamówienia: ' . $order_id,
 						array(
-							'source'          => 'apaczka-create-package-log',
-							'order_id'        => $order_id,
+							'source'                => 'apaczka-create-package-log',
+							'order_id'              => $order_id,
 							'create_order_response' => $apaczka_response,
 						)
 					);
@@ -2038,7 +2034,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 				'apaczka-pl'
 			),
 			'type'        => 'checkbox',
-			'description' => __(
+			'description' => esc_html__(
 				'Displays a map of delivery points on the checkout form for this shipping method.',
 				'apaczka-pl'
 			),
@@ -2054,22 +2050,22 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			'type'    => 'select',
 			'default' => 'all',
 			'options' => array(
-				'ALL'        => __( 'All', 'apaczka-pl' ),
-				'DHL_PARCEL' => __( 'DHL', 'apaczka-pl-mapa-punktow' ),
-				'DPD'        => __( 'DPD', 'apaczka-pl-mapa-punktow' ),
-				'INPOST'     => __(
+				'ALL'        => esc_html__( 'All', 'apaczka-pl' ),
+				'DHL_PARCEL' => esc_html__( 'DHL', 'apaczka-pl-mapa-punktow' ),
+				'DPD'        => esc_html__( 'DPD', 'apaczka-pl-mapa-punktow' ),
+				'INPOST'     => esc_html__(
 					'Inpost',
 					'apaczka-pl-mapa-punktow'
 				),
-				'PWR'        => __(
+				'PWR'        => esc_html__(
 					'Orlen Paczka',
 					'apaczka-pl-mapa-punktow'
 				),
-				'POCZTA'     => __(
+				'POCZTA'     => esc_html__(
 					'Poczta Polska',
 					'apaczka-pl-mapa-punktow'
 				),
-				'UPS'        => __( 'UPS', 'apaczka-pl-mapa-punktow' ),
+				'UPS'        => esc_html__( 'UPS', 'apaczka-pl-mapa-punktow' ),
 			),
 		);
 
@@ -2079,7 +2075,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 				'apaczka-pl'
 			),
 			'type'        => 'checkbox',
-			'description' => __(
+			'description' => esc_html__(
 				'Displays only points with Collect on Delivery.',
 				'apaczka-pl'
 			),
@@ -2186,8 +2182,8 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			}
 		} elseif ( is_object( $post ) ) {
 
-				$post_id   = $post->ID;
-				$post_type = get_post_type( $post_id );
+			$post_id   = $post->ID;
+			$post_type = get_post_type( $post_id );
 			if ( 'shop_order' === $post_type ) {
 				if ( 'post.php' === $pagenow || 'post-new.php' === $pagenow ) {
 					$need_popup = true;
@@ -2205,12 +2201,12 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 							src="<?php echo apaczka()->get_plugin_img_url() . '/decor-close.jpg'; ?>">
 					</div>
 					<div class="apaczka_alert_modal_title">
-						<h2><?php echo __( 'Problem is occured', 'apaczka-pl' ); ?></h2>
+						<h2><?php echo esc_html__( 'Problem is occured', 'apaczka-pl' ); ?></h2>
 					</div>
 					<div class="apaczka_alert_modal_text">
-						<p><?php echo __( 'The shipment can only be canceled on Apaczka.pl via contact form:', 'apaczka-pl' ); ?></p>
-						<p><?php echo __( 'Shipping and Delivery -> Cancellation of a pallet and GLS shipment order.', 'apaczka-pl' ); ?></p>
-						<p><?php echo __( 'The cancellation service may incur an additional charge.', 'apaczka-pl' ); ?></p>
+						<p><?php echo esc_html__( 'The shipment can only be canceled on Apaczka.pl via contact form:', 'apaczka-pl' ); ?></p>
+						<p><?php echo esc_html__( 'Shipping and Delivery -> Cancellation of a pallet and GLS shipment order.', 'apaczka-pl' ); ?></p>
+						<p><?php echo esc_html__( 'The cancellation service may incur an additional charge.', 'apaczka-pl' ); ?></p>
 					</div>
 					<div class="apaczka_alert_modal_action">
 						<button id="apaczka_alert_modal_close_button">Ok</button>
@@ -2343,13 +2339,13 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 				$order->save();
 			}
 		}
-		
+
 		$receiver_company = '';
-        if( ! empty( $order->get_shipping_company() ) ) {
-            $receiver_company = $order->get_shipping_company();
-        } else if ( ! empty( $order->get_billing_company() ) ) {
-            $receiver_company = $order->get_billing_company();
-        }
+		if ( ! empty( $order->get_shipping_company() ) ) {
+			$receiver_company = $order->get_shipping_company();
+		} elseif ( ! empty( $order->get_billing_company() ) ) {
+			$receiver_company = $order->get_billing_company();
+		}
 
 		$receiver = array(
 			'country_code'       => $order->get_shipping_country(),
@@ -2398,10 +2394,10 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 						$plugin->get_front_blocks_script_id(),
 						'apaczka_block',
 						array(
-							'button_text1'  => __( 'Select point', 'apaczka-pl' ),
-							'button_text2'  => __( 'Change point', 'apaczka-pl' ),
-							'selected_text' => __( 'Selected Parcel Locker:', 'apaczka-pl' ),
-							'alert_text'    => __( 'Delivery point must be chosen!', 'apaczka-pl' ),
+							'button_text1'  => esc_html__( 'Select point', 'apaczka-pl' ),
+							'button_text2'  => esc_html__( 'Change point', 'apaczka-pl' ),
+							'selected_text' => esc_html__( 'Selected Parcel Locker:', 'apaczka-pl' ),
+							'alert_text'    => esc_html__( 'Delivery point must be chosen!', 'apaczka-pl' ),
 							'map_config'    => $map_config,
 						)
 					);
@@ -2535,6 +2531,4 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 
 		return $package_properties;
 	}
-
-	
 }
