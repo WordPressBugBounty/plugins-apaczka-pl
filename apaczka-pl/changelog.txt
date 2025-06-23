@@ -125,5 +125,11 @@
 ### Fix.
 - translations
 
+## [1.3.2] - 2025-06-23
+### Fix.
+- logo and delivery point for Inpost International
+### Feat.
+- new map based on Bliskapaczka.pl API
+
 
 

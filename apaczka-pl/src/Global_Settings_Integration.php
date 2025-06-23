@@ -309,6 +309,10 @@ class Global_Settings_Integration extends WC_Settings_Page {
 				) {
 					return;
 				}
+				
+				$sender_templates_json = ( new Sender_Settings_Templates_Helper() )->get_all_templates_json();
+				
+				
 				if ( $custom_button_id === $type ) {
 					?>
                     <button id="apaczka_load_sender_settings_btn"
@@ -332,7 +336,7 @@ class Global_Settings_Integration extends WC_Settings_Page {
 
                     <script>
                         //get_all_templates_json - encoded with wp_json_encode
-                        const apaczka_sender_templates = JSON.parse('<?php echo ( new Sender_Settings_Templates_Helper() )->get_all_templates_json()?>');
+                        const apaczka_sender_templates = JSON.parse('<?php echo addslashes( $sender_templates_json ); ?>');
 
                         jQuery(document).ready(function () {
                             jQuery("#apaczka_load_sender_settings_btn").click(function (e) {
@@ -340,30 +344,6 @@ class Global_Settings_Integration extends WC_Settings_Page {
 
                                 let selectedTemplateSlug = jQuery('#apaczka_woocommerce_settings_general_select_sender_template').val();
                                 apaczkaFillFormByTemplate(selectedTemplateSlug);
-                            });
-
-
-                            jQuery('#geowidget_show_map').click(function (e) {
-                                e.preventDefault();
-
-                                var apaczkaMap = new ApaczkaMap({
-                                    app_id: 'demo',
-                                    onChange: function (record) {
-                                        if (record) {
-                                            jQuery('#parcel_machine_id').val(record.foreign_access_point_id);
-                                            jQuery('#selected-parcel-machine').removeClass('hidden');
-                                            jQuery('#selected-parcel-machine-id').html(record.foreign_access_point_id);
-                                        }
-                                    }
-                                });
-                                apaczkaMap.setFilterSupplierAllowed(
-                                    ['INPOST'],
-                                    ['INPOST']
-                                );
-
-                                apaczkaMap.show();
-
-                                initiated = true;
                             });
                         });
 

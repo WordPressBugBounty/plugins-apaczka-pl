@@ -15,15 +15,13 @@ class Global_Settings {
 			],
 
 			[
-				'title'    => __( 'App ID',
-					'apaczka-pl' ),
+				'title'    => __( 'App ID',	'apaczka-pl' ),
 				'id'       => $this->get_setting_id( 'app_id' ),
 				'css'      => '',
 				'default'  => '',
 				'type'     => 'text',
 				'desc_tip' => false,
-				'class'    => '',
-				//'custom_attributes' => [ 'required' => 'required' ],
+				'class'    => ''
 			],
 
 
@@ -34,11 +32,7 @@ class Global_Settings {
 				'type'        => 'password',
 				'description' => __( 'App Secret', 'apaczka-pl' ),
 				'default'     => '',
-				'desc_tip'    => true,
-				//'custom_attributes' => [
-				//'required_' => '',
-				//],
-
+				'desc_tip'    => true
 			],
 
 

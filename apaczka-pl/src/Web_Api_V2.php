@@ -97,7 +97,7 @@ class Web_Api_V2 {
 			array(
 				'body'      => http_build_query( $this->buildRequest( $route, $data ) ),
 				'method'    => 'POST',
-				'sslverify' => false,
+				'sslverify' => true,
 				'timeout'   => 30,
 			)
 		);

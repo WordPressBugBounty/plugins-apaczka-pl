@@ -3,7 +3,7 @@ Contributors: inspirelabs
 Tags: apaczka, woocommerce
 Requires at least: 5.3
 Tested up to: 6.8
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -58,6 +58,10 @@ Tak. Zarejestruj się bezpłatnie na [Apaczka.pl](https://panel.apaczka.pl/rejes
 7.
 
 == Changelog ==
+
+= 1.3.2 =
+* Fix: logo and delivery point for Inpost International
+* Feat: new map based on Bliskapaczka.pl API
 
 = 1.3.1 =
 * Fix: translations

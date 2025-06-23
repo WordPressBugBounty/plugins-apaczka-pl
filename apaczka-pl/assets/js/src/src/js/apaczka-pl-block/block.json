@@ -1,0 +1,32 @@
+{
+	"apiVersion": 2,
+	"name": "apaczka-pl/block",
+	"version": "1.0.0",
+	"title": "Apaczka PL Map Button",
+	"category": "woocommerce",
+	"description": "This code adds map button and adds input to save delivery point data.",
+	"supports": {
+		"html": false,
+		"align": false,
+		"multiple": false,
+		"reusable": false
+	},
+	"parent": [ "woocommerce/checkout-shipping-methods-block" ],
+	"attributes": {
+		"lock": {
+			"type": "object",
+			"default": {
+				"remove": true,
+				"move": true
+			}
+		},
+		"text": {
+			"type": "string",
+			"source": "html",
+			"selector": ".wp-block-apaczka-pl",
+			"default": ""
+		}
+	},
+	"textdomain": "apaczka-pl",
+	"editorStyle": ""
+}

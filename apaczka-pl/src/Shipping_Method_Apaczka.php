@@ -45,11 +45,11 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	/**
 	 * @var mixed
 	 */
-	private $geowidget_supplier;
+	//private $geowidget_supplier;
 	/**
 	 * @var mixed
 	 */
-	private $geowidget_only_cod;
+	//private $geowidget_only_cod;
 
 	/**
 	 * @var string
@@ -162,7 +162,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 				}
 			);
 
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_blocks_scripts' ) );
+			//add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_blocks_scripts' ) );
 			// integration with Woocommerce blocks end.
 		}
 	}
@@ -232,15 +232,17 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	 * @return void
 	 */
 	public function woocommerce_review_order_after_shipping() {
+
 		if ( $this->is_delivery_map_button_display() && ! self::$review_order_after_shipping_once ) {
-			$point_id = $this->geowidget_supplier;
-			$only_cod = 'yes' === $this->geowidget_only_cod ? true : false;
+			//$point_id = $this->geowidget_supplier;
+			//$only_cod = 'yes' === $this->geowidget_only_cod ? true : false;
 			wc_get_template(
 				'checkout/apaczka-review-order-after-shipping.php',
-				array(
+				array(),
+				/*array(
 					'point_id' => $point_id,
 					'only_cod' => $only_cod,
-				),
+				),*/
 				'',
 				apaczka()->get_plugin_templates_dir( true )
 			);
@@ -928,6 +930,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			$order
 		);
 
+        $apaczka_order_id = '';
 		if ( isset( $apaczka_wc_order_data['package_send'] )
 			&& $apaczka_wc_order_data['package_send'] === 1 ) {
 			if ( isset( $apaczka_wc_order_data['apaczka_response']->order->id ) ) {
@@ -1600,7 +1603,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 						'debug',
 						'Żądanie API (wycena) dla numeru zamówienia: ' . $order_id,
 						array(
-							'source'   => 'apaczka-wycena-log',
+							'source'   => 'apaczka-wycena-zam-#-' . $order_id,
 							'order_id' => $order_id,
 							'wycena'   => $apaczka_order,
 						)
@@ -1618,7 +1621,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 						'debug',
 						'API ODPOWIEDŹ (wycena) dla numeru zamówienia: ' . $order_id,
 						array(
-							'source'          => 'apaczka-wycena-log',
+                            'source'   => 'apaczka-wycena-zam-#-' . $order_id,
 							'order_id'        => $order_id,
 							'wycena_response' => $apaczka_response,
 						)
@@ -1789,7 +1792,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 						'debug',
 						'Żądanie API dla numeru zamówienia: ' . $order_id,
 						array(
-							'source'       => 'apaczka-create-package-log',
+                            'source'       => 'apaczka-utw-przesylki-zam-#-' . $order_id,
 							'order_id'     => $order_id,
 							'create_order' => $apaczka_order,
 						)
@@ -1807,7 +1810,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 						'debug',
 						'API ODPOWIEDŹ dla numeru zamówienia: ' . $order_id,
 						array(
-							'source'                => 'apaczka-create-package-log',
+                            'source'       => 'apaczka-utw-przesylki-zam-#-' . $order_id,
 							'order_id'              => $order_id,
 							'create_order_response' => $apaczka_response,
 						)
@@ -2106,58 +2109,46 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		}
 	}
 
+
+    private function get_shipping_method_instance_id( $shipping_method ) {
+
+        $instance_id = null;
+
+        $data = explode( ':', $shipping_method );
+
+        if( ! empty($data[1]) ) {
+            return $data[1];
+        }
+
+        return $instance_id;
+    }
+
 	private function is_delivery_map_button_display() {
-		// Get all your existing shipping zones IDS.
-		$zone_ids                = array_keys( array( '' ) + \WC_Shipping_Zones::get_zones() );
-		$chosen_shipping_methods = WC()->session->chosen_shipping_methods;
 
-		// Loop through shipping Zones IDs.
-		foreach ( $zone_ids as $zone_id ) {
-			// Get the shipping Zone object.
-			$shipping_zone = new \WC_Shipping_Zone( $zone_id );
+        $chosen_shipping_methods = array();
 
-			// Get all shipping method values for the shipping zone.
-			$shipping_methods = $shipping_zone->get_shipping_methods(
-				true,
-				'values'
-			);
+        if ( is_object( WC() ) && is_object( WC()->session ) ) {
+            $chosen_shipping_methods = WC()->session->get('chosen_shipping_methods');
+        }
 
-			// Loop through each shipping methods set for the current shipping zone.
-			foreach ( $shipping_methods as $instance_id => $shipping_method ) {
-				if ( isset( $chosen_shipping_methods[0] ) && $shipping_method->id . ':' . $instance_id === $chosen_shipping_methods[0] ) {
-					if ( isset( $shipping_method->instance_settings['display_apaczka_map'] ) && 'yes' === $shipping_method->instance_settings['display_apaczka_map'] ) {
-						$this->geowidget_supplier = $shipping_method->instance_settings['supplier_apaczka_map'];
+        if ( ! empty( $chosen_shipping_methods ) && is_array( $chosen_shipping_methods ) ) {
 
-						if ( 'ALL' == $this->geowidget_supplier ) {
-							$this->geowidget_supplier = "'DHL_PARCEL', 'DPD', 'INPOST', 'POCZTA', 'UPS', 'PWR'";
-						} else {
-							$single_carrier           = $shipping_method->instance_settings['supplier_apaczka_map'];
-							$single_carrier           = "'" . $single_carrier . "'";
-							$this->geowidget_supplier = $single_carrier;
-						}
+            if( ! empty( $chosen_shipping_methods[0] ) ) {
+                $chosen_method = $chosen_shipping_methods[0];
+                $instance_id = $this->get_shipping_method_instance_id( $chosen_method );
 
-						$this->geowidget_only_cod = $shipping_method->instance_settings['only_cod_apaczka_map'];
+                if( $instance_id ) {
+                    $map_config = apaczka()->get_map_config();
+                    if( ! empty($map_config[$instance_id]) ) {
+                        return true;
+                    }
+                }
 
-						return true;
-					}
-				}
+            }
+        }
 
-				/*
-				if ( defined( 'FLEXIBLE_SHIPPING_VERSION' ) && 'flexible_shipping' === $shipping_method->id ) {
-					$flexible_shipping      = new Flexible_Shipping_Integration();
-					$flexible_shipping_data = $flexible_shipping->get_chosen_shipping_data( $chosen_shipping_methods[0], $instance_id );
+        return false;
 
-					if ( isset( $flexible_shipping_data['display_apaczka_map_fxsp'] ) && 'yes' === $flexible_shipping_data['display_apaczka_map_fxsp'] ) {
-						$this->supplier = $flexible_shipping_data['supplier_apaczka_map_fxsp'];
-						$this->only_cod = $flexible_shipping_data['only_cod_apaczka_map_fxsp'];
-
-						return true;
-					}
-				}*/
-			}
-		}
-
-		return false;
 	}
 
 	public function cancel_package_popup() {
@@ -2248,6 +2239,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			case 40:
 			case 42:
 			case 43:
+			case 45:
 			case 46:
 				return 'inpost';
 				break;
@@ -2263,6 +2255,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			case 82:
 			case 83:
 			case 84:
+			case 87:
 				return 'dhl';
 				break;
 			case 50:
@@ -2380,62 +2373,16 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	}
 
 
-	public function enqueue_frontend_blocks_scripts() {
+	/*public function enqueue_frontend_blocks_scripts() {
 		if ( ! class_exists( 'Apaczka_Points_Map\Points_Map_Plugin' ) ) {
 			if ( is_checkout() ) {
-				if ( has_block( 'woocommerce/checkout' ) ) {
-					$map_config = $this->get_map_config();
-					$plugin     = new Plugin();
-					wp_enqueue_script(
-						$plugin->get_front_blocks_script_id(),
-						$plugin->get_plugin_js_url() . '/blocks/front-blocks.js'
-					);
-					wp_localize_script(
-						$plugin->get_front_blocks_script_id(),
-						'apaczka_block',
-						array(
-							'button_text1'  => esc_html__( 'Select point', 'apaczka-pl' ),
-							'button_text2'  => esc_html__( 'Change point', 'apaczka-pl' ),
-							'selected_text' => esc_html__( 'Selected Parcel Locker:', 'apaczka-pl' ),
-							'alert_text'    => esc_html__( 'Delivery point must be chosen!', 'apaczka-pl' ),
-							'map_config'    => $map_config,
-						)
-					);
-				}
+
 			}
 		}
-	}
+	}*/
 
 
-	private function get_map_config() {
-		$config = array();
-		// Get all your existing shipping zones IDS.
-		$zone_ids = array_keys( array( '' ) + \WC_Shipping_Zones::get_zones() );
 
-		foreach ( $zone_ids as $zone_id ) {
-
-			$shipping_zone = new \WC_Shipping_Zone( $zone_id );
-
-			$shipping_methods = $shipping_zone->get_shipping_methods( true, 'values' );
-
-			foreach ( $shipping_methods as $instance_id => $shipping_method ) {
-				if ( isset( $shipping_method->instance_settings['display_apaczka_map'] ) && 'yes' === $shipping_method->instance_settings['display_apaczka_map'] ) {
-					$this->geowidget_supplier = $shipping_method->instance_settings['supplier_apaczka_map'];
-
-					if ( 'ALL' == $this->geowidget_supplier ) {
-						$config[ $instance_id ]['geowidget_supplier'] = array( 'DHL_PARCEL', 'DPD', 'INPOST', 'POCZTA', 'UPS', 'PWR' );
-					} else {
-						$single_carrier                               = $shipping_method->instance_settings['supplier_apaczka_map'];
-						$config[ $instance_id ]['geowidget_supplier'] = array( $single_carrier );
-					}
-
-					$config[ $instance_id ]['geowidget_only_cod'] = $shipping_method->instance_settings['only_cod_apaczka_map'];
-				}
-			}
-		}
-
-		return $config;
-	}
 
 
 	private function get_package_properties( $order = null ) {

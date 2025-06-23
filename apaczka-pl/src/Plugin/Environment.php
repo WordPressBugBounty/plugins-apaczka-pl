@@ -17,6 +17,7 @@ trait Environment {
 	private static $plugin_templates_dir;
 	private static $plugin_prefix;
 	private static $text_domain;
+    private static $plugin_header_info;
 
 
 	/**
@@ -171,6 +172,30 @@ trait Environment {
         }
 
         return self::$plugin_img_url;
+    }
+
+
+    /**
+     * Get plugin version
+     *
+     * @throws Exception Exception.
+     */
+    public function get_plugin_version(): string {
+        $plugin_header_info = $this->get_plugin_header_info();
+        return $plugin_header_info['Version'];
+    }
+
+
+    /**
+     * Get plugin header info
+     *
+     * @throws Exception Exception.
+     */
+    public function get_plugin_header_info(): array {
+        if ( ! self::$plugin_header_info ) {
+            self::$plugin_header_info = get_plugin_data( $this->get_from_config( '__FILE__' ) );
+        }
+        return self::$plugin_header_info;
     }
 
 }

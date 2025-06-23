@@ -16,8 +16,7 @@ use Inspire_Labs\Apaczka_Woocommerce\Shipping_Method_Apaczka;
 		<?php $checked = '' ?>
 		<?php if ( in_array( $k, $skip_this_service ) ): continue; endif; ?>
         <?php if ( $apaczka_order['address']['sender']['is_residential'] === 1 && $k === 150 ): continue; endif; // exclude Geis for adres Prywatny ?>
-        <label class="apaczka-calculate-item selected"
-               onclick="addBorder()"
+        <label class="apaczka-calculate-item"
                data-item="<?php echo esc_attr($i) ?>"
                data-pickup_courier="<?php echo esc_attr( $service['pickup_courier'] ); ?>"
                data-service_id="<?php echo esc_attr( $k ); ?>"

@@ -442,3 +442,9 @@ msgstr " symboli"
 
 msgid "requires WooCommerce to function."
 msgstr "wymaga WooCommerce do działania."
+
+msgid "Change point"
+msgstr "Zmień punkt"
+
+msgid "Selected point"
+msgstr "Wybrany punkt dostawy"
