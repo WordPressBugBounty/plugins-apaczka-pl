@@ -1442,7 +1442,7 @@ $id = 'gateway';
         <?php
         $srv_list        = (new Service_Structure_Helper())->get_services();
         $choosed_carrier = '';
-        $apaczka_order   = get_post_meta($post->ID, '_apaczka_last_order_object', true);
+        $apaczka_order   = get_post_meta( $order->get_id(), '_apaczka_last_order_object', true );
         if ($apaczka_order) {
             foreach ($srv_list as $service) {
                 if ($service->service_id == $apaczka_order['service_id']) {

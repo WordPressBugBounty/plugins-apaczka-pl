@@ -13,6 +13,138 @@
             let is_cod_only    = false;
             let operatorsArray = [];
 
+
+            window.apaczka_mp_map_callback = function (point) {
+
+                console.log( point );
+                console.log( 'point code:', point.code );
+                console.log( 'point operator:', point.operator );
+
+                $( '#selected-parcel-machine' ).removeClass( 'apaczka-hidden' );
+                if ( 'brand' in point ) {
+                    let point_brand = point.brand + ': ' + point.code;
+                    $( '#selected-parcel-machine-id' ).html( point_brand );
+                } else {
+                    $( '#selected-parcel-machine-id' ).html( point.code );
+                }
+
+                let visible_point_desc = '';
+                if ('description' in point) {
+                    visible_point_desc += point.description;
+                }
+                if ('street' in point) {
+                    visible_point_desc += '<br>' + point.street;
+                }
+                if ('city' in point) {
+                    visible_point_desc += '<br>' + point.city;
+                }
+                if ('postalCode' in point) {
+                    visible_point_desc += '<br>' + point.postalCode;
+                }
+
+                $( '#selected-parcel-machine-desc' ).html( visible_point_desc );
+
+                $( '#apm_name' ).val( point.description );
+                $( '#apm_city' ).val( point.city );
+                $( '#apm_street' ).val( point.street );
+                $( '#apm_postal_code' ).val( point.postalCode );
+                $( '#apm_country_code' ).val( country_code_apaczka );
+                $( '#apm_supplier' ).val( point.operator );
+                $( '#apm_access_point_id' ).val( point.code );
+                $( '#apm_foreign_access_point_id' ).val( point.code );
+
+            }
+
+            function apaczka_pl_create_operator_obj(operatorId, operatorName) {
+                operatorName = operatorName.toUpperCase();
+                return {
+                    operator: operatorName,
+                    price: null
+                };
+            }
+
+            function apaczka_pl_wait_fo_element(selector) {
+                return new Promise(
+                    function (resolve) {
+                        if (document.querySelector( selector )) {
+                            return resolve( document.querySelector( selector ) );
+                        }
+
+                        const observer = new MutationObserver(
+                            function (mutations) {
+                                if (document.querySelector( selector )) {
+                                    resolve( document.querySelector( selector ) );
+                                    observer.disconnect();
+                                }
+                            }
+                        );
+
+                        observer.observe(
+                            document.body,
+                            {
+                                childList: true,
+                                subtree: true
+                            }
+                        );
+                    }
+                );
+            }
+
+            function apaczka_pl_get_chosen_shipping_method() {
+                let data    = {};
+                let method  = $( 'input[name^="shipping_method"]:checked' ).val();
+                let postfix = '';
+                if ('undefined' == typeof method || null === method ) {
+                    method = $( 'input[name^="shipping_method"]' ).val();
+                }
+                if (typeof method != 'undefined' && method !== null) {
+                    if (method.indexOf( ':' ) > -1) {
+                        let arr = method.split( ':' );
+                        method  = arr[0];
+                        postfix = arr[1];
+                    }
+                }
+                data.method      = method;
+                data.instance_id = postfix;
+
+                return data;
+            }
+
+            function apaczka_pl_get_initial_map_address() {
+
+                let country_code        = '';
+                let initial_map_address = '';
+
+                let shipping_country_input = $( '#shipping_country' );
+
+                if (typeof shipping_country_input != 'undefined' && shipping_country_input !== null) {
+                    let country_code_shipping = $( shipping_country_input ).val();
+                    if (typeof country_code_shipping != 'undefined' && country_code_shipping !== null) {
+                        country_code = $( '#shipping_city' ).val();
+                    } else {
+                        let billing_country = $( '#billing_country' );
+                        if (typeof billing_country != 'undefined' && billing_country !== null) {
+                            country_code_billing = $( billing_country ).val();
+                            if (typeof country_code_billing != 'undefined' && country_code_billing !== null) {
+                                country_code = $( '#billing_city' ).val();
+                            }
+                        }
+                    }
+                }
+
+                let city = $( '#billing_city' ).val();
+                if (typeof city != 'undefined' && city !== null) {
+                    initial_map_address = city;
+                } else {
+                    let city_2 = $( '#shipping_city' ).val();
+                    if (typeof city_2 != 'undefined' && city_2 !== null) {
+                        initial_map_address = city_2;
+                    }
+                }
+
+                return initial_map_address;
+            }
+
             let shipping_methods_config = apaczka_checkout.map_config;
             console.log( 'shipping_methods_config:' );
             console.log( shipping_methods_config );
@@ -213,43 +345,9 @@
                             document.getElementById( 'apaczka_pl_geowidget_modal_inner_content' ),
                             {
                                 callback: function (point) {
-                                    console.log( point );
-                                    //console.log( 'point code:', point.code );
-                                    //console.log( 'point operator:', point.operator );
+                                    window.apaczka_mp_map_callback( point );
                                     let map_modal           = document.getElementById( 'apaczka_pl_geowidget_modal_dynamic' );
                                     map_modal.style.display = 'none';
-                                    $( '#selected-parcel-machine' ).removeClass( 'apaczka-hidden' );
-                                    if ( 'brand' in point ) {
-                                        let point_brand = point.brand + ': ' + point.code;
-                                        $( '#selected-parcel-machine-id' ).html( point_brand );
-                                    } else {
-                                        $( '#selected-parcel-machine-id' ).html( point.code );
-                                    }
-
-                                    let visible_point_desc = '';
-                                    if ('description' in point) {
-                                        visible_point_desc += point.description;
-                                    }
-                                    if ('street' in point) {
-                                        visible_point_desc += '<br>' + point.street;
-                                    }
-                                    if ('city' in point) {
-                                        visible_point_desc += '<br>' + point.city;
-                                    }
-                                    if ('postalCode' in point) {
-                                        visible_point_desc += '<br>' + point.postalCode;
-                                    }
-
-                                    $( '#selected-parcel-machine-desc' ).html( visible_point_desc );
-
-                                    $( '#apm_name' ).val( point.description );
-                                    $( '#apm_city' ).val( point.city );
-                                    $( '#apm_street' ).val( point.street );
-                                    $( '#apm_postal_code' ).val( point.postalCode );
-                                    $( '#apm_country_code' ).val( country_code_apaczka );
-                                    $( '#apm_supplier' ).val( point.operator );
-                                    $( '#apm_access_point_id' ).val( point.code );
-                                    $( '#apm_foreign_access_point_id' ).val( point.code );
                                 },
                                 language: apaczka_checkout.lang,
                                 posType: 'DELIVERY',
@@ -285,95 +383,7 @@
                 }
             );
 
-            function apaczka_pl_create_operator_obj(operatorId, operatorName) {
-                operatorName = operatorName.toUpperCase();
-                return {
-                    operator: operatorName,
-                    price: null
-                };
-            }
 
-            function apaczka_pl_wait_fo_element(selector) {
-                return new Promise(
-                    function (resolve) {
-                        if (document.querySelector( selector )) {
-                            return resolve( document.querySelector( selector ) );
-                        }
-
-                        const observer = new MutationObserver(
-                            function (mutations) {
-                                if (document.querySelector( selector )) {
-                                    resolve( document.querySelector( selector ) );
-                                    observer.disconnect();
-                                }
-                            }
-                        );
-
-                        observer.observe(
-                            document.body,
-                            {
-                                childList: true,
-                                subtree: true
-                            }
-                        );
-                    }
-                );
-            }
-
-            function apaczka_pl_get_chosen_shipping_method() {
-                let data    = {};
-                let method  = $( 'input[name^="shipping_method"]:checked' ).val();
-                let postfix = '';
-                if ('undefined' == typeof method || null === method ) {
-                    method = $( 'input[name^="shipping_method"]' ).val();
-                }
-                if (typeof method != 'undefined' && method !== null) {
-                    if (method.indexOf( ':' ) > -1) {
-                        let arr = method.split( ':' );
-                        method  = arr[0];
-                        postfix = arr[1];
-                    }
-                }
-                data.method      = method;
-                data.instance_id = postfix;
-
-                return data;
-            }
-
-            function apaczka_pl_get_initial_map_address() {
-
-                let country_code        = '';
-                let initial_map_address = '';
-
-                let shipping_country_input = $( '#shipping_country' );
-
-                if (typeof shipping_country_input != 'undefined' && shipping_country_input !== null) {
-                    let country_code_shipping = $( shipping_country_input ).val();
-                    if (typeof country_code_shipping != 'undefined' && country_code_shipping !== null) {
-                        country_code = $( '#shipping_city' ).val();
-                    } else {
-                        let billing_country = $( '#billing_country' );
-                        if (typeof billing_country != 'undefined' && billing_country !== null) {
-                            country_code_billing = $( billing_country ).val();
-                            if (typeof country_code_billing != 'undefined' && country_code_billing !== null) {
-                                country_code = $( '#billing_city' ).val();
-                            }
-                        }
-                    }
-                }
-
-                let city = $( '#billing_city' ).val();
-                if (typeof city != 'undefined' && city !== null) {
-                    initial_map_address = city;
-                } else {
-                    let city_2 = $( '#shipping_city' ).val();
-                    if (typeof city_2 != 'undefined' && city_2 !== null) {
-                        initial_map_address = city_2;
-                    }
-                }
-
-                return initial_map_address;
-            }
 
         }
     );

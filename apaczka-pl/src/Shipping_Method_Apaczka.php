@@ -42,15 +42,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	static $instance_options                 = array();
 
 	private $fields = array();
-	/**
-	 * @var mixed
-	 */
-	//private $geowidget_supplier;
-	/**
-	 * @var mixed
-	 */
-	//private $geowidget_only_cod;
-
+	
 	/**
 	 * @var string
 	 */
@@ -146,7 +138,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 
 		add_action( 'woocommerce_store_api_checkout_update_order_from_request', array( $this, 'save_shipping_point_in_order_meta' ), 10, 2 );
 
-		if ( ! is_plugin_active( 'apaczka-pl-mapa-punktow/apaczka-points-map.php' ) ) {
+        if ( ! class_exists( 'Apaczka_Points_Map\Points_Map_Plugin' ) ) {
 			add_action(
 				'woocommerce_review_order_after_shipping',
 				array( $this, 'woocommerce_review_order_after_shipping' )
@@ -161,8 +153,6 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 					}
 				}
 			);
-
-			//add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_blocks_scripts' ) );
 			// integration with Woocommerce blocks end.
 		}
 	}
@@ -233,21 +223,19 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	 */
 	public function woocommerce_review_order_after_shipping() {
 
-		if ( $this->is_delivery_map_button_display() && ! self::$review_order_after_shipping_once ) {
-			//$point_id = $this->geowidget_supplier;
-			//$only_cod = 'yes' === $this->geowidget_only_cod ? true : false;
-			wc_get_template(
-				'checkout/apaczka-review-order-after-shipping.php',
-				array(),
-				/*array(
-					'point_id' => $point_id,
-					'only_cod' => $only_cod,
-				),*/
-				'',
-				apaczka()->get_plugin_templates_dir( true )
-			);
-			self::$review_order_after_shipping_once = true;
-		}
+        if ( ! class_exists( 'Apaczka_Points_Map\Points_Map_Plugin' ) ) {
+
+            if ($this->is_delivery_map_button_display() && ! self::$review_order_after_shipping_once) {
+                
+                wc_get_template(
+                    'checkout/apaczka-review-order-after-shipping.php',
+                    array(),                    
+                    '',
+                    apaczka()->get_plugin_templates_dir(true)
+                );
+                self::$review_order_after_shipping_once = true;
+            }
+        }
 	}
 
 	public function add_meta_boxes( $post_type, $post ) {
@@ -2051,7 +2039,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 				'apaczka-pl'
 			),
 			'type'    => 'select',
-			'default' => 'all',
+			'default' => 'ALL',
 			'options' => array(
 				'ALL'        => esc_html__( 'All', 'apaczka-pl' ),
 				'DHL_PARCEL' => esc_html__( 'DHL', 'apaczka-pl-mapa-punktow' ),
@@ -2273,7 +2261,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			case 150:
 				return 'geis';
 				break;
-			case 53:
+			//case 53:
 			case 151:
 			case 153:
 				return 'fedex';
@@ -2371,16 +2359,6 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			$order->save();
 		}
 	}
-
-
-	/*public function enqueue_frontend_blocks_scripts() {
-		if ( ! class_exists( 'Apaczka_Points_Map\Points_Map_Plugin' ) ) {
-			if ( is_checkout() ) {
-
-			}
-		}
-	}*/
-
 
 
 

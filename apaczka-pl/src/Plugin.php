@@ -169,12 +169,13 @@ class Plugin extends Abstract_Ilabs_Plugin {
      * @return void
      */
 	public function enqueue_frontend_scripts() {
+
 		if ( ! class_exists( 'Apaczka_Points_Map\Points_Map_Plugin' ) ) {
 
             global $wp;
-            $thankyou_page          = ! empty( $wp->query_vars['order-received'] ) ? absint( $wp->query_vars['order-received'] ) : false;
+            $thankyou_page = ! empty( $wp->query_vars['order-received'] ) ? absint( $wp->query_vars['order-received'] ) : false;
 
-			if ( is_checkout() || has_block( 'woocommerce/checkout' ) ) {
+			if ( ! $thankyou_page && ( is_checkout() || has_block( 'woocommerce/checkout' ) ) ) {
 
                 $current_plugin_version = apaczka()->get_plugin_version();
 
@@ -191,34 +192,6 @@ class Plugin extends Abstract_Ilabs_Plugin {
 					$this->get_admin_css_id(),
 					$this->get_plugin_css_url() . '/front.css'
 				);
-			}
-
-
-            if ( ! $thankyou_page && ( is_checkout() || has_block( 'woocommerce/checkout' ) ) ) {
-                $lang = $this->get_website_language();
-                $map_config = $this->get_map_config();
-				$fb_js_path = apaczka()->get_plugin_dir() . 'assets/js/front-blocks.js';
-                $fb_js_ver  = file_exists( $fb_js_path ) ? filemtime( $fb_js_path ) : $current_plugin_version;
-                wp_enqueue_script(
-                    $this->get_front_blocks_script_id(),
-                    $this->get_plugin_js_url() . '/front-blocks.js',
-					array( 'jquery' ),
-                    $fb_js_ver,
-                    array( 'in_footer' => true )
-                );
-                wp_localize_script(
-                    $this->get_front_blocks_script_id(),
-                    'apaczka_block',
-                    array(
-                        'button_text1'  => esc_html__( 'Select point', 'apaczka-pl' ),
-                        'button_text2'  => esc_html__( 'Change point', 'apaczka-pl' ),
-                        'selected_text' => esc_html__( 'Selected Parcel Locker:', 'apaczka-pl' ),
-                        'alert_text'    => esc_html__( 'Delivery point must be chosen!', 'apaczka-pl' ),
-                        'map_config'    => $map_config,
-                    )
-                );
-
-
 
                 $bp_js_path = apaczka()->get_plugin_dir() . 'assets/js/bliskapaczka-map.js';
                 $bp_js_ver  = file_exists( $bp_js_path ) ? filemtime( $bp_js_path ) : $current_plugin_version;
@@ -229,15 +202,45 @@ class Plugin extends Abstract_Ilabs_Plugin {
                     $bp_js_ver,
                     array( 'in_footer' => true )
                 );
+			}
 
+
+            if ( ! $thankyou_page && has_block( 'woocommerce/checkout' ) ) {
+                $lang       = $this->get_website_language();
+                $map_config = $this->get_map_config();
+                $fb_js_path = apaczka()->get_plugin_dir() . 'assets/js/front-blocks.js';
+                $fb_js_ver  = file_exists($fb_js_path) ? filemtime($fb_js_path) : $current_plugin_version;
+                wp_enqueue_script(
+                    $this->get_front_blocks_script_id(),
+                    $this->get_plugin_js_url() . '/front-blocks.js',
+                    array('jquery'),
+                    $fb_js_ver,
+                    array('in_footer' => true)
+                );
+                wp_localize_script(
+                    $this->get_front_blocks_script_id(),
+                    'apaczka_block',
+                    array(
+                        'button_text1'  => esc_html__('Select point', 'apaczka-pl'),
+                        'button_text2'  => esc_html__('Change point', 'apaczka-pl'),
+                        'selected_text' => esc_html__('Selected Parcel Locker:', 'apaczka-pl'),
+                        'alert_text'    => esc_html__('Delivery point must be chosen!', 'apaczka-pl'),
+                        'map_config'    => $map_config,
+                    )
+                );
+            }
+
+
+            if ( ! $thankyou_page && is_checkout() && ! has_block( 'woocommerce/checkout' ) ) {
+                $lang       = $this->get_website_language();
                 $front_js_path = apaczka()->get_plugin_dir() . 'assets/js/frontend.js';
-                $front_js_ver  = file_exists( $front_js_path ) ? filemtime( $front_js_path ) : $current_plugin_version;
+                $front_js_ver  = file_exists($front_js_path) ? filemtime($front_js_path) : $current_plugin_version;
                 wp_enqueue_script(
                     self::APP_PREFIX . '_frontend.js',
                     $this->get_plugin_js_url() . '/frontend.js',
-                    array( 'jquery' ),
+                    array('jquery'),
                     $front_js_ver,
-                    array( 'in_footer' => true )
+                    array('in_footer' => true)
                 );
                 wp_localize_script(
                     self::APP_PREFIX . '_frontend.js',
@@ -247,10 +250,6 @@ class Plugin extends Abstract_Ilabs_Plugin {
                         'lang'       => $lang,
                     )
                 );
-
-
-
-
             }
 
 
@@ -466,9 +465,7 @@ class Plugin extends Abstract_Ilabs_Plugin {
                             'POCZTA',
                             'DPD',
                             'UPS',
-                            'DHL',
-                            'GLS',
-                            'FEDEX',
+                            'DHL'
                         );
                     } else {
                         $single_carrier                               = $shipping_method->instance_settings['supplier_apaczka_map'];

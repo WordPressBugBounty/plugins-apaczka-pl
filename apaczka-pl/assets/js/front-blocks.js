@@ -48,7 +48,7 @@
     }
 
 
-    function apaczka_pl_set_apm_data(record) {
+    window.apaczka_mp_map_callback = function (record) {
 
         console.log( 'apaczka_wc_block_point_callback' );
         console.log( record );
@@ -278,12 +278,12 @@
                                     {
 
                                         callback: function (point) {
+                                            window.apaczka_mp_map_callback( point );
                                             // console.log(point);
                                             // console.log('point code:', point.code);
                                             // console.log('point operator:', point.operator);
                                             let map_modal           = document.getElementById( 'apaczka_pl_geowidget_modal_dynamic' );
                                             map_modal.style.display = 'none';
-                                            apaczka_pl_set_apm_data( point );
                                         },
                                         posType: 'DELIVERY',
                                         mapOptions: { zoom: 14 },
