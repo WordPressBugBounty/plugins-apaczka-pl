@@ -4,14 +4,16 @@
  * Plugin URI: https://www.apaczka.com/zostan-sprzedawca
  * Description: Nadawaj przesyłki za pośrednictwem Apaczka.pl bezpośrednio z panelu swojego sklepu
  * Product: Apaczka Woocommerce
- * Version: 1.3.3
+ * Version: 1.3.4
  * Tested up to: 6.8
  * Requires at least: 5.3
  * Requires PHP: 7.2
  * Author: iLabs LTD
  * Author URI: https://iLabs.dev
  * Text Domain: apaczka-pl
- * Domain Path: /languages/
+ * Domain Path: /lang/
+ * License: GPLv3
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  *
  * Copyright 2022 iLabs LTD
  *
@@ -103,7 +105,7 @@ add_filter(
 	'plugin_action_links_' . plugin_basename( __FILE__ ),
 	function ( $links ) {
 		$plugin_links = array(
-			'<a href="/wp-admin/admin.php?page=wc-settings&tab=apaczka_woocommerce_settings_general">' . esc_html__( 'Ustawienia', 'apaczka-pl' ) . '</a>',
+			'<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=apaczka_woocommerce_settings_general' ) ) . '">' . esc_html__( 'Ustawienia', 'apaczka-pl' ) . '</a>',
 		);
 
 		return array_merge( $links, $plugin_links );

@@ -171,11 +171,8 @@ class Plugin extends Abstract_Ilabs_Plugin {
 	public function enqueue_frontend_scripts() {
 
 		if ( ! class_exists( 'Apaczka_Points_Map\Points_Map_Plugin' ) ) {
-
-            global $wp;
-            $thankyou_page = ! empty( $wp->query_vars['order-received'] ) ? absint( $wp->query_vars['order-received'] ) : false;
-
-			if ( ! $thankyou_page && ( is_checkout() || has_block( 'woocommerce/checkout' ) ) ) {
+            
+			if (  is_checkout() || has_block( 'woocommerce/checkout' ) ) {
 
                 $current_plugin_version = apaczka()->get_plugin_version();
 
@@ -205,7 +202,7 @@ class Plugin extends Abstract_Ilabs_Plugin {
 			}
 
 
-            if ( ! $thankyou_page && has_block( 'woocommerce/checkout' ) ) {
+            if (  is_checkout() || has_block( 'woocommerce/checkout' ) ) {
                 $lang       = $this->get_website_language();
                 $map_config = $this->get_map_config();
                 $fb_js_path = apaczka()->get_plugin_dir() . 'assets/js/front-blocks.js';
@@ -226,12 +223,23 @@ class Plugin extends Abstract_Ilabs_Plugin {
                         'selected_text' => esc_html__('Selected Parcel Locker:', 'apaczka-pl'),
                         'alert_text'    => esc_html__('Delivery point must be chosen!', 'apaczka-pl'),
                         'map_config'    => $map_config,
+                        'plugin_version'    => $current_plugin_version,
                     )
                 );
             }
 
 
-            if ( ! $thankyou_page && is_checkout() && ! has_block( 'woocommerce/checkout' ) ) {
+            $enqueue_script_classic_checkout = false;
+            if ( is_checkout() && ! has_block( 'woocommerce/checkout' ) ) {
+                $enqueue_script_classic_checkout = true;
+            }
+            if( is_checkout() && class_exists( 'FluidCheckout' ) ) {
+                $enqueue_script_classic_checkout = true;
+            }
+
+
+            if (  is_checkout() || has_block( 'woocommerce/checkout' ) ) {
+
                 $lang       = $this->get_website_language();
                 $front_js_path = apaczka()->get_plugin_dir() . 'assets/js/frontend.js';
                 $front_js_ver  = file_exists($front_js_path) ? filemtime($front_js_path) : $current_plugin_version;
@@ -248,6 +256,7 @@ class Plugin extends Abstract_Ilabs_Plugin {
                     array(
                         'map_config' => $this->get_map_config(),
                         'lang'       => $lang,
+						'plugin_version'    => $current_plugin_version,
                     )
                 );
             }

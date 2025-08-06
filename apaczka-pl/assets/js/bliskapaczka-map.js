@@ -8790,11 +8790,30 @@ function posId(t) {
             }
 
             initTranslations(e) {
-                return m(this, void 0, void 0, function* () {
-                    var t = yield(yield fetch(`https://widget.bliskapaczka.pl/v8.2/translations/${e}.json`)).json();
-                    i18n.locale = e, i18n.store(t)
-                })
-            }
+				return m(this, void 0, void 0, function* () {
+					try {
+						// Try original language
+						const response = yield fetch(`https://widget.bliskapaczka.pl/v8.2/translations/${e}.json`);
+						const t = yield response.json();
+						i18n.locale = e;
+						i18n.store(t);
+					} catch (error) {
+						console.error(`Failed to load ${e} translations, falling back to English:`, error);
+						
+						try {
+							// Fallback to English
+							const enResponse = yield fetch('https://widget.bliskapaczka.pl/v8.2/translations/en.json');
+							const enTranslations = yield enResponse.json();
+							i18n.locale = 'en';
+							i18n.store(enTranslations);
+						} catch (fallbackError) {
+							console.error('Failed to load English fallback translations:', fallbackError);
+							i18n.locale = e;
+							i18n.store({}); // Empty fallback if everything fails
+						}
+					}
+				});
+			}
 
             initMap() {
                 var i;

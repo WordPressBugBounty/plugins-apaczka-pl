@@ -2041,22 +2041,26 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			'type'    => 'select',
 			'default' => 'ALL',
 			'options' => array(
-				'ALL'        => esc_html__( 'All', 'apaczka-pl' ),
-				'DHL_PARCEL' => esc_html__( 'DHL', 'apaczka-pl-mapa-punktow' ),
-				'DPD'        => esc_html__( 'DPD', 'apaczka-pl-mapa-punktow' ),
-				'INPOST'     => esc_html__(
+				'ALL'                  => esc_html__( 'All', 'apaczka-pl' ),
+				'DHL_PARCEL'           => esc_html__( 'DHL', 'apaczka-pl' ),
+				'DPD'                  => esc_html__( 'DPD', 'apaczka-pl' ),
+				'INPOST'               => esc_html__(
 					'Inpost',
-					'apaczka-pl-mapa-punktow'
+					'apaczka-pl'
 				),
-				'PWR'        => esc_html__(
+				'INPOST_INTERNATIONAL' => esc_html__(
+					'Inpost International',
+					'apaczka-pl'
+				),
+				'PWR'                  => esc_html__(
 					'Orlen Paczka',
-					'apaczka-pl-mapa-punktow'
+					'apaczka-pl'
 				),
-				'POCZTA'     => esc_html__(
+				'POCZTA'               => esc_html__(
 					'Poczta Polska',
-					'apaczka-pl-mapa-punktow'
+					'apaczka-pl'
 				),
-				'UPS'        => esc_html__( 'UPS', 'apaczka-pl-mapa-punktow' ),
+				'UPS'                  => esc_html__( 'UPS', 'apaczka-pl' ),
 			),
 		);
 
@@ -2209,8 +2213,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			case 14:
 			case 15:
 			case 16:
-				return 'ups';
-				break;
+				return 'ups';				
 			case 20:
 			case 21:
 			case 22:
@@ -2221,76 +2224,61 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			case 28:
 			case 29:
 			case 30:
-				return 'dpd';
-				break;
+				return 'dpd';				
 			case 41:
 			case 40:
 			case 42:
 			case 43:
 			case 45:
 			case 46:
-				return 'inpost';
-				break;
+				return 'inpost';				
 			case 162:
 			case 163:
 			case 64:
 			case 66:
 			case 68:
-				return 'pocztex';
-				break;
+				return 'pocztex';				
 			case 86:
 			case 81:
 			case 82:
 			case 83:
 			case 84:
 			case 87:
-				return 'dhl';
-				break;
+				return 'dhl';				
 			case 50:
 			case 53:
-				return 'orlen';
-				break;
+				return 'orlen';				
 			case 60:
 			case 65:
 			case 67:
-				return 'pocztex';
-				break;
+				return 'pocztex';				
 			case 110:
-				return 'ipaczka';
-				break;
+				return 'ipaczka';				
 			case 150:
-				return 'geis';
-				break;
+				return 'geis';				
 			//case 53:
 			case 151:
 			case 153:
-				return 'fedex';
-				break;
+				return 'fedex';				
 			case 191:
-				return 'apaczka-niemcy';
-				break;
+				return 'apaczka-niemcy';				
 			case 200:
-				return 'gls';
-				break;
+				return 'gls';				
 			case 211:
-				return 'wawa';
-				break;
+				return 'wawa';				
 			case 220:
-				return 'pallex';
-				break;
+				return 'pallex';				
 			case 230:
-				return 'hellmann';
-				break;
+				return 'hellmann';				
 			case 240:
-				return 'rhenus';
-				break;
+				return 'rhenus';				
 			case 260:
 			case 261:
-				return 'ambro';
-				break;
+				return 'ambro';				
 			case 250:
 				return 'geodis';
-				break;
+			case 312:
+                return 'cblog';
 			default:
 				return null;
 
