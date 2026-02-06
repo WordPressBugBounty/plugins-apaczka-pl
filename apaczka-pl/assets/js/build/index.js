@@ -1,1 +1,1 @@
-(()=>{"use strict";(0,window.wp.plugins.registerPlugin)("alsendo_connect_block",{render:()=>{},scope:"woocommerce-checkout"})})();
+(()=>{"use strict";(0,window.wp.plugins.registerPlugin)("apaczka_pl_block",{render:()=>{},scope:"woocommerce-checkout"})})();

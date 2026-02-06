@@ -16,14 +16,82 @@ export const Block = ( { checkoutExtensionData, extensions } ) => {
 	);
 
 	// Get current shipping options.
-	const selectedShippingRate = useSelect(
+	let shippingRates = useSelect(
 		(select) => {
 			const store            = select( 'wc/store/cart' );
 			return store.getShippingRates();
 		}
 	);
 
-	let shippingRates = selectedShippingRate;
+	// State to track pickup selection with both store and DOM monitoring.
+	const [isPickupSelected, setIsPickupSelected] = useState(false);
+
+	// Get pickup selection status from store.
+	const storePickupSelected = useSelect(
+		(select) => {
+			const checkoutStore = select('wc/store/checkout');
+			return checkoutStore.prefersCollection();
+		},
+		[] // Dependencies array - will re-run when store changes.
+	);
+
+	// Update local state when store changes.
+	useEffect(() => {
+		setIsPickupSelected(storePickupSelected);
+	}, [storePickupSelected]);
+
+	// DOM listener for immediate Ship/Pickup changes.
+	useEffect(() => {
+		const handleShippingMethodChange = () => {
+			const container = document.getElementById('shipping-method');
+			if (!container) return;
+
+			const allOptions = container.querySelectorAll('.wc-block-checkout__shipping-method-option');
+			const selectedOption = container.querySelector('.wc-block-checkout__shipping-method-option--selected');
+
+			if (selectedOption && allOptions.length > 0) {
+				// Find the index of the selected option
+				const selectedIndex = Array.from(allOptions).indexOf(selectedOption);
+				const isPickup = selectedIndex === 1; // Ship = 0, Pickup = 1
+
+				console.log('Selected shipping method index:', selectedIndex);
+				console.log('isPickup shipping method:', isPickup);
+
+				if (isPickup) {
+					clearValidationError(validationErrorId);
+				}
+				setIsPickupSelected(isPickup);
+			}
+		};
+
+		// Initial check.
+		handleShippingMethodChange();
+
+		// Listen for clicks on shipping method container.
+		const container = document.getElementById('shipping-method');
+		if (container) {
+			container.addEventListener('click', (event) => {
+				// Small delay to allow DOM to update.
+				setTimeout(handleShippingMethodChange, 100);
+			});
+
+			// Also listen for any changes in the container
+			const observer = new MutationObserver(() => {
+				handleShippingMethodChange();
+			});
+
+			observer.observe(container, {
+				childList: true,
+				subtree: true,
+				attributes: true,
+				attributeFilter: ['class']
+			});
+
+			return () => {
+				observer.disconnect();
+			};
+		}
+	}, []);
 
 	function useApaczkaPlConfiguredMethods() {
 		if (window.apaczka_block && window.apaczka_block.map_config) {
@@ -81,57 +149,37 @@ export const Block = ( { checkoutExtensionData, extensions } ) => {
 		}
 	}
 
-
-	// Initial validation error - prevent to place order after Checkout page loaded, and we have empty input value for Apaczka delivery point.
-	const initialValiadtion = useCallback(
-		() => {
-        if ( isApaczkaPlShippingMethod && ! apaczkaPlDeliveryPoint ) {
-            setValidationErrors(
-            {
-                [validationErrorId]: {
-                    message: __( 'Parcel locker must be choosen.', 'apaczka-pl' ),
-                    hidden: true,
-                },
-            }
-            );
-        }
-		},
-		[apaczkaPlDeliveryPoint, setValidationErrors, clearValidationError, isApaczkaPlShippingMethod]
-	);
-
-
-	// Additional validation: clear validation error if we have input value for Apaczka Input.
-	const validateInput = useCallback(
-		() => {
-        if ( apaczkaPlDeliveryPoint || ! isApaczkaPlShippingMethod ) {
-            clearValidationError( validationErrorId );
-            return true; // Allow order placement.
-        }
-		},
-		[apaczkaPlDeliveryPoint, setValidationErrors, clearValidationError, isApaczkaPlShippingMethod]
-	);
-
-
-	// Effect to validate input whenever Delivery Point input value changes.
+	// Effect to handle validation whenever relevant values change.
 	useEffect(
 		() => {
-        initialValiadtion();
-        validateInput();
-        setExtensionData( "apaczka_pl", "apaczka-point", apaczkaPlDeliveryPoint );
+			// Set extension data.
+			setExtensionData( "apaczka_pl", "apaczka-point", apaczkaPlDeliveryPoint );
+			// Validation logic.
+			if ( apaczkaPlDeliveryPoint || ! isApaczkaPlShippingMethod || isPickupSelected ) {
+				clearValidationError( validationErrorId );
+			} else {
+				setValidationErrors(
+					{
+						[validationErrorId]: {
+							message: __( 'Parcel locker must be choosen.', 'apaczka-pl' ),
+							hidden: true,
+						},
+					} );
+			}
 		},
-		[apaczkaPlDeliveryPoint, setExtensionData, validateInput]
+		[apaczkaPlDeliveryPoint, isPickupSelected, isApaczkaPlShippingMethod, setExtensionData, clearValidationError, setValidationErrors]
 	);
+
 
 	// Change Delivery Point input value.
 	const handleDeliveryPointChange = (event) => {
 		const selectedId            = event.target.value;
 		setApaczkaPlDeliveryPoint( selectedId );
-	};	
-
+	};
 
 	return (
 		<>
-			{isApaczkaPlShippingMethod && (
+			{isApaczkaPlShippingMethod && ! isPickupSelected && (
 				<>
 					<button className="button alt apaczka_pl_geowidget_block" id="apaczka_pl_geowidget_block">
 						{__( 'Select point', 'apaczka-pl' )}
@@ -141,7 +189,7 @@ export const Block = ( { checkoutExtensionData, extensions } ) => {
 					</div>
 					<ExperimentalOrderMeta>
 						<PointLockerInput
-							apaczkaPlDeliveryPoint={}       = {apaczkaPlDeliveryPoint}
+							apaczkaPlDeliveryPoint = {apaczkaPlDeliveryPoint}
 							handleDeliveryPointChange = {handleDeliveryPointChange}
 						/>						
 					</ExperimentalOrderMeta>

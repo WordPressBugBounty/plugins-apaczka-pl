@@ -2,11 +2,11 @@
 Contributors: inspirelabs
 Tags: apaczka, woocommerce
 Requires at least: 5.3
-Tested up to: 6.8
-Stable tag: 1.3.4
+Tested up to: 6.9
+Stable tag: 1.3.9
 Requires PHP: 7.2
-License: GPLv2 or later
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+License: GPLv3 or later
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Nowa wtyczka na platformie WooCommerce umożliwiająca integrację z liderem na rynku logistycznym - Apaczka.pl. Oferowana dostępność większości przewoźników, a także ogromna liczba punktów nadań i doręczeń, gwarantuje łatwe i efektywne zarządzanie wysyłką zamówień zarówno krajowych, jak i zagranicznych. Zainstaluj już teraz i korzystaj z wygody jaką oferuje Apaczka.pl WooCommerce 2.0
 
@@ -58,6 +58,24 @@ Tak. Zarejestruj się bezpłatnie na [Apaczka.pl](https://panel.apaczka.pl/rejes
 7.
 
 == Changelog ==
+
+= 1.3.9 =
+* Fix: map enqueue script if virtual products in cart
+
+= 1.3.8 =
+* Fix: International methods names
+* Feat: additional mode to output map button
+
+= 1.3.7 =
+* Fix: DPD dispatch point
+
+= 1.3.6 =
+* Fix: checkout blocks validation
+* Fix: map files enqueue
+* Feat: integration with Woocommerce Subsrciptions
+
+= 1.3.5 =
+* Fix: address line data to API
 
 = 1.3.4 =
 * Fix: InPost International on the map

@@ -2,6 +2,10 @@
 
 namespace Inspire_Labs\Apaczka_Woocommerce;
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit; // Exit if accessed directly.
+}
+
 class Sender_Settings_Templates_Helper {
 
 

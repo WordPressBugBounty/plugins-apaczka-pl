@@ -6,8 +6,8 @@
 			var country_code_apaczka = 'PL';
 			var initial_map_address  = '';
 
-			console.log( 'Apaczka PL 2.0: ' );
-			console.log( apaczka_checkout.plugin_version );
+			console.log( 'Apaczka.pl, ver: ' + apaczka_checkout.plugin_version );
+			//console.log( apaczka_checkout.plugin_version );
 
 			let apaczka_geowidget_modal;
 			let cod_only       = false;
@@ -19,6 +19,13 @@
 				console.log( 'apaczka_cl_point_callback' );
 				console.log( 'point code:', point.code );
 				console.log( 'point operator:', point.operator );
+
+
+				$('.apaczka_pl_after_rate_description').each(
+					function (i, elem) {
+						$( elem ).remove();
+					}
+				);
 
 				let visible_point_desc = '';
 				let visible_point_id   = '';
@@ -61,14 +68,55 @@
 					}
 				}
 
-				$( '#apm_name' ).val( point.description );
-				$( '#apm_city' ).val( point.city );
-				$( '#apm_street' ).val( point.street );
-				$( '#apm_postal_code' ).val( point.postalCode );
-				$( '#apm_country_code' ).val( country_code_apaczka );
-				$( '#apm_supplier' ).val( point.operator );
-				$( '#apm_access_point_id' ).val( point.code );
-				$( '#apm_foreign_access_point_id' ).val( point.code );
+				//$( '#apm_name' ).val( point.description );
+				//$( '#apm_city' ).val( point.city );
+				//$( '#apm_street' ).val( point.street );
+				//$( '#apm_postal_code' ).val( point.postalCode );
+				//$( '#apm_country_code' ).val( country_code_apaczka );
+				//$( '#apm_supplier' ).val( point.operator );
+				//$( '#apm_access_point_id' ).val( point.code );
+				//$( '#apm_foreign_access_point_id' ).val( point.code );
+
+				$( '#apm_name' ).each(
+					function (i, elem) {
+						$( elem ).val( point.description );
+					}
+				);
+				$( '#apm_city' ).each(
+					function (i, elem) {
+						$( elem ).val( point.city );
+					}
+				);
+				$( '#apm_street' ).each(
+					function (i, elem) {
+						$( elem ).val( point.street );
+					}
+				);
+				$( '#apm_postal_code' ).each(
+					function (i, elem) {
+						$( elem ).val( point.postalCode );
+					}
+				);
+				$( '#apm_country_code' ).each(
+					function (i, elem) {
+						$( elem ).val( country_code_apaczka );
+					}
+				);
+				$( '#apm_supplier' ).each(
+					function (i, elem) {
+						$( elem ).val( point.operator );
+					}
+				);
+				$( '#apm_access_point_id' ).each(
+					function (i, elem) {
+						$( elem ).val( point.code );
+					}
+				);
+				$( '#apm_foreign_access_point_id' ).each(
+					function (i, elem) {
+						$( elem ).val( point.code );
+					}
+				);
 				/*  Old Checkout End */
 
 				/*  New Checkout */
@@ -146,6 +194,27 @@
 				let map_modal = document.getElementById( 'apaczka_pl_geowidget_modal_dynamic' );
 				if (typeof map_modal != 'undefined' && map_modal !== null) {
 					map_modal.style.display = 'none';
+				}
+
+				if ($('.apaczka_pl_after_rate_btn').length > 0) {
+					console.log('apaczka_pl_after_rate_btn');
+
+					$('#selected-parcel-machine').each(
+						function (i, elem) {
+							$( elem ).addClass( 'apaczka-hidden' );
+						}
+					);
+
+					apaczka_point += '<input type="hidden" id="apm_access_point_id" name="apm_access_point_id" value="'+point.code+'"/>\n' +
+						'<input type="hidden" id="apm_supplier" name="apm_supplier" value="'+point.operator+'"/>\n' +
+						'<input type="hidden" id="apm_name" name="apm_name" value="'+point.description+'"/>\n' +
+						'<input type="hidden" id="apm_foreign_access_point_id" name="apm_foreign_access_point_id" value="'+point.code+'"/>\n' +
+						'<input type="hidden" id="apm_street" name="apm_street" value="'+point.street+'"/>\n' +
+						'<input type="hidden" id="apm_city" name="apm_city" value="'+point.city+'"/>\n' +
+						'<input type="hidden" id="apm_postal_code" name="apm_postal_code" value="'+point.postalCode+'"/>\n' +
+						'<input type="hidden" id="apm_country_code" name="apm_country_code" value="'+apaczka_point_data.apm_country_code+'"/>';
+
+					$('.apaczka_pl_after_rate_btn').after( apaczka_point );
 				}
 
 			}
@@ -384,6 +453,11 @@
 								if (typeof config_by_instance_id != 'undefined' && config_by_instance_id !== null) {
 									operatorsArray = config_by_instance_id.geowidget_supplier;
 									is_cod_only    = config_by_instance_id.geowidget_only_cod;
+									if ( is_cod_only && 'yes' === is_cod_only ) {
+										cod_only = true;
+									}
+									console.log('is_cod_only: ' + is_cod_only);
+
 									if ( typeof map_button != 'undefined' && map_button !== null) {
 										$( map_button ).removeClass( 'apaczka-hidden' );
 									}
@@ -404,6 +478,8 @@
 					if (target.hasAttribute( 'id' ) && 'apaczka_pl_geowidget_classic' === target.getAttribute( 'id' ) ) {
 
 						e.preventDefault();
+
+						let bp_is_cod_only = false;
 
 						let apaczkaShippingData = localStorage.getItem( 'apaczkaShippingData' );
 						if ( apaczkaShippingData !== null) {
@@ -435,8 +511,24 @@
 							initial_map_address = apaczka_pl_get_initial_map_address();
 						}
 
+						let shipping_method_data = apaczka_pl_get_chosen_shipping_method();
+						if ( 'instance_id' in shipping_method_data ) {
+							let instance_id = shipping_method_data.instance_id;
+							console.log( 'instance_id:' );
+							console.log( instance_id );
+							let config_by_instance_id = shipping_methods_config[instance_id];
+							if (typeof config_by_instance_id != 'undefined' && config_by_instance_id !== null) {
+								operatorsArray = config_by_instance_id.geowidget_supplier;
+								is_cod_only    = config_by_instance_id.geowidget_only_cod;
+								if ( is_cod_only && 'yes' === is_cod_only ) {
+									bp_is_cod_only = true;
+								}
+							}
+						}
+
 						console.log( 'apaczka_pl_country_code_before_map_init: ', country_code_apaczka );
 						console.log( 'apaczka_pl_map_initial_address: ', initial_map_address );
+						console.log( 'cod_only: ', bp_is_cod_only );
 
 						let operators = operatorsArray.map(
 							function (operator) {
@@ -445,8 +537,19 @@
 						).filter( Boolean );
 						operators     = operators.length ? operators : null;
 
-						// console.log( 'operators before map init: ' );
-						// console.log( operators );
+						let widget_config = {
+							language: apaczka_checkout.lang,
+							posType: 'DELIVERY',
+							mapOptions: { zoom: 14 },
+							codOnly: bp_is_cod_only,
+							operatorMarkers: true,
+							countryCodes: country_code_apaczka,
+							initialAddress: initial_map_address,
+							operators: operators,
+							codeSearch: true
+						};
+						console.log( 'map widget config:' );
+						console.log( widget_config );
 
 						BPWidget.init(
 							document.getElementById( 'apaczka_pl_geowidget_modal_inner_content' ),
@@ -457,7 +560,7 @@
 								language: apaczka_checkout.lang,
 								posType: 'DELIVERY',
 								mapOptions: { zoom: 14 },
-								codOnly: cod_only,
+								codOnly: bp_is_cod_only,
 								operatorMarkers: true,
 								countryCodes: country_code_apaczka,
 								initialAddress: initial_map_address,

@@ -12,7 +12,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly.
 
 
+/**
+ * Shipping_Method_Apaczka
+ */
 class Shipping_Method_Apaczka extends WC_Shipping_Method {
+
 
 	const APACZKA_PICKUP_COURIER = 1;
 
@@ -42,7 +46,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	static $instance_options                 = array();
 
 	private $fields = array();
-	
+
 	/**
 	 * @var string
 	 */
@@ -83,10 +87,16 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	 */
 	private $free_shipping_cost;
 
+	/**
+	 * @var Helper
+	 */
+	private $helper;
+
 
 	/**
 	 * Constructor for your shipping class
 	 *
+	 * @param int $instance_id Shipping method instance.
 	 * @access public
 	 * @return void
 	 */
@@ -108,8 +118,12 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 
 		self::$order_status_completed_auto
 			= $this->get_option( 'order_status_completed_auto' );
+
+		$this->helper = new Helper();
+
 		$this->init();
 		$this->get_waybill();
+
 		add_action(
 			'woocommerce_update_options_shipping_' . $this->id,
 			array( $this, 'process_admin_options' )
@@ -136,9 +150,14 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 
 		add_action( 'admin_footer', array( $this, 'cancel_package_popup' ) );
 
-		add_action( 'woocommerce_store_api_checkout_update_order_from_request', array( $this, 'save_shipping_point_in_order_meta' ), 10, 2 );
+		add_action(
+			'woocommerce_store_api_checkout_update_order_from_request',
+			array( $this, 'save_shipping_point_in_order_meta' ),
+			10,
+			2
+		);
 
-        if ( ! class_exists( 'Apaczka_Points_Map\Points_Map_Plugin' ) ) {
+		if ( ! class_exists( 'Apaczka_Points_Map\Points_Map_Plugin' ) ) {
 			add_action(
 				'woocommerce_review_order_after_shipping',
 				array( $this, 'woocommerce_review_order_after_shipping' )
@@ -163,7 +182,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	 * @access public
 	 * @return void
 	 */
-	function init() {
+	public function init() {
 		$this->init_form_fields();
 		$this->init_settings();
 
@@ -175,21 +194,33 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		$this->cost               = $this->get_option( 'cost' );
 		$this->cost_cod           = $this->get_option( 'cost_cod' );
 		$this->free_shipping_cost
-									= 1.9;
+								= 1.9;
 		$this->flat_rate          = 1.9;
 		$this->cost_per_order     = 1.9;
 	}
 
 	/**
-	 * @param int $service_id service_id.
+	 * Determines if a service ID belongs to a parcel locker service.
 	 *
-	 * @return bool
+	 * @param int $service_id The service ID to check.
+	 * @return bool True if the service is a parcel locker service, false otherwise.
+	 *
+	 * @since 1.0.0
+	 * @access private
 	 */
 	private function is_parcel_locker_service( int $service_id ): bool {
 		return key_exists( $service_id, self::PARCEL_LOCKER_GEOWIDGET_IDS );
 	}
 
 
+	/**
+	 * Validates checkout process for APM delivery points.
+	 *
+	 * @return void
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 */
 	public function woocommerce_checkout_process() {
 
 		$cart_contents = array();
@@ -213,31 +244,49 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 
 		if ( $this->is_delivery_map_button_display() && $physical_product_in_cart ) {
 			if ( empty( apaczka()->get_request()->get_by_key( 'apm_access_point_id' ) ) ) {
-				wc_add_notice( __( 'Parcel locker must be choosen.', 'apaczka-pl' ), 'error' );
+				wc_add_notice( 'Apaczka PL: ' . esc_html__( 'Parcel locker must be choosen.', 'apaczka-pl' ), 'error' );
 			}
 		}
 	}
 
 	/**
+	 * Adds delivery point selection interface after shipping methods on checkout.
+	 *
 	 * @return void
+	 *
+	 * @since 1.0.0
+	 * @access public
 	 */
 	public function woocommerce_review_order_after_shipping() {
 
-        if ( ! class_exists( 'Apaczka_Points_Map\Points_Map_Plugin' ) ) {
+		if ( ! class_exists( 'Apaczka_Points_Map\Points_Map_Plugin' ) ) {
 
-            if ($this->is_delivery_map_button_display() && ! self::$review_order_after_shipping_once) {
-                
-                wc_get_template(
-                    'checkout/apaczka-review-order-after-shipping.php',
-                    array(),                    
-                    '',
-                    apaczka()->get_plugin_templates_dir(true)
-                );
-                self::$review_order_after_shipping_once = true;
-            }
-        }
+			if ( $this->is_delivery_map_button_display() && ! self::$review_order_after_shipping_once ) {
+				if ( 'yes' !== get_option( 'apaczka_woocommerce_settings_general_apaczka_map_debug_mode' ) ) {
+					wc_get_template(
+						'checkout/apaczka-review-order-after-shipping.php',
+						array(),
+						'',
+						apaczka()->get_plugin_templates_dir( true )
+					);
+				}
+				self::$review_order_after_shipping_once = true;
+			}
+		}
 	}
 
+
+	/**
+	 * Adds meta boxes to the order edit screen for Apaczka shipping information.
+	 *
+	 * @param string           $post_type The post type.
+	 * @param WP_Post|WC_Order $post The post or order object.
+	 *
+	 * @return void
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 */
 	public function add_meta_boxes( $post_type, $post ) {
 
 		$apaczka_wc_order_data  = array();
@@ -249,30 +298,16 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			if ( 'woocommerce_page_wc-orders' === $post_type ) {
 
 				$order_id = $post->get_id();
-				$order    = wc_get_order( $order_id );
 
-				$apaczka_wc_order_data_raw = isset( get_post_meta( $order_id )['_apaczka'][0] )
-					? get_post_meta( $order_id )['_apaczka'][0]
-					: '';
+				$apaczka_wc_order_data  = $this->helper->get_woo_order_meta( $order_id, '_apaczka' );
+				$apaczka_delivery_point = $this->helper->get_woo_order_meta( $order_id, 'apaczka_delivery_point' );
 
-				if ( ! empty( $apaczka_wc_order_data_raw ) ) {
-					$apaczka_wc_order_data = unserialize( $apaczka_wc_order_data_raw );
+				if ( ! empty( $apaczka_wc_order_data ) && is_array( $apaczka_wc_order_data ) ) {
+					$show_apaczka_metabox = true;
 				}
-
-				if ( empty( $apaczka_wc_order_data ) ) {
-					return;
+				if ( ! empty( $apaczka_delivery_point ) && is_array( $apaczka_delivery_point ) ) {
+					$show_apaczka_metabox = true;
 				}
-
-				$apaczka_delivery_point_raw = isset( get_post_meta( $order_id )['apaczka_delivery_point'][0] )
-					? get_post_meta( $order_id )['apaczka_delivery_point'][0]
-					: '';
-
-				if ( ! empty( $apaczka_delivery_point_raw ) ) {
-					$apaczka_delivery_point = unserialize( $apaczka_delivery_point_raw );
-				}
-
-				$show_apaczka_metabox = true;
-
 			}
 		} else {
 
@@ -283,56 +318,61 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 				$order_id  = $post->ID;
 				$post_type = get_post_type( $order_id );
 
-				if ( $post_type == 'shop_order' ) {
+				if ( 'shop_order' === $post_type ) {
 
-					$order                 = wc_get_order( $order_id );
-					$apaczka_wc_order_data = get_post_meta( $order_id, '_apaczka', true );
+					$apaczka_wc_order_data  = $this->helper->get_woo_order_meta( $order_id, '_apaczka' );
+					$apaczka_delivery_point = $this->helper->get_woo_order_meta( $order_id, 'apaczka_delivery_point' );
 
-					if ( empty( $apaczka_wc_order_data ) ) {
-						return;
+					if ( ! empty( $apaczka_wc_order_data ) && is_array( $apaczka_wc_order_data ) ) {
+						$show_apaczka_metabox = true;
 					}
-
-					$apaczka_delivery_point = get_post_meta( $order_id, 'apaczka_delivery_point', true );
-					$show_apaczka_metabox   = true;
-
+					if ( ! empty( $apaczka_delivery_point ) && is_array( $apaczka_delivery_point ) ) {
+						$show_apaczka_metabox = true;
+					}
 				}
 			}
 		}
 
-		if ( $show_apaczka_metabox ) {
-
-			add_meta_box(
-				$this->id,
-				__( 'Apaczka.pl', 'apaczka-pl' ),
-				array( $this, 'order_metabox' ),
-				null,
-				'normal',
-				'default',
-				array(
-					'wc_order_apaczka_meta_data'          => $apaczka_wc_order_data,
-					'apaczka_delivery_point'              => ! empty( $apaczka_delivery_point ) ? $apaczka_delivery_point : null,
-					'sender_templates'                    => ( new Sender_Settings_Templates_Helper() )
-						->get_all_templates_list(),
-					'sender_templates_json'               => ( new Sender_Settings_Templates_Helper() )
-						->get_all_templates_json(),
-					'package_properties_templates'        => ( new Gateway_Settings_Templates_Helper() )
-						->get_all_templates_list(),
-					'package_properties_templates_json'   => ( new Gateway_Settings_Templates_Helper() )
-						->get_all_templates_json(),
-					'package_properties_services'         => self::get_services(),
-					'package_properties_parcel_types'     =>
-						$this->fields['parcel_type']['options'],
-					'package_properties_shipping_methods' =>
-						$this->fields['shipping_method']['options'],
-					'package_properties_hours'            =>
-						$this->fields['pickup_hour_from']['options'],
-				)
-			);
+		if ( ! $show_apaczka_metabox ) {
+			return;
 		}
+
+		add_meta_box(
+			$this->id,
+			esc_html__( 'Apaczka.pl', 'apaczka-pl' ),
+			array( $this, 'order_metabox' ),
+			null,
+			'normal',
+			'default',
+			array(
+				'wc_order_apaczka_meta_data'          => $apaczka_wc_order_data,
+				'apaczka_delivery_point'              => ! empty( $apaczka_delivery_point ) ? $apaczka_delivery_point : null,
+				'sender_templates'                    => ( new Sender_Settings_Templates_Helper() )
+					->get_all_templates_list(),
+				'sender_templates_json'               => ( new Sender_Settings_Templates_Helper() )
+					->get_all_templates_json(),
+				'package_properties_templates'        => ( new Gateway_Settings_Templates_Helper() )
+					->get_all_templates_list(),
+				'package_properties_templates_json'   => ( new Gateway_Settings_Templates_Helper() )
+					->get_all_templates_json(),
+				'package_properties_services'         => self::get_services(),
+				'package_properties_parcel_types'     =>
+					$this->fields['parcel_type']['options'],
+				'package_properties_shipping_methods' =>
+					$this->fields['shipping_method']['options'],
+				'package_properties_hours'            =>
+					$this->fields['pickup_hour_from']['options'],
+			)
+		);
 	}
 
 	/**
-	 * Initialise Settings Form Fields
+	 * Initializes form fields for the shipping method settings.
+	 *
+	 * @return void
+	 *
+	 * @since 1.0.0
+	 * @access public
 	 */
 	public function init_form_fields() {
 
@@ -346,91 +386,55 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 
 		$this->fields = array(
 			array(
-				'title'                    => __(
-					'Method settings',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Method settings', 'apaczka-pl' ),
 				'type'                     => 'title',
 				'description'              => '',
 				'id'                       => 'section_general_settings',
 				'visible_on_order_details' => false,
 			),
 			'title'                  => array(
-				'title'                    => __(
-					'Method title',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Method title', 'apaczka-pl' ),
 				'type'                     => 'text',
-				'default'                  => __(
-					'Method title',
-					'apaczka-pl'
-				),
+				'default'                  => esc_html__( 'Method title', 'apaczka-pl' ),
 				'desc_tip'                 => false,
 				'visible_on_order_details' => false,
 			),
 
 			'cod'                    => array(
-				'title'                    => __(
-					'COD method',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'COD method', 'apaczka-pl' ),
 				'type'                     => 'checkbox',
-				'label'                    => __(
-					'',
-					'apaczka-pl'
-				),
+				'label'                    => '',
 				'default'                  => 'no',
 				'visible_on_order_details' => false,
 			),
 			'declared_content'       => array(
-				'title'                    => __(
-					'Declared value',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Declared value', 'apaczka-pl' ),
 				'type'                     => 'text',
-				'label'                    => __(
-					'',
-					'apaczka-pl'
-				),
+				'label'                    => '',
 				'visible_on_order_details' => true,
 			),
 			'insurance'              => array(
-				'title'                    => __(
-					'Insurance',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Insurance', 'apaczka-pl' ),
 				'type'                     => 'select',
-				'description'              => __(
-					'',
-					'apaczka-pl'
-				),
+				'description'              => '',
 				'default'                  => '',
 				'desc_tip'                 => true,
 				'options'                  => array(
-					'yes' => __( 'Tak', 'apaczka-pl' ),
-					'no'  => __( 'Nie', 'apaczka-pl' ),
+					'yes' => esc_html__( 'Tak', 'apaczka-pl' ),
+					'no'  => esc_html__( 'Nie', 'apaczka-pl' ),
 				),
 				'visible_on_order_details' => true,
 			),
 			array(
-				'title'                    => __(
-					'Default shipping settings',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Default shipping settings', 'apaczka-pl' ),
 				'type'                     => 'title',
 				'description'              => '',
 				'visible_on_order_details' => false,
 			),
 			'service'                => array(
-				'title'                    => __(
-					'Service',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Service', 'apaczka-pl' ),
 				'type'                     => 'select',
-				'description'              => __(
-					'',
-					'apaczka-pl'
-				),
+				'description'              => '',
 				'default'                  => '',
 				'desc_tip'                 => true,
 				'options'                  => self::get_services(),
@@ -438,109 +442,58 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			),
 
 			'parcel_type'            => array(
-				'title'                    => __(
-					'Parcel type',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Parcel type', 'apaczka-pl' ),
 				'type'                     => 'select',
-				'desc_tip'                 => __( '' ),
+				'desc_tip'                 => '',
 				'options'                  => array(
-					'box'             => __(
-						'Box',
-						'apaczka-pl'
-					),
-					'europalette'     => __(
-						'Europalette',
-						'apaczka-pl'
-					),
-					'palette_60x80'   => __(
-						'Palette 60x80',
-						'apaczka-pl'
-					),
-					'palette_120x100' => __(
-						'Palette 120x100',
-						'apaczka-pl'
-					),
-					'palette_120x120' => __(
-						'Palette 120x120',
-						'apaczka-pl'
-					),
+					'box'             => esc_html__( 'Box', 'apaczka-pl' ),
+					'europalette'     => esc_html__( 'Europalette', 'apaczka-pl' ),
+					'palette_60x80'   => esc_html__( 'Palette 60x80', 'apaczka-pl' ),
+					'palette_120x100' => esc_html__( 'Palette 120x100', 'apaczka-pl' ),
+					'palette_120x120' => esc_html__( 'Palette 120x120', 'apaczka-pl' ),
 				),
 				'visible_on_order_details' => true,
 			),
 
 			'is_nstd'                => array(
-				'title'                    => __(
-					'Non standard package',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Non standard package', 'apaczka-pl' ),
 				'type'                     => 'select',
-				'description'              => __(
-					'',
-					'apaczka-pl'
-				),
+				'description'              => '',
 				'default'                  => 'no',
 				'desc_tip'                 => true,
 				'options'                  => array(
-					'yes' => __( 'Yes', 'apaczka-pl' ),
-					'no'  => __( 'No', 'apaczka-pl' ),
+					'yes' => esc_html__( 'Yes', 'apaczka-pl' ),
+					'no'  => esc_html__( 'No', 'apaczka-pl' ),
 				),
 				'visible_on_order_details' => true,
 			),
 
 			'shipping_method'        => array(
-				'title'                    => __(
-					'Shipping method',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Shipping method', 'apaczka-pl' ),
 				'type'                     => 'select',
-				'description'              => __(
-					'',
-					'apaczka-pl'
-				),
+				'description'              => '',
 				'desc_tip'                 => true,
 				'options'                  => array(
-					'POINT'   => __(
-						'Shipment directly at the point',
-						'apaczka-pl'
-					),
-					'COURIER' => __(
-						'Courier pickup request',
-						'apaczka-pl'
-					),
-					'SELF'    => __(
-						'Pickup self',
-						'apaczka-pl'
-					),
+					'POINT'   => esc_html__( 'Shipment directly at the point', 'apaczka-pl' ),
+					'COURIER' => esc_html__( 'Courier pickup request', 'apaczka-pl' ),
+					'SELF'    => esc_html__( 'Pickup self', 'apaczka-pl' ),
 				),
 				'visible_on_order_details' => true,
 			),
 
 			'pickup_hour_from'       => array(
-				'title'                    => __(
-					'Pickup hour from',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Pickup hour from', 'apaczka-pl' ),
 				'type'                     => 'select',
-				'description'              => __(
-					'',
-					'apaczka-pl'
-				),
+				'description'              => '',
 				'default'                  => '',
 				'desc_tip'                 => true,
 				'options'                  => $options_hours,
 				'visible_on_order_details' => true,
 			),
 			'pickup_hour_to'         => array(
-				'title'                    => __(
-					'Pickup hour to',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Pickup hour to', 'apaczka-pl' ),
 				'type'                     => 'select',
-				'description'              => __(
-					'',
-					'apaczka-pl'
-				),
+				'description'              => '',
 				'default'                  => '',
 				'desc_tip'                 => true,
 				'options'                  => $options_hours,
@@ -548,73 +501,43 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			),
 
 			'dispath_point_inpost'   => array(
-				'title'                    => __(
-					'Default dispatch point (InPost)',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Default dispatch point (InPost)', 'apaczka-pl' ),
 				'type'                     => 'text',
-				'description'              => __(
-					'',
-					'apaczka-pl'
-				),
+				'description'              => '',
 				'default'                  => '',
 				'desc_tip'                 => true,
 				'visible_on_order_details' => true,
 			),
 
 			'dispath_point_kurier48' => array(
-				'title'                    => __(
-					'Default dispatch point (Kurier48)',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Default dispatch point (Kurier48)', 'apaczka-pl' ),
 				'type'                     => 'text',
-				'description'              => __(
-					'',
-					'apaczka-pl'
-				),
+				'description'              => '',
 				'default'                  => '',
 				'desc_tip'                 => true,
 				'visible_on_order_details' => true,
 			),
 			'dispath_point_ups'      => array(
-				'title'                    => __(
-					'Default dispatch point (UPS)',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Default dispatch point (UPS)', 'apaczka-pl' ),
 				'type'                     => 'text',
-				'description'              => __(
-					'',
-					'apaczka-pl'
-				),
+				'description'              => '',
 				'default'                  => '',
 				'desc_tip'                 => true,
 				'visible_on_order_details' => true,
 			),
 			'dispath_point_dpd'      => array(
-				'title'                    => __(
-					'Default dispatch point (DPD)',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Default dispatch point (DPD)', 'apaczka-pl' ),
 				'type'                     => 'text',
-				'description'              => __(
-					'',
-					'apaczka-pl'
-				),
+				'description'              => '',
 				'default'                  => '',
 				'desc_tip'                 => true,
 				'visible_on_order_details' => true,
 			),
 
 			'package_width'          => array(
-				'title'                    => __(
-					'Package length [cm]',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Package length [cm]', 'apaczka-pl' ),
 				'type'                     => 'number',
-				'description'              => __(
-					'Package length [cm].',
-					'apaczka-pl'
-				),
+				'description'              => esc_html__( 'Package length [cm].', 'apaczka-pl' ),
 				'default'                  => '',
 				'desc_tip'                 => true,
 				'custom_attributes'        => array(
@@ -626,15 +549,9 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 				'visible_on_order_details' => true,
 			),
 			'package_depth'          => array(
-				'title'                    => __(
-					'Package width [cm]',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Package width [cm]', 'apaczka-pl' ),
 				'type'                     => 'number',
-				'description'              => __(
-					'Package width [cm].',
-					'apaczka-pl'
-				),
+				'description'              => esc_html__( 'Package width [cm].', 'apaczka-pl' ),
 				'default'                  => '',
 				'desc_tip'                 => true,
 				'custom_attributes'        => array(
@@ -646,15 +563,9 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 				'visible_on_order_details' => true,
 			),
 			'package_height'         => array(
-				'title'                    => __(
-					'Package height [cm]',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Package height [cm]', 'apaczka-pl' ),
 				'type'                     => 'number',
-				'description'              => __(
-					'Package height [cm].',
-					'apaczka-pl'
-				),
+				'description'              => esc_html__( 'Package height [cm].', 'apaczka-pl' ),
 				'default'                  => '',
 				'desc_tip'                 => true,
 				'custom_attributes'        => array(
@@ -666,15 +577,9 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 				'visible_on_order_details' => true,
 			),
 			'package_weight'         => array(
-				'title'                    => __(
-					'Package weight [kg]',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Package weight [kg]', 'apaczka-pl' ),
 				'type'                     => 'number',
-				'description'              => __(
-					'Package weight [kg].',
-					'apaczka-pl'
-				),
+				'description'              => esc_html__( 'Package weight [kg].', 'apaczka-pl' ),
 				'default'                  => '',
 				'desc_tip'                 => true,
 				'custom_attributes'        => array(
@@ -686,75 +591,48 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 				'visible_on_order_details' => true,
 			),
 			'package_contents'       => array(
-				'title'                    => __(
-					'Package contents',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Package contents', 'apaczka-pl' ),
 				'type'                     => 'text',
-				'description'              => __(
-					'',
-					'apaczka-pl'
-				),
+				'description'              => '',
 				'default'                  => '',
 				'desc_tip'                 => true,
 				'visible_on_order_details' => true,
 			),
 
 			'create_template'        => array(
-				'title'                    => __(
-					'Create new template from this settings?',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Create new template from this settings?', 'apaczka-pl' ),
 				'type'                     => 'select',
-				'description'              => __(
-					'',
-					'apaczka-pl'
-				),
+				'description'              => '',
 				'default'                  => 'no',
 				'desc_tip'                 => true,
 				'options'                  => array(
-					'no'  => __( 'Nie', 'apaczka-pl' ),
-					'yes' => __( 'Tak', 'apaczka-pl' ),
+					'no'  => esc_html__( 'Nie', 'apaczka-pl' ),
+					'yes' => esc_html__( 'Tak', 'apaczka-pl' ),
 				),
 				'visible_on_order_details' => false,
 			),
 
 			'new_template_name'      => array(
-				'title'                    => __(
-					'New template name',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'New template name', 'apaczka-pl' ),
 				'type'                     => 'text',
-				'description'              => __(
-					'',
-					'apaczka-pl'
-				),
+				'description'              => '',
 				'default'                  => '',
 				'desc_tip'                 => true,
 				'visible_on_order_details' => false,
 			),
 
 			'select_template'        => array(
-				'title'                    => __(
-					'Choose template to load',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'Choose template to load', 'apaczka-pl' ),
 				'type'                     => 'select',
-				'description'              => __(
-					'',
-					'apaczka-pl'
-				),
+				'description'              => '',
 				'default'                  => '',
 				'desc_tip'                 => true,
 				'options'                  => ( new Gateway_Settings_Templates_Helper() )->get_all_templates_list(),
 				'visible_on_order_details' => true,
 			),
 			'load_from_template'     => array(
-				'name'                     => __( '', '' ),
-				'title'                    => __(
-					'',
-					'apaczka-pl'
-				),
+				'name'                     => '',
+				'title'                    => '',
 				'type'                     => 'load_from_template',
 				'id'                       => 'load_from_template',
 				'visible_on_order_details' => true,
@@ -764,15 +642,9 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 
 		$form_settings = array(
 			'cod' => array(
-				'title'                    => __(
-					'COD method',
-					'apaczka-pl'
-				),
+				'title'                    => esc_html__( 'COD method', 'apaczka-pl' ),
 				'type'                     => 'checkbox',
-				'label'                    => __(
-					'',
-					'apaczka-pl'
-				),
+				'label'                    => '',
 				'default'                  => 'no',
 				'visible_on_order_details' => false,
 			),
@@ -781,12 +653,28 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		$this->form_fields = $form_settings;
 	}
 
+
+	/**
+	 * Renders the order metabox content.
+	 *
+	 * @param WP_Post $post The post object.
+	 * @param array   $metabox_data Additional metabox data.
+	 * @return void
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 */
 	public function order_metabox( $post, $metabox_data ) {
 		self::order_metabox_content( $post, $metabox_data );
 	}
 
 	/**
-	 * @return array
+	 * Gets available shipping services from the API.
+	 *
+	 * @return array Array of services with service IDs as keys and names as values.
+	 *
+	 * @since 1.0.0
+	 * @access public static
 	 */
 	public static function get_services(): array {
 		$app_id     = Plugin::get_option( 'app_id' );
@@ -801,7 +689,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		if ( ! is_array( $services ) ) {
 			return array();
 		}
-		foreach ( ( new Service_Structure_Helper() )->get_services() as $service ) {
+		foreach ( $services as $service ) {
 			$return [ $service->service_id ] = $service->name;
 		}
 
@@ -809,20 +697,29 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	}
 
 
+	/**
+	 * Sets default values for order data if not already set.
+	 *
+	 * @param array    $apaczka_wc_order_data The current order data.
+	 * @param WC_Order $order The WooCommerce order object.
+	 * @return array The updated order data with defaults applied.
+	 *
+	 * @since 1.0.0
+	 * @access private static
+	 */
 	private static function set_defaults_to_wc_order_data(
 		array $apaczka_wc_order_data,
 		WC_Order $order
 	): array {
 
-		// var_dump($apaczka_wc_order_data['package_properties']);die;
-		// sender
-		// Package properties
-		// Additional options
+		// sender.
+		// Package properties.
+		// Additional options.
 
 		$payment_method = $order->get_payment_method();
 
 		if ( empty( $apaczka_wc_order_data['additional_options']['point'] ) ) {
-			$apaczka_wc_order_data['additional_options']['point'] = $point = self::get_point_from_order( $order );
+			$apaczka_wc_order_data['additional_options']['point'] = self::get_point_from_order( $order );
 		}
 
 		if ( empty( $apaczka_wc_order_data['additional_options']['cod_amount'] ) ) {
@@ -851,7 +748,11 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		}
 
 		if ( empty( $apaczka_wc_order_data['package_properties']['pickup_date'] ) ) {
-			$apaczka_wc_order_data['package_properties']['pickup_date'] = date( 'Y-m-d' );
+			$apaczka_wc_order_data['package_properties']['pickup_date'] = gmdate( 'Y-m-d' );
+		}
+
+		if ( ! isset( $apaczka_wc_order_data['receiver'] ) || ! is_array( $apaczka_wc_order_data['receiver'] ) ) {
+			$apaczka_wc_order_data['receiver'] = array();
 		}
 
 		if ( empty( $apaczka_wc_order_data['receiver']['phone'] ) ) {
@@ -864,9 +765,13 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	}
 
 	/**
-	 * @param int $apaczka_order_id apaczka_order_id.
+	 * Retrieves the status of an Apaczka order from the API.
 	 *
-	 * @return string
+	 * @param int $apaczka_order_id The Apaczka order ID.
+	 * @return string|null The order status or null if not found.
+	 *
+	 * @since 1.0.0
+	 * @access public static
 	 */
 	public static function get_apaczka_order_status( int $apaczka_order_id ): ?string {
 		$api_order = ( new Web_Api_V2() )->order( $apaczka_order_id );
@@ -878,6 +783,18 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		return null;
 	}
 
+
+	/**
+	 * Renders the content for the order metabox.
+	 *
+	 * @param WP_Post|WC_Order $post The post or order object.
+	 * @param array            $metabox_data Additional metabox data.
+	 * @param bool             $output Whether to output the content directly or return it.
+	 * @return string|void The metabox content if $output is false, void otherwise.
+	 *
+	 * @since 1.0.0
+	 * @access public static
+	 */
 	public static function order_metabox_content(
 		$post,
 		$metabox_data,
@@ -896,8 +813,9 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 
 		$order = wc_get_order( $order_id );
 
-		// $service = $order->get_meta( 'service' );
-		// $has_order_parcel_machine = $order->get_meta( '_apaczka_parcel_machine_id' );
+		if ( ! $order || is_wp_error( $order ) ) {
+			return '';
+		}
 
 		$apaczka_wc_order_data               = $metabox_data['args']['wc_order_apaczka_meta_data'];
 		$sender_templates                    = $metabox_data['args']['sender_templates'];
@@ -913,30 +831,23 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		$services     = self::get_services();
 		$package_send = false;
 
-		$apaczka_wc_order_data = self::set_defaults_to_wc_order_data(
-			$apaczka_wc_order_data,
-			$order
-		);
+		$apaczka_wc_order_data = self::set_defaults_to_wc_order_data( $apaczka_wc_order_data, $order );
 
-        $apaczka_order_id = '';
+		$helper    = new Helper();
+		$meta_data = $helper->get_woo_order_meta( $order_id, '_apaczka' );
+
+		$apaczka_order_id = '';
 		if ( isset( $apaczka_wc_order_data['package_send'] )
-			&& $apaczka_wc_order_data['package_send'] === 1 ) {
+			&& 1 === $apaczka_wc_order_data['package_send'] ) {
 			if ( isset( $apaczka_wc_order_data['apaczka_response']->order->id ) ) {
 				$apaczka_order_id = $apaczka_wc_order_data['apaczka_response']->order->id;
 				$status           = self::get_apaczka_order_status( $apaczka_order_id );
 				if ( 'CANCELLED' === $status ) {
 					$apaczka_wc_order_data['package_send'] = 0;
-					$meta_data                             = get_post_meta( $order_id, '_apaczka', true );
-
-					$meta_data['package_send'] = 0;
-					update_post_meta( $order_id, '_apaczka', $meta_data );
-
-					if ( 'yes' === get_option( 'woocommerce_custom_orders_table_enabled' ) ) {
-						$order = wc_get_order( $order_id );
-						if ( $order && ! is_wp_error( $order ) ) {
-							$order->update_meta_data( '_apaczka', $meta_data );
-							$order->save();
-						}
+					$meta_data['package_send']             = 0;
+					if ( $order && ! is_wp_error( $order ) ) {
+						$order->update_meta_data( '_apaczka', $meta_data );
+						$order->save();
 					}
 				}
 			}
@@ -945,6 +856,12 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			$status           = self::get_apaczka_order_status( $apaczka_order_id );
 
 			if ( 'CANCELLED' === $status ) {
+				$apaczka_wc_order_data['package_send'] = 0;
+				$meta_data['package_send']             = 0;
+				if ( $order && ! is_wp_error( $order ) ) {
+					$order->update_meta_data( '_apaczka', $meta_data );
+					$order->save();
+				}
 				// change order status.
 				$current_order_status = $order->get_status();
 				if ( $order->get_date_paid() ) {
@@ -958,7 +875,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		}
 
 		if ( isset( $apaczka_wc_order_data['package_send'] )
-			&& $apaczka_wc_order_data['package_send'] === 1 ) {
+			&& 1 === $apaczka_wc_order_data['package_send'] ) {
 			$package_send = true;
 
 			$url_waybill
@@ -992,6 +909,15 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		}
 	}
 
+	/**
+	 * Saves Apaczka shipping data when a post is saved.
+	 *
+	 * @param int $post_id The post ID.
+	 * @return void
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 */
 	public function save_post( $post_id ) {
 
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -1024,14 +950,10 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 							$apaczka_post['package_properties']['cod']   = $cod;
 							$apaczka_post['error_messages']              = isset( $_apaczka['error_messages'] ) ? $_apaczka['error_messages'] : '';
 
-							update_post_meta( $post_id, '_apaczka', $apaczka_post );
-
-							if ( 'yes' === get_option( 'woocommerce_custom_orders_table_enabled' ) ) {
-								$order = wc_get_order( $post_id );
-								if ( $order && ! is_wp_error( $order ) ) {
-									$order->update_meta_data( '_apaczka', $apaczka_post );
-									$order->save();
-								}
+							$order = wc_get_order( $post_id );
+							if ( $order && ! is_wp_error( $order ) ) {
+								$order->update_meta_data( '_apaczka', $apaczka_post );
+								$order->save();
 							}
 						}
 					}
@@ -1039,18 +961,16 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			}
 		}
 
-		if ( 'shop_order' !== apaczka()
-				->get_request()
-				->get_by_key( 'post_type' ) ) {
+		if ( 'shop_order' !== apaczka()->get_request()->get_by_key( 'post_type' ) ) {
 			return;
 		}
 
 		if ( apaczka()->get_request()->get_by_key( '_apaczka' ) ) {
-			$_apaczka = get_post_meta( $post_id, '_apaczka', true );
+			$helper   = new Helper();
+			$_apaczka = $helper->get_woo_order_meta( $post_id, '_apaczka' );
 
 			if ( ! $_apaczka || ! is_array( $_apaczka ) ) {
 				if ( 'yes' === get_option( 'woocommerce_custom_orders_table_enabled' ) ) {
-
 					$apaczka_wc_order_data_raw = isset( get_post_meta( $post_id )['_apaczka'][0] )
 						? get_post_meta( $post_id )['_apaczka'][0]
 						: '';
@@ -1073,24 +993,24 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			$apaczka_post['package_properties']['cod']   = $cod;
 			$apaczka_post['error_messages']              = isset( $_apaczka['error_messages'] ) ? $_apaczka['error_messages'] : '';
 
-			update_post_meta( $post_id, '_apaczka', $apaczka_post );
-
-			if ( 'yes' === get_option( 'woocommerce_custom_orders_table_enabled' ) ) {
-				$order = wc_get_order( $post_id );
-				if ( $order && ! is_wp_error( $order ) ) {
-					$order->update_meta_data( '_apaczka', $apaczka_post );
-					$order->save();
-				}
+			$order = wc_get_order( $post_id );
+			if ( $order && ! is_wp_error( $order ) ) {
+				$order->update_meta_data( '_apaczka', $apaczka_post );
+				$order->save();
 			}
 		}
 	}
 
 
 	/**
-	 * @param $order_id
-	 * @param $posted
+	 * Updates order meta with Apaczka shipping data during checkout.
 	 *
+	 * @param int   $order_id The order ID.
+	 * @param array $posted Posted checkout data.
 	 * @return void
+	 *
+	 * @since 1.0.0
+	 * @access public
 	 */
 	public function woocommerce_checkout_update_order_meta(
 		$order_id,
@@ -1098,6 +1018,9 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	) {
 
 		$order = wc_get_order( $order_id );
+		if ( ! $order || is_wp_error( $order ) ) {
+			return;
+		}
 
 		$package_properties = $this->get_package_properties( $order );
 
@@ -1135,10 +1058,6 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			$apaczka_delivery_point = null;
 		}
 
-		if ( ! $order || is_wp_error( $order ) ) {
-			return;
-		}
-
 		$receiver_company = '';
 		if ( ! empty( $order->get_shipping_company() ) ) {
 			$receiver_company = $order->get_shipping_company();
@@ -1168,17 +1087,9 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		$apaczka['package_properties'] = $package_properties;
 		$apaczka['receiver']           = $receiver;
 
-		update_post_meta( $order_id, 'apaczka_delivery_point', $apaczka_delivery_point );
-		update_post_meta( $order_id, '_apaczka', $apaczka );
-
-		if ( 'yes' === get_option( 'woocommerce_custom_orders_table_enabled' ) ) {
-			$order = wc_get_order( $order_id );
-			if ( $order && ! is_wp_error( $order ) ) {
-				$order->update_meta_data( 'apaczka_delivery_point', $apaczka_delivery_point );
-				$order->update_meta_data( '_apaczka', $apaczka );
-				$order->save();
-			}
-		}
+		$order->update_meta_data( 'apaczka_delivery_point', $apaczka_delivery_point );
+		$order->update_meta_data( '_apaczka', $apaczka );
+		$order->save();
 	}
 
 
@@ -1191,7 +1102,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		}
 		$shippings            = $order->get_shipping_methods();
 		$all_shipping_methods
-								= flexible_shipping_get_all_shipping_methods();
+					= flexible_shipping_get_all_shipping_methods();
 		if ( isset( $all_shipping_methods['flexible_shipping'] ) ) {
 			$flexible_shipping_rates
 				= $all_shipping_methods['flexible_shipping']->get_all_rates();
@@ -1211,16 +1122,21 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		return false;
 	}
 
-	private static function toBool( $value ) {
-		return 'true' === (string) $value;
-	}
 
 
-	public static function ajax_calculate() {
-	}
-
+	/**
+	 * Retrieves delivery point information from an order.
+	 *
+	 * @param WC_Order $order The WooCommerce order object.
+	 * @return array|null The delivery point data or null if not found.
+	 *
+	 * @since 1.0.0
+	 * @access private static
+	 */
 	private static function get_point_from_order( WC_Order $order ) {
-		$data = get_post_meta( $order->get_id(), 'apaczka_delivery_point', true );
+
+		$helper = new Helper();
+		$data   = $helper->get_woo_order_meta( $order->get_id(), 'apaczka_delivery_point' );
 
 		if ( is_array( $data ) ) {
 			return $data;
@@ -1250,6 +1166,19 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		 */
 	}
 
+	/**
+	 * Creates an API order from WooCommerce order data.
+	 *
+	 * @param WC_Order           $order The WooCommerce order object.
+	 * @param array              $data The order data.
+	 * @param WC_Shipping_Method $shipping_method The shipping method object.
+	 * @param mixed              $point The delivery point information.
+	 * @param int|null           $service_id The service ID.
+	 * @return array The formatted API order data.
+	 *
+	 * @since 1.0.0
+	 * @access private static
+	 */
 	private static function create_api_order(
 		WC_Order $order,
 		array $data,
@@ -1273,6 +1202,19 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		}
 
 		$data['receiver']['foreign_address_id'] = $point;
+
+		$receiver_address_line_full = '';
+		if ( ! empty( $data['receiver']['line1'] ) ) {
+			$receiver_address_line_full = trim( $data['receiver']['line1'] );
+		}
+
+		if ( ! empty( $data['receiver']['line2'] ) ) {
+			$receiver_address_line_2     = trim( $data['receiver']['line2'] );
+			$receiver_address_line_full .= ', ' . $receiver_address_line_2;
+		}
+
+		$data['receiver']['line1'] = $receiver_address_line_full;
+		$data['receiver']['line2'] = '';
 
 		$shipment_type_code = 'PACZKA';
 
@@ -1367,20 +1309,20 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 
 			'cod'            => array(
 				'amount'      => ! empty( $data['additional_options']['cod_amount'] )
-					? $data['additional_options']['cod_amount'] * 100  // // wartość w groszach
-					: 0,  // // wartość w groszach
+					? $data['additional_options']['cod_amount'] * 100  // // wartość w groszach.
+					: 0,  // // wartość w groszach.
 				'bankaccount' => $data['sender']['bank_account_number'],
 			),
 
 			'pickup'         => array(
 				'type'       => $pickup_method,
-				// endpoint: service_structure
+				// endpoint: service_structure.
 				'date'       => $data['package_properties']['pickup_date'],
 				// Y-m-d
-				'hours_from' => date( 'H:i', strtotime( $data['package_properties']['pickup_hour_from'] ) ),
-				// H:i - pickup_hours
-				'hours_to'   => date( 'H:i', strtotime( $data['package_properties']['pickup_hour_to'] ) ),
-				// H:i - pickup_hours
+				'hours_from' => gmdate( 'H:i', strtotime( $data['package_properties']['pickup_hour_from'] ) ),
+				// H:i - pickup_hours.
+				'hours_to'   => gmdate( 'H:i', strtotime( $data['package_properties']['pickup_hour_to'] ) ),
+				// H:i - pickup_hours.
 			),
 			'shipment'       => array(
 				array(
@@ -1414,11 +1356,15 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 
 
 	/**
-	 * @param float  $declared_value
-	 * @param float  $cod_amount
-	 * @param string $api_context
+	 * Validates the declared value against the COD amount.
 	 *
-	 * @return bool
+	 * @param float  $declared_value The declared value of the shipment.
+	 * @param float  $cod_amount The COD amount.
+	 * @param string $api_context The context for error messages.
+	 * @return bool True if validation passes, false otherwise.
+	 *
+	 * @since 1.0.0
+	 * @access private static
 	 */
 	private static function declared_value_validate(
 		float $declared_value,
@@ -1429,10 +1375,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		if ( $cod_amount > 0 ) {
 			if ( $declared_value === 0.0 ) {
 				( new Alerts() )->add_error(
-					__(
-						'The Declared value field cannot be empty',
-						'apaczka-pl'
-					),
+					esc_html__( 'The Declared value field cannot be empty', 'apaczka-pl' ),
 					$api_context
 				);
 
@@ -1440,10 +1383,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			}
 			if ( $declared_value < $cod_amount ) {
 				( new Alerts() )->add_error(
-					__(
-						'The Declared Value field must be equal to or higher than the COD amount',
-						'apaczka-pl'
-					),
+					esc_html__( 'The Declared Value field must be equal to or higher than the COD amount', 'apaczka-pl' ),
 					$api_context
 				);
 
@@ -1455,19 +1395,23 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	}
 
 	/**
-	 * @return void
+	 * Cancels a package via AJAX and returns the result.
+	 *
+	 * @return void Outputs JSON response and terminates execution.
+	 *
+	 * @since 1.0.0
+	 * @access public static
 	 */
 	public static function ajax_cancel_package() {
 		$order_id   = apaczka()->get_request()->get_by_key( 'order_id' );
-		$meta_data  = get_post_meta( $order_id, '_apaczka', true );
+		$helper     = new Helper();
+		$meta_data  = $helper->get_woo_order_meta( $order_id, '_apaczka' );
 		$apaczka_id = $meta_data['apaczka_response']->order->id;
 
 		try {
 			$apaczka_response  = ( new Web_Api_V2() )->cancel_order( $apaczka_id );
 			$response_messages = ( new Alerts() )->get_alerts_unformatted_by_context( 'cancel_order' );
 
-			$services           = self::get_services();
-			$return_price_table = array();
 			if ( ! empty( $response_messages['error'] ) ) {
 				$ret['error_messages'] = implode( ',', $response_messages['error'] );
 				$ret['status']         = 'error';
@@ -1481,14 +1425,11 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 
 		if ( $ret['status'] === 'ok' ) {
 			$ret['error_messages'] = '';
-			update_post_meta( $order_id, '_apaczka', $meta_data );
+			$order                 = wc_get_order( $order_id );
+			if ( $order && ! is_wp_error( $order ) ) {
 
-			if ( 'yes' === get_option( 'woocommerce_custom_orders_table_enabled' ) ) {
-				$order = wc_get_order( $order_id );
-				if ( $order && ! is_wp_error( $order ) ) {
-					$order->update_meta_data( '_apaczka', $meta_data );
-					$order->save();
-				}
+				$order->update_meta_data( '_apaczka', $meta_data );
+				$order->save();
 			}
 		}
 
@@ -1497,20 +1438,25 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	}
 
 	/**
-	 * @return void
+	 * Downloads a turn-in document for a package and returns it as base64.
+	 *
+	 * @return void Outputs JSON response and terminates execution.
+	 *
+	 * @since 1.0.0
+	 * @access public static
 	 */
 	public static function download_turn_in() {
-		$order_id = apaczka()->get_request()->get_by_key( 'order_id' );
 
-		$meta_data  = get_post_meta( $order_id, '_apaczka', true );
+		$order_id   = apaczka()->get_request()->get_by_key( 'order_id' );
+		$helper     = new Helper();
+		$meta_data  = $helper->get_woo_order_meta( $order_id, '_apaczka' );
 		$apaczka_id = $meta_data['apaczka_response']->order->id;
 
 		try {
+
 			$apaczka_response  = ( new Web_Api_V2() )->turn_in( array( $apaczka_id ) );
 			$response_messages = ( new Alerts() )->get_alerts_unformatted_by_context( 'cancel_order' );
 
-			$services           = self::get_services();
-			$return_price_table = array();
 			if ( ! empty( $response_messages['error'] ) ) {
 				$ret['error_messages'] = implode( ',', $response_messages['error'] );
 				$ret['status']         = 'error';
@@ -1531,8 +1477,12 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	}
 
 	/**
-	 * @return void
-	 * @throws Exception
+	 * Calculates package pricing via AJAX and returns available shipping options.
+	 *
+	 * @return void Outputs JSON response and terminates execution.
+	 *
+	 * @since 1.0.0
+	 * @access public static
 	 */
 	public static function ajax_calculate_package() {
 		$shipping_methods = WC()->shipping()->get_shipping_methods();
@@ -1550,13 +1500,14 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 
 		$order = wc_get_order( $order_id );
 
-		$post = get_post( $order_id );
+		if ( ! $order || is_wp_error( $order ) ) {
+			return;
+		}
 
-		$data = apaczka()
-			->get_request()
-			->get_by_key( 'apaczka' );
+		$data = apaczka()->get_request()->get_by_key( 'apaczka' );
 
-		$meta_data = get_post_meta( $order_id, '_apaczka', true );
+		$helper    = new Helper();
+		$meta_data = $helper->get_woo_order_meta( $order_id, '_apaczka' );
 
 		$declared_value_valid = self::declared_value_validate(
 			(float) $data['package_properties']['declared_content'],
@@ -1609,7 +1560,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 						'debug',
 						'API ODPOWIEDŹ (wycena) dla numeru zamówienia: ' . $order_id,
 						array(
-                            'source'   => 'apaczka-wycena-zam-#-' . $order_id,
+							'source'          => 'apaczka-wycena-zam-#-' . $order_id,
 							'order_id'        => $order_id,
 							'wycena_response' => $apaczka_response,
 						)
@@ -1639,13 +1590,9 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 					);
 				}
 
-				// var_dump($services_cache);die;
-
-				$price_table   = $apaczka_response->price_table;
-				$ret['status'] = 'ok';
+				$price_table = $apaczka_response->price_table;
 
 				foreach ( $price_table as $k => $price_item ) {
-					// var_dump($price_table);die;
 					$return_price_table[ $k ] =
 						array(
 							'name'           => $services_cache[ $k ]['name'],
@@ -1655,9 +1602,15 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 							'supplier'       => $services_cache[ $k ]['supplier'],
 						);
 				}
+
+				if ( ! empty( $return_price_table ) ) {
+					$return_price_table = self::sort_by_supplier( $return_price_table );
+					$ret['status']      = 'ok';
+				}
 			}
 
 			$data['apaczka_response'] = $apaczka_response;
+
 		} catch ( Exception $e ) {
 			$ret['error_messages'] = $e->getMessage();
 		}
@@ -1672,24 +1625,16 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		}
 
 		if ( empty( $_apaczka['package_properties']['cod'] ) ) {
-			$_apaczka['package_properties']['cod'] = $meta_data['package_properties']['cod'];
+			$_apaczka['package_properties']['cod'] = ! empty( $meta_data['package_properties']['cod'] ) ? $meta_data['package_properties']['cod'] : '';
 		}
 
 		if ( empty( $_apaczka['receiver'] ) ) {
 			$_apaczka['receiver'] = $meta_data['receiver'];
 		}
 
-		update_post_meta( $order_id, '_apaczka', $_apaczka );
-		update_post_meta( $order_id, '_apaczka_last_order_object_calc', $apaczka_order );
-
-		if ( 'yes' === get_option( 'woocommerce_custom_orders_table_enabled' ) ) {
-			$order = wc_get_order( $order_id );
-			if ( $order && ! is_wp_error( $order ) ) {
-				$order->update_meta_data( '_apaczka', $_apaczka );
-				$order->update_meta_data( '_apaczka_last_order_object_calc', $apaczka_order );
-				$order->save();
-			}
-		}
+		$order->update_meta_data( '_apaczka', $_apaczka );
+		$order->update_meta_data( '_apaczka_last_order_object_calc', $apaczka_order );
+		$order->save();
 
 		$default_service = (int) get_option( ( new Global_Settings() )->get_setting_id( 'service' ) );
 
@@ -1716,15 +1661,27 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	}
 
 	/**
-	 * @param string $price
+	 * Formats a price from cents to a display-friendly string.
 	 *
-	 * @return string
+	 * @param string $price The price in cents.
+	 * @return string The formatted price with comma as decimal separator.
+	 *
+	 * @since 1.0.0
+	 * @access public static
 	 */
 	public static function format_calculate_price( string $price ): string {
 		return str_replace( '.', ',', (string) ( number_format( (int) $price / 100, 2, '.', '' ) ) );
 	}
 
 
+	/**
+	 * Creates a package via AJAX and sends it to the Apaczka API.
+	 *
+	 * @return void Outputs JSON response and terminates execution.
+	 *
+	 * @since 1.0.0
+	 * @access public static
+	 */
 	public static function ajax_create_package() {
 		$shipping_methods = WC()->shipping()->get_shipping_methods();
 		if ( empty( $shipping_methods ) ) {
@@ -1734,15 +1691,17 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		$ret                   = array();
 		$ret['status']         = 'error';
 		$ret['error_messages'] = '';
-		$order_id              = apaczka()
-			->get_request()
-			->get_by_key( 'order_id' );
-		$order                 = wc_get_order( $order_id );
-		$post                  = get_post( $order_id );
-		$data                  = apaczka()
-			->get_request()
-			->get_by_key( 'apaczka' );
-		$meta_data             = get_post_meta( $order_id, '_apaczka', true );
+		$order_id              = apaczka()->get_request()->get_by_key( 'order_id' );
+
+		$order = wc_get_order( $order_id );
+
+		if ( ! $order || is_wp_error( $order ) ) {
+			return;
+		}
+
+		$data      = apaczka()->get_request()->get_by_key( 'apaczka' );
+		$helper    = new Helper();
+		$meta_data = $helper->get_woo_order_meta( $order_id, '_apaczka' );
 
 		$declared_value_valid = self::declared_value_validate(
 			(float) $data['package_properties']['declared_content'],
@@ -1780,7 +1739,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 						'debug',
 						'Żądanie API dla numeru zamówienia: ' . $order_id,
 						array(
-                            'source'       => 'apaczka-utw-przesylki-zam-#-' . $order_id,
+							'source'       => 'apaczka-utw-przesylki-zam-#-' . $order_id,
 							'order_id'     => $order_id,
 							'create_order' => $apaczka_order,
 						)
@@ -1798,7 +1757,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 						'debug',
 						'API ODPOWIEDŹ dla numeru zamówienia: ' . $order_id,
 						array(
-                            'source'       => 'apaczka-utw-przesylki-zam-#-' . $order_id,
+							'source'                => 'apaczka-utw-przesylki-zam-#-' . $order_id,
 							'order_id'              => $order_id,
 							'create_order_response' => $apaczka_response,
 						)
@@ -1806,8 +1765,6 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 				}
 			}
 
-			$services           = self::get_services();
-			$return_price_table = array();
 			if ( ! empty( $response_messages['error'] ) ) {
 				$ret['error_messages'] = implode( ',', $response_messages['error'][0] );
 
@@ -1844,7 +1801,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			$_apaczka['package_send']  = 1;
 			$_apaczka['apaczka_order'] = $apaczka_response->order;
 
-			// set order to status 'wc-completed' if checkbox is set during parcel create
+			// set order to status 'wc-completed' if checkbox is set during parcel create.
 			// if( isset($_POST['apaczka_order_status_completed']) && 'true' === $_POST['apaczka_order_status_completed'] ) {
 			if ( 'yes' === Plugin::get_option( 'set_order_status_completed' ) ) {
 				if ( $order && ! is_wp_error( $order ) ) {
@@ -1858,17 +1815,9 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			$_apaczka['package_send'] = 0;
 		}
 
-		update_post_meta( $order_id, '_apaczka', $_apaczka );
-		update_post_meta( $order_id, '_apaczka_last_order_object', $apaczka_order );
-
-		if ( 'yes' === get_option( 'woocommerce_custom_orders_table_enabled' ) ) {
-			$order = wc_get_order( $order_id );
-			if ( $order && ! is_wp_error( $order ) ) {
-				$order->update_meta_data( '_apaczka', $_apaczka );
-				$order->update_meta_data( '_apaczka_last_order_object', $apaczka_order );
-				$order->save();
-			}
-		}
+		$order->update_meta_data( '_apaczka', $_apaczka );
+		$order->update_meta_data( '_apaczka_last_order_object', $apaczka_order );
+		$order->save();
 
 		$ret['content'] = '';
 
@@ -1878,7 +1827,12 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 
 
 	/**
-	 * @return void
+	 * Retrieves and outputs a waybill PDF for download.
+	 *
+	 * @return void Outputs PDF file and terminates execution.
+	 *
+	 * @since 1.0.0
+	 * @access public
 	 */
 	public function get_waybill() {
 		if ( ! is_admin() || ! isset( $_REQUEST['apaczka_get_waybill'] ) ) {
@@ -1902,21 +1856,16 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		die();
 	}
 
-	/**
-	 * @return bool
-	 */
-	private function isParcelLockerChosen() {
-		if ( 'PACZKOMAT' === $this->get_option( 'service' ) ) {
-			return true;
-		}
 
-		return false;
-	}
 
 	/**
-	 * @param int $selected_service
+	 * Checks if the Apaczka Maps plugin is active when a parcel locker service is selected.
 	 *
-	 * @return bool
+	 * @param int $selected_service The selected service ID.
+	 * @return bool True if the plugin is active or not needed, false otherwise.
+	 *
+	 * @since 1.0.0
+	 * @access private
 	 */
 	private function check_apaczka_maps_plugin( int $selected_service ): bool {
 		if ( $this->is_parcel_locker_service( $selected_service ) ) {
@@ -1931,6 +1880,15 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		return class_exists( 'Apaczka_Points_Map\Points_Map_Plugin' );
 	}
 
+
+	/**
+	 * Processes admin options for the shipping method.
+	 *
+	 * @return bool|mixed True if options are saved successfully, false otherwise.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 */
 	public function process_admin_options() {
 		if ( ! $this->instance_id ) {
 			return parent::process_admin_options();
@@ -1987,7 +1945,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 						$created_template[ $key ] = $value;
 					}
 				} catch ( Exception $e ) {
-					$this->add_error( $e->getMessage() );
+					$this->add_error( 'Plugin Apaczka.pl: ' . $e->getMessage() );
 				}
 			}
 		}
@@ -2081,6 +2039,16 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		return $settings;
 	}
 
+
+	/**
+	 * Adds map field to settings.
+	 *
+	 * @param array $settings The current settings array.
+	 * @return array Modified settings array with map field added.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 */
 	public function add_map_field( $settings ) {
 		$settings = self::settings_field( $settings );
 
@@ -2088,7 +2056,12 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	}
 
 	/**
-	 * Adds custom field to each shipping method.
+	 * Adds map field to all shipping method settings.
+	 *
+	 * @return void
+	 *
+	 * @since 1.0.0
+	 * @access public
 	 */
 	public function filtering_shipping_fields() {
 		$shipping_methods = WC()->shipping->get_shipping_methods();
@@ -2102,47 +2075,71 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	}
 
 
-    private function get_shipping_method_instance_id( $shipping_method ) {
+	/**
+	 * Extracts the instance ID from a shipping method string.
+	 *
+	 * @param string $shipping_method The shipping method string.
+	 * @return string|null The instance ID or null if not found.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 */
+	private function get_shipping_method_instance_id( $shipping_method ) {
 
-        $instance_id = null;
+		$instance_id = null;
 
-        $data = explode( ':', $shipping_method );
+		$data = explode( ':', $shipping_method );
 
-        if( ! empty($data[1]) ) {
-            return $data[1];
-        }
+		if ( ! empty( $data[1] ) ) {
+			return $data[1];
+		}
 
-        return $instance_id;
-    }
-
-	private function is_delivery_map_button_display() {
-
-        $chosen_shipping_methods = array();
-
-        if ( is_object( WC() ) && is_object( WC()->session ) ) {
-            $chosen_shipping_methods = WC()->session->get('chosen_shipping_methods');
-        }
-
-        if ( ! empty( $chosen_shipping_methods ) && is_array( $chosen_shipping_methods ) ) {
-
-            if( ! empty( $chosen_shipping_methods[0] ) ) {
-                $chosen_method = $chosen_shipping_methods[0];
-                $instance_id = $this->get_shipping_method_instance_id( $chosen_method );
-
-                if( $instance_id ) {
-                    $map_config = apaczka()->get_map_config();
-                    if( ! empty($map_config[$instance_id]) ) {
-                        return true;
-                    }
-                }
-
-            }
-        }
-
-        return false;
-
+		return $instance_id;
 	}
 
+	/**
+	 * Determines if the delivery map button should be displayed.
+	 *
+	 * @return bool True if the map button should be displayed, false otherwise.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 */
+	private function is_delivery_map_button_display() {
+
+		$chosen_shipping_methods = array();
+
+		if ( is_object( WC() ) && is_object( WC()->session ) ) {
+			$chosen_shipping_methods = WC()->session->get( 'chosen_shipping_methods' );
+		}
+
+		if ( ! empty( $chosen_shipping_methods ) && is_array( $chosen_shipping_methods ) ) {
+
+			if ( ! empty( $chosen_shipping_methods[0] ) ) {
+				$chosen_method = $chosen_shipping_methods[0];
+				$instance_id   = $this->get_shipping_method_instance_id( $chosen_method );
+
+				if ( $instance_id ) {
+					$map_config = apaczka()->get_map_config();
+					if ( ! empty( $map_config[ $instance_id ] ) ) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+
+	/**
+	 * Outputs the HTML for the cancel package popup.
+	 *
+	 * @return void
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 */
 	public function cancel_package_popup() {
 
 		global $pagenow;
@@ -2181,15 +2178,36 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 					<div class="apaczka_alert_modal_close"></div>
 					<div class="apaczka_alert_modal_text_wrapper">
 						<img id="apaczka_decor_close"
-							src="<?php echo apaczka()->get_plugin_img_url() . '/decor-close.jpg'; ?>">
+							src="<?php echo esc_url( apaczka()->get_plugin_img_url() . '/decor-close.jpg' ); ?>">
 					</div>
 					<div class="apaczka_alert_modal_title">
 						<h2><?php echo esc_html__( 'Problem is occured', 'apaczka-pl' ); ?></h2>
 					</div>
 					<div class="apaczka_alert_modal_text">
-						<p><?php echo esc_html__( 'The shipment can only be canceled on Apaczka.pl via contact form:', 'apaczka-pl' ); ?></p>
-						<p><?php echo esc_html__( 'Shipping and Delivery -> Cancellation of a pallet and GLS shipment order.', 'apaczka-pl' ); ?></p>
-						<p><?php echo esc_html__( 'The cancellation service may incur an additional charge.', 'apaczka-pl' ); ?></p>
+						<p>
+						<?php
+						echo esc_html__(
+							'The shipment can only be canceled on Apaczka.pl via contact form:',
+							'apaczka-pl'
+						);
+						?>
+								</p>
+						<p>
+						<?php
+						echo esc_html__(
+							'Shipping and Delivery -> Cancellation of a pallet and GLS shipment order.',
+							'apaczka-pl'
+						);
+						?>
+								</p>
+						<p>
+						<?php
+						echo esc_html__(
+							'The cancellation service may incur an additional charge.',
+							'apaczka-pl'
+						);
+						?>
+								</p>
 					</div>
 					<div class="apaczka_alert_modal_action">
 						<button id="apaczka_alert_modal_close_button">Ok</button>
@@ -2201,6 +2219,15 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	}
 
 
+	/**
+	 * Gets the logo identifier for a given service ID.
+	 *
+	 * @param int $serviceId The service ID.
+	 * @return string|null The logo identifier or null if not found.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 */
 	public function get_logo( $serviceId ) {
 		switch ( (int) $serviceId ) {
 			case 1:
@@ -2213,7 +2240,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			case 14:
 			case 15:
 			case 16:
-				return 'ups';				
+				return 'ups';
 			case 20:
 			case 21:
 			case 22:
@@ -2224,61 +2251,60 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			case 28:
 			case 29:
 			case 30:
-				return 'dpd';				
+				return 'dpd';
 			case 41:
 			case 40:
 			case 42:
 			case 43:
 			case 45:
 			case 46:
-				return 'inpost';				
+				return 'inpost';
 			case 162:
 			case 163:
 			case 64:
 			case 66:
+			case 67:
+			case 65:
+			case 60:
 			case 68:
-				return 'pocztex';				
+				return 'pocztex';
 			case 86:
 			case 81:
 			case 82:
 			case 83:
 			case 84:
 			case 87:
-				return 'dhl';				
+				return 'dhl';
 			case 50:
 			case 53:
-				return 'orlen';				
-			case 60:
-			case 65:
-			case 67:
-				return 'pocztex';				
+				return 'orlen';
 			case 110:
-				return 'ipaczka';				
+				return 'ipaczka';
 			case 150:
-				return 'geis';				
-			//case 53:
+				return 'geis';
+			// case 53:
 			case 151:
 			case 153:
-				return 'fedex';				
+				return 'fedex';
 			case 191:
-				return 'apaczka-niemcy';				
+				return 'apaczka-niemcy';
 			case 200:
-				return 'gls';				
+				return 'gls';
 			case 211:
-				return 'wawa';				
+				return 'wawa';
 			case 220:
-				return 'pallex';				
+				return 'pallex';
 			case 230:
-				return 'hellmann';				
+				return 'hellmann';
 			case 240:
-				return 'rhenus';				
+				return 'rhenus';
 			case 260:
 			case 261:
-				return 'ambro';				
+				return 'ambro';
 			case 250:
 				return 'geodis';
 			case 312:
-                return 'cblog';
+				return 'cblog';
 			default:
 				return null;
 
@@ -2286,6 +2312,16 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	}
 
 
+	/**
+	 * Saves shipping point information in order meta data.
+	 *
+	 * @param WC_Order        $order The order object.
+	 * @param WP_REST_Request $request The REST request object.
+	 * @return void
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 */
 	public function save_shipping_point_in_order_meta( $order, $request ) {
 
 		if ( ! $order ) {
@@ -2301,12 +2337,8 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 
 			$apaczka_delivery_point = array_map( 'sanitize_text_field', $apaczka_delivery_point );
 
-			update_post_meta( $order->get_ID(), 'apaczka_delivery_point', $apaczka_delivery_point );
-
-			if ( 'yes' === get_option( 'woocommerce_custom_orders_table_enabled' ) ) {
-				$order->update_meta_data( 'apaczka_delivery_point', $apaczka_delivery_point );
-				$order->save();
-			}
+			$order->update_meta_data( 'apaczka_delivery_point', $apaczka_delivery_point );
+			$order->save();
 		}
 
 		$receiver_company = '';
@@ -2340,17 +2372,20 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		$apaczka['package_properties'] = $package_properties;
 		$apaczka['receiver']           = $receiver;
 
-		update_post_meta( $order->get_ID(), '_apaczka', $apaczka );
-
-		if ( 'yes' === get_option( 'woocommerce_custom_orders_table_enabled' ) ) {
-			$order->update_meta_data( '_apaczka', $apaczka );
-			$order->save();
-		}
+		$order->update_meta_data( '_apaczka', $apaczka );
+		$order->save();
 	}
 
 
-
-
+	/**
+	 * Gets package properties based on global settings and order data.
+	 *
+	 * @param WC_Order|null $order The order object or null.
+	 * @return array Package properties array.
+	 *
+	 * @since 1.0.0
+	 * @access private
+	 */
 	private function get_package_properties( $order = null ) {
 
 		$settings = new Global_Settings();
@@ -2443,5 +2478,35 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		);
 
 		return $package_properties;
+	}
+
+
+	/**
+	 * Sorts shipping methods by supplier name and then by price.
+	 *
+	 * @param array $shipping_methods Array of shipping methods to sort.
+	 *
+	 * @return array Sorted array of shipping methods.
+	 *
+	 * @since 1.3.6
+	 * @access public static
+	 */
+	public static function sort_by_supplier( $shipping_methods ) {
+		uasort(
+			$shipping_methods,
+			function ( $a, $b ) {
+				// First, compare by supplier (alphabetically).
+				$supplier_comparison = strcmp( $a['supplier'], $b['supplier'] );
+
+				if ( 0 !== $supplier_comparison ) {
+					return $supplier_comparison;
+				}
+
+				// If suppliers are the same, sort by price (ascending).
+				return $a['price'] <=> $b['price'];
+			}
+		);
+
+		return $shipping_methods;
 	}
 }

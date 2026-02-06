@@ -33,7 +33,7 @@ use Inspire_Labs\Apaczka_Woocommerce\Shipping_Method_Apaczka;
                 <img class="apaczka-service-logo" src="<?php echo esc_url( $logo_src ); ?>" style="">
             </p>
             <p>
-				<?php echo str_replace(
+				<?php echo wp_kses_post( str_replace(
 					[
 						'Drzwi -',
 						'Punkt -',
@@ -42,7 +42,7 @@ use Inspire_Labs\Apaczka_Woocommerce\Shipping_Method_Apaczka;
 						'<br>Drzwi -',
 						'<br>Punkt -',
 					],
-					esc_attr($service['name'] )) ?>
+					esc_attr($service['name'] ) ) ); ?>
             </p>
 
             <div class="apaczka-calculate-item-price-wrapper">

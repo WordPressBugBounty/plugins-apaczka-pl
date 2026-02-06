@@ -31,9 +31,9 @@ trait Environment {
 			return self::$config[ $key ];
 		}
 
-		throw new Exception(
-			"[Ilabs_Plugin] [get_from_config] Key: '$key' not exists"
-		);
+        $message = '[Ilabs_Plugin] [get_from_config] Key: ' . esc_html( $key ) . ' not exists';
+
+		throw new Exception( esc_html( $message ) );
 	}
 
 	/**

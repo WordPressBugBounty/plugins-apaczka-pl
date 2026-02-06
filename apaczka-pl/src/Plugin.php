@@ -7,6 +7,10 @@
 
 namespace Inspire_Labs\Apaczka_Woocommerce;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 use Exception;
 use Inspire_Labs\Apaczka_Woocommerce\Plugin\Abstract_Ilabs_Plugin;
 use WC_Order;
@@ -21,14 +25,22 @@ class Plugin extends Abstract_Ilabs_Plugin {
 
 	public $shipping_methods = array();
 
-    /**
-     * Cached shipping zones \WC_Shipping_Zones::get_zones()
-     *
-     * @var $cached_zones
-     */
-    public $cached_zones = array();
+	/**
+	 * Cached shipping zones \WC_Shipping_Zones::get_zones()
+	 *
+	 * @var $cached_zones
+	 */
+	public $cached_zones = array();
 
 
+	/**
+	 * Initializes the plugin components.
+	 *
+	 * @return void
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 */
 	public function init() {
 		$this->require_wp_core_file( 'wp-admin/includes/class-wp-filesystem-base.php' );
 		$this->require_wp_core_file( 'wp-admin/includes/class-wp-filesystem-direct.php' );
@@ -37,7 +49,11 @@ class Plugin extends Abstract_Ilabs_Plugin {
 			$this->init_admin_features();
 		}
 
-        add_filter( 'woocommerce_get_order_item_totals', array( $this, 'show_selected_point_data_in_order_details' ), 2, 100 );
+		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'show_selected_point_data_in_order_details' ), 2, 100 );
+
+		add_action( 'woocommerce_after_shipping_rate', array( $this, 'show_map_button_debug' ), 100 );
+
+		( new Integrations() );
 	}
 
 	protected function register_request_filters(): array {
@@ -84,6 +100,16 @@ class Plugin extends Abstract_Ilabs_Plugin {
 		);
 	}
 
+
+	/**
+	 * Registers the plugin's shipping method with WooCommerce.
+	 *
+	 * Adds the Apaczka shipping method to the list of available
+	 * WooCommerce shipping methods.
+	 *
+	 * @param array $methods Existing WooCommerce shipping methods.
+	 * @return array Modified array with Apaczka shipping method added.
+	 */
 	public function woocommerce_shipping_methods( $methods ) {
 		$methods[ $this->shipping_methods['apaczka']->id ]
 			= get_class( $this->shipping_methods['apaczka'] );
@@ -91,6 +117,17 @@ class Plugin extends Abstract_Ilabs_Plugin {
 		return $methods;
 	}
 
+
+	/**
+	 * Initializes admin-specific features and hooks.
+	 *
+	 * Sets up various WordPress hooks for the admin area including:
+	 * - Settings page integration with WooCommerce
+	 * - Ajax handlers initialization
+	 * - Display of delivery point information on order pages
+	 *
+	 * Adds delivery point details to order data when available.
+	 */
 	private function init_admin_features() {
 		add_action( 'woocommerce_settings_saved', array( $this, 'save_post' ) );
 		add_filter(
@@ -108,18 +145,11 @@ class Plugin extends Abstract_Ilabs_Plugin {
 			add_action(
 				'woocommerce_admin_order_data_after_shipping_address',
 				function ( WC_Order $order ) {
-					$apaczka_delivery_point = get_post_meta(
-						$order->get_id(),
-						'apaczka_delivery_point',
-						true
-					);
-
+					$helper                 = new Helper();
+					$apaczka_delivery_point = $helper->get_woo_order_meta( $order->get_id(), 'apaczka_delivery_point' );
 					if ( ! empty( $apaczka_delivery_point ) ) {
-						echo '<div class="order_data_column"><h4>' . __(
-							'Others:',
-							'apaczka-pl'
-						) . '</h4><p><strong>'
-							. __( 'Delivery point', 'apaczka-pl' )
+						echo '<div class="order_data_column"><h3 class="apaczka_admin_order_point_info">' . esc_html__( 'From plugin Apaczka.pl:', 'apaczka-pl' ) . '</h3><p><strong>'
+							. esc_html__( 'Delivery point', 'apaczka-pl' )
 							. ': </strong>'
 							. esc_attr( $apaczka_delivery_point['apm_access_point_id'] )
 							. ' (' . esc_attr( $apaczka_delivery_point['apm_supplier'] ) . '. ' . esc_attr( $apaczka_delivery_point['apm_name'] ) . ')'
@@ -137,162 +167,184 @@ class Plugin extends Abstract_Ilabs_Plugin {
 
 
 	/**
-     * Get admin script_id
-     *
+	 * Get admin script_id
+	 *
 	 * @return string
 	 */
 	private function get_admin_script_id(): string {
 		return self::APP_PREFIX . '_admin-js';
 	}
 
-    /**
-     * Get admin css_id
-     *
-     * @return string
-     */
+	/**
+	 * Get admin css_id
+	 *
+	 * @return string
+	 */
 	private function get_admin_css_id(): string {
 		return self::APP_PREFIX . '_admin-css';
 	}
 
-    /**
-     * Get frontend blocks script_id
-     *
-     * @return string
-     */
+	/**
+	 * Get frontend blocks script_id
+	 *
+	 * @return string
+	 */
 	public function get_front_blocks_script_id(): string {
 		return self::APP_PREFIX . '_front_blocks-js';
 	}
 
-    /**
-     * Enqueue frontend scripts
-     *
-     * @return void
-     */
+	/**
+	 * Enqueue frontend scripts
+	 *
+	 * @return void
+	 */
 	public function enqueue_frontend_scripts() {
 
-		if ( ! class_exists( 'Apaczka_Points_Map\Points_Map_Plugin' ) ) {
-            
-			if (  is_checkout() || has_block( 'woocommerce/checkout' ) ) {
+		if ( class_exists( 'Apaczka_Points_Map\Points_Map_Plugin' ) ) {
+			return;
+		}
 
-                $current_plugin_version = apaczka()->get_plugin_version();
+		$is_virtual_products = false;
 
-                $bp_css_path = apaczka()->get_plugin_dir() . 'assets/css/bliskapaczka-map.css';
-                $bp_css_ver  = file_exists( $bp_css_path ) ? filemtime( $bp_css_path ) : $current_plugin_version;
-                wp_enqueue_style(
-                    self::APP_PREFIX . '_bliskapaczka_map',
-                    $this->get_plugin_css_url() . '/bliskapaczka-map.css',
-                    array(),
-                    $bp_css_ver
-                );
-
-				wp_enqueue_style(
-					$this->get_admin_css_id(),
-					$this->get_plugin_css_url() . '/front.css'
-				);
-
-                $bp_js_path = apaczka()->get_plugin_dir() . 'assets/js/bliskapaczka-map.js';
-                $bp_js_ver  = file_exists( $bp_js_path ) ? filemtime( $bp_js_path ) : $current_plugin_version;
-                wp_enqueue_script(
-                    self::APP_PREFIX . '_bliskapaczka-map',
-                    $this->get_plugin_js_url() . '/bliskapaczka-map.js',
-                    array( 'jquery' ),
-                    $bp_js_ver,
-                    array( 'in_footer' => true )
-                );
+		if ( is_checkout() || has_block( 'woocommerce/checkout' ) ) {
+			if ( is_object( WC()->cart ) ) {
+				if ( ! WC()->cart->needs_shipping() ) {
+					$is_virtual_products = true;
+				}
 			}
+		}
 
+		if ( $is_virtual_products ) {
+			return;
+		}
 
-            if (  is_checkout() || has_block( 'woocommerce/checkout' ) ) {
-                $lang       = $this->get_website_language();
-                $map_config = $this->get_map_config();
-                $fb_js_path = apaczka()->get_plugin_dir() . 'assets/js/front-blocks.js';
-                $fb_js_ver  = file_exists($fb_js_path) ? filemtime($fb_js_path) : $current_plugin_version;
-                wp_enqueue_script(
-                    $this->get_front_blocks_script_id(),
-                    $this->get_plugin_js_url() . '/front-blocks.js',
-                    array('jquery'),
-                    $fb_js_ver,
-                    array('in_footer' => true)
-                );
-                wp_localize_script(
-                    $this->get_front_blocks_script_id(),
-                    'apaczka_block',
-                    array(
-                        'button_text1'  => esc_html__('Select point', 'apaczka-pl'),
-                        'button_text2'  => esc_html__('Change point', 'apaczka-pl'),
-                        'selected_text' => esc_html__('Selected Parcel Locker:', 'apaczka-pl'),
-                        'alert_text'    => esc_html__('Delivery point must be chosen!', 'apaczka-pl'),
-                        'map_config'    => $map_config,
-                        'plugin_version'    => $current_plugin_version,
-                    )
-                );
-            }
+		if ( is_checkout() || has_block( 'woocommerce/checkout' ) ) {
 
+			$current_plugin_version = apaczka()->get_plugin_version();
 
-            $enqueue_script_classic_checkout = false;
-            if ( is_checkout() && ! has_block( 'woocommerce/checkout' ) ) {
-                $enqueue_script_classic_checkout = true;
-            }
-            if( is_checkout() && class_exists( 'FluidCheckout' ) ) {
-                $enqueue_script_classic_checkout = true;
-            }
+			$bp_css_path = apaczka()->get_plugin_dir() . 'assets/css/bliskapaczka-map.css';
+			// $bp_css_ver  = file_exists( $bp_css_path ) ? filemtime( $bp_css_path ) : $current_plugin_version;
+			$bp_css_ver = '8.6';
+			wp_enqueue_style(
+				self::APP_PREFIX . '_bliskapaczka_map',
+				'https://map.alsendo.com/v8.6/main.css',
+				array(),
+				$bp_css_ver
+			);
 
+			wp_enqueue_style(
+				$this->get_admin_css_id(),
+				$this->get_plugin_css_url() . '/front.css'
+			);
 
-            if (  is_checkout() || has_block( 'woocommerce/checkout' ) ) {
+			$bp_js_path = apaczka()->get_plugin_dir() . 'assets/js/bliskapaczka-map.js';
+			// $bp_js_ver  = file_exists( $bp_js_path ) ? filemtime( $bp_js_path ) : $current_plugin_version;
+			$bp_js_ver = '8.6';
+			wp_enqueue_script(
+				self::APP_PREFIX . '_bliskapaczka-map',
+				'https://map.alsendo.com/v8.6/main.js',
+				array( 'jquery' ),
+				$bp_js_ver,
+				array( 'in_footer' => true )
+			);
+		}
 
-                $lang       = $this->get_website_language();
-                $front_js_path = apaczka()->get_plugin_dir() . 'assets/js/frontend.js';
-                $front_js_ver  = file_exists($front_js_path) ? filemtime($front_js_path) : $current_plugin_version;
-                wp_enqueue_script(
-                    self::APP_PREFIX . '_frontend.js',
-                    $this->get_plugin_js_url() . '/frontend.js',
-                    array('jquery'),
-                    $front_js_ver,
-                    array('in_footer' => true)
-                );
-                wp_localize_script(
-                    self::APP_PREFIX . '_frontend.js',
-                    'apaczka_checkout',
-                    array(
-                        'map_config' => $this->get_map_config(),
-                        'lang'       => $lang,
-						'plugin_version'    => $current_plugin_version,
-                    )
-                );
-            }
+		if ( is_checkout() || has_block( 'woocommerce/checkout' ) ) {
+			$lang       = $this->get_website_language();
+			$map_config = $this->get_map_config();
+			$fb_js_path = apaczka()->get_plugin_dir() . 'assets/js/front-blocks.js';
+			$fb_js_ver  = file_exists( $fb_js_path ) ? filemtime( $fb_js_path ) : $current_plugin_version;
+			wp_enqueue_script(
+				$this->get_front_blocks_script_id(),
+				$this->get_plugin_js_url() . '/front-blocks.js',
+				array( 'jquery' ),
+				$fb_js_ver,
+				array( 'in_footer' => true )
+			);
+			wp_localize_script(
+				$this->get_front_blocks_script_id(),
+				'apaczka_block',
+				array(
+					'button_text1'   => esc_html__( 'Select point', 'apaczka-pl' ),
+					'button_text2'   => esc_html__( 'Change point', 'apaczka-pl' ),
+					'selected_text'  => esc_html__( 'Selected Parcel Locker:', 'apaczka-pl' ),
+					'alert_text'     => esc_html__( 'Delivery point must be chosen!', 'apaczka-pl' ),
+					'map_config'     => $map_config,
+					'plugin_version' => $current_plugin_version,
+				)
+			);
+		}
 
+		$enqueue_script_classic_checkout = false;
+		if ( is_checkout() && ! has_block( 'woocommerce/checkout' ) ) {
+			$enqueue_script_classic_checkout = true;
+		}
+		if ( is_checkout() && class_exists( 'FluidCheckout' ) ) {
+			$enqueue_script_classic_checkout = true;
+		}
 
+		if ( is_checkout() || has_block( 'woocommerce/checkout' ) ) {
+
+			$lang          = $this->get_website_language();
+			$front_js_path = apaczka()->get_plugin_dir() . 'assets/js/frontend.js';
+			$front_js_ver  = file_exists( $front_js_path ) ? filemtime( $front_js_path ) : $current_plugin_version;
+			wp_enqueue_script(
+				self::APP_PREFIX . '_frontend.js',
+				$this->get_plugin_js_url() . '/frontend.js',
+				array( 'jquery' ),
+				$front_js_ver,
+				array( 'in_footer' => true )
+			);
+			wp_localize_script(
+				self::APP_PREFIX . '_frontend.js',
+				'apaczka_checkout',
+				array(
+					'map_config'     => $this->get_map_config(),
+					'lang'           => $lang,
+					'plugin_version' => $current_plugin_version,
+				)
+			);
 		}
 	}
 
+
+	/**
+	 * Enqueues scripts and styles for the admin dashboard.
+	 *
+	 * Loads necessary CSS and JavaScript files on specific admin pages
+	 * where the plugin functionality is required. Handles different asset
+	 * requirements based on the current screen (settings page or order page).
+	 * Includes the Alsendo map widget and localizes scripts with required data.
+	 */
 	public function enqueue_dashboard_scripts() {
 
 		if ( $this->is_required_pages() ) {
 
-            $current_screen = get_current_screen();
-            $current_plugin_version = apaczka()->get_plugin_version();
-            $lang = $this->get_website_language();
+			$current_screen         = get_current_screen();
+			$current_plugin_version = apaczka()->get_plugin_version();
+			$lang                   = $this->get_website_language();
 
 			wp_enqueue_style(
 				$this->get_admin_css_id(),
 				$this->get_plugin_css_url() . '/admin.css'
 			);
 
-            $bp_css_path = apaczka()->get_plugin_dir() . 'assets/css/bliskapaczka-map.css';
-            $bp_css_ver  = file_exists( $bp_css_path ) ? filemtime( $bp_css_path ) : $current_plugin_version;
-            wp_enqueue_style(
-                self::APP_PREFIX . '_bliskapaczka_map',
-                $this->get_plugin_css_url() . '/bliskapaczka-map.css',
-                array(),
-                $bp_css_ver
-            );
+			$bp_css_path = apaczka()->get_plugin_dir() . 'assets/css/bliskapaczka-map.css';
+			// $bp_css_ver  = file_exists( $bp_css_path ) ? filemtime( $bp_css_path ) : $current_plugin_version;
+			$bp_css_ver = '8.6';
+			wp_enqueue_style(
+				self::APP_PREFIX . '_bliskapaczka_map',
+				'https://map.alsendo.com/v8.6/main.css',
+				array(),
+				$bp_css_ver
+			);
 
 			wp_enqueue_script(
 				'jquery_maskedinput',
 				$this->get_plugin_js_url() . '/jquery.maskedinput.js'
 			);
 
-			$admin_js_path  = $this->get_plugin_dir() . 'assets/js/admin.js';
+			$admin_js_path = $this->get_plugin_dir() . 'assets/js/admin.js';
 			$admin_js_ver  = file_exists( $admin_js_path ) ? filemtime( $admin_js_path ) : $current_plugin_version;
 
 			if ( is_a( $current_screen, 'WP_Screen' ) && 'woocommerce_page_wc-settings' === $current_screen->id ) {
@@ -302,86 +354,90 @@ class Plugin extends Abstract_Ilabs_Plugin {
 						$this->get_admin_script_id(),
 						$this->get_plugin_js_url() . '/admin.js',
 						array( 'jquery' ),
-                        $admin_js_ver
+						$admin_js_ver
 					);
-                    wp_localize_script(
-                        $this->get_admin_script_id(),
-                        'apaczka_admin',
-                        array(
-                            'ajaxurl'           => admin_url( 'admin-ajax.php' ),
-                            'nonce'             => wp_create_nonce( 'apaczka_pl_ajax_nonce' ),
-                            'lang'              => $lang
-                        )
-                    );
+					wp_localize_script(
+						$this->get_admin_script_id(),
+						'apaczka_admin',
+						array(
+							'ajaxurl' => admin_url( 'admin-ajax.php' ),
+							'nonce'   => wp_create_nonce( 'apaczka_pl_ajax_nonce' ),
+							'lang'    => $lang,
+						)
+					);
 
-                    $bp_js_path = apaczka()->get_plugin_dir() . 'assets/js/bliskapaczka-map.js';
-                    $bp_js_ver  = file_exists( $bp_js_path ) ? filemtime( $bp_js_path ) : $current_plugin_version;
-                    wp_enqueue_script(
-                        self::APP_PREFIX . '_bliskapaczka-map.js',
-                        $this->get_plugin_js_url() . '/bliskapaczka-map.js',
-                        array( 'jquery' ),
-                        $bp_js_ver,
-                        array( 'in_footer' => true )
-                    );
+					$bp_js_path = apaczka()->get_plugin_dir() . 'assets/js/bliskapaczka-map.js';
+					// $bp_js_ver  = file_exists( $bp_js_path ) ? filemtime( $bp_js_path ) : $current_plugin_version;
+					$bp_js_ver = '8.6';
+					wp_enqueue_script(
+						self::APP_PREFIX . '_bliskapaczka-map.js',
+						'https://map.alsendo.com/v8.6/main.js',
+						array( 'jquery' ),
+						$bp_js_ver,
+						array( 'in_footer' => true )
+					);
 				}
-
-
 			}
 
-            if ( ( isset( $_GET['page'] ) && 'wc-orders' === $_GET['page'] ) || ( isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' === $_GET['action'] ) ) {
+			if ( ( isset( $_GET['page'] ) && 'wc-orders' === $_GET['page'] ) || ( isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' === $_GET['action'] ) ) {
 
+				if ( isset( $_GET['post'] ) && isset( $_GET['action'] ) && 'edit' === $_GET['action'] ) {
+					$post_id = sanitize_text_field( wp_unslash( $_GET['post'] ) );
+					if ( is_numeric( $post_id ) ) {
+						// check if post type is WC Order.
+						$post_type = get_post_type( $post_id );
+						if ( 'shop_order' !== $post_type ) {
+							return;
+						}
+					}
+				}
 
-                wp_enqueue_script(
-                    'apaczka_pl_order_metabox',
-                    $this->get_plugin_js_url() . '/order-metabox.js',
-                    array( 'jquery', 'mediaelement', 'wc-admin-order-meta-boxes' ),
-                    $admin_js_ver,
-                    array( 'in_footer' => true )
-                );
+				wp_enqueue_script(
+					'apaczka_pl_order_metabox',
+					$this->get_plugin_js_url() . '/order-metabox.js',
+					array( 'jquery', 'mediaelement', 'wc-admin-order-meta-boxes' ),
+					$admin_js_ver,
+					array( 'in_footer' => true )
+				);
 
+				$sender_templates_json  = ( new Sender_Settings_Templates_Helper() )->get_all_templates_json();
+				$package_templates_json = ( new Gateway_Settings_Templates_Helper() )->get_all_templates_json();
 
-                $sender_templates_json  = ( new Sender_Settings_Templates_Helper() )->get_all_templates_json();
-                $package_templates_json = ( new Gateway_Settings_Templates_Helper() )->get_all_templates_json();
+				wp_localize_script(
+					'apaczka_pl_order_metabox',
+					'apaczka_order_metabox',
+					array(
+						'ajaxurl'                      => admin_url( 'admin-ajax.php' ),
+						'preloader'                    => $this->get_plugin_img_url() . '/animation-round-small.gif',
+						'nonce'                        => wp_create_nonce( 'apaczka_ajax_nonce' ),
+						'sender_templates'             => json_decode( $sender_templates_json, true ),
+						'package_properties_templates' => json_decode( $package_templates_json, true ),
+					)
+				);
 
-                wp_localize_script(
-                    'apaczka_pl_order_metabox',
-                    'apaczka_order_metabox',
-                    array(
-                        'ajaxurl'                      => admin_url( 'admin-ajax.php' ),
-                        'preloader'                    => $this->get_plugin_img_url() . '/animation-round-small.gif',
-                        'nonce'                        => wp_create_nonce( 'apaczka_ajax_nonce' ),
-                        'sender_templates'             => json_decode( $sender_templates_json, true ),
-                        'package_properties_templates' => json_decode( $package_templates_json, true )
-                    )
-                );
-
-
-                $bp_js_path = apaczka()->get_plugin_dir() . 'assets/js/bliskapaczka-map.js';
-                $bp_js_ver  = file_exists( $bp_js_path ) ? filemtime( $bp_js_path ) : $current_plugin_version;
-                wp_enqueue_script(
-                    self::APP_PREFIX . '_bliskapaczka-map',
-                    $this->get_plugin_js_url() . '/bliskapaczka-map.js',
-                    array( 'jquery' ),
-                    $bp_js_ver,
-                    array( 'in_footer' => true )
-                );
-            }
-
-
-
-            /*$bp_js_path = apaczka()->get_plugin_dir() . 'assets/js/bliskapaczka-map.js';
-            $bp_js_ver  = file_exists( $bp_js_path ) ? filemtime( $bp_js_path ) : $current_plugin_version;
-            wp_enqueue_script(
-                self::APP_PREFIX . '_bliskapaczka-map',
-                $this->get_plugin_js_url() . '/bliskapaczka-map.js',
-                array( 'jquery' ),
-                $bp_js_ver,
-                array( 'in_footer' => true )
-            );*/
-
-        }
+				$bp_js_path = apaczka()->get_plugin_dir() . 'assets/js/bliskapaczka-map.js';
+				// $bp_js_ver  = file_exists( $bp_js_path ) ? filemtime( $bp_js_path ) : $current_plugin_version;
+				$bp_js_ver = '8.6';
+				wp_enqueue_script(
+					self::APP_PREFIX . '_bliskapaczka-map',
+					'https://map.alsendo.com/v8.6/main.js',
+					array( 'jquery' ),
+					$bp_js_ver,
+					array( 'in_footer' => true )
+				);
+			}
+		}
 	}
 
+	/**
+	 * Determines if the current page requires the plugin's assets.
+	 *
+	 * Checks if the current admin page is one where the plugin's functionality
+	 * is needed. Excludes product edit pages but includes other post pages,
+	 * plugin settings pages, and WooCommerce order detail pages.
+	 *
+	 * @return bool True if current page requires plugin assets, false otherwise.
+	 */
 	public function is_required_pages() {
 		global $pagenow;
 
@@ -414,172 +470,255 @@ class Plugin extends Abstract_Ilabs_Plugin {
 	}
 
 
-    /**
-     * Retrieves and caches shipping zones.
-     *
-     * @uses WC_Shipping_Zones::get_zones() To fetch shipping zones if not already cached.
-     *
-     * @return array An array of WooCommerce shipping zones, or an empty array if WC_Shipping_Zones class doesn't exist.
-     */
-    private function get_cached_zones() {
-        $cached_zones = ! empty( $this->cached_zones ) ? $this->cached_zones : null;
-        if ( empty( $cached_zones ) ) {
-            if ( class_exists( 'WC_Shipping_Zones' ) ) {
-                $cached_zones       = \WC_Shipping_Zones::get_zones();
-                $this->cached_zones = $cached_zones;
-            }
-        }
-        return $cached_zones;
-    }
+	/**
+	 * Retrieves and caches shipping zones.
+	 *
+	 * @uses WC_Shipping_Zones::get_zones() To fetch shipping zones if not already cached.
+	 *
+	 * @return array An array of WooCommerce shipping zones, or an empty array if WC_Shipping_Zones class doesn't exist.
+	 */
+	private function get_cached_zones() {
+		$cached_zones = ! empty( $this->cached_zones ) ? $this->cached_zones : null;
+		if ( empty( $cached_zones ) ) {
+			if ( class_exists( 'WC_Shipping_Zones' ) ) {
+				$cached_zones       = \WC_Shipping_Zones::get_zones();
+				$this->cached_zones = $cached_zones;
+			}
+		}
+		return $cached_zones;
+	}
 
 
-    /**
-     * Clears the cached shipping zones.
-     *
-     * @return void
-     */
-    public function clear_zones_cache() {
-        $this->cached_zones = null;
-    }
+	/**
+	 * Clears the cached shipping zones.
+	 *
+	 * @return void
+	 */
+	public function clear_zones_cache() {
+		$this->cached_zones = null;
+	}
 
-    /**
-     * Get map config
-     *
-     * @return array
-     */
-    public function get_map_config() {
+	/**
+	 * Get map config
+	 *
+	 * @return array
+	 */
+	public function get_map_config() {
 
-        $config = array();
+		$config = array();
 
-        $delivery_zones = $this->get_cached_zones();
+		$delivery_zones = $this->get_cached_zones();
 
-        $zone_ids = array_keys( array( '' ) + $delivery_zones );
+		$zone_ids = array_keys( array( '' ) + $delivery_zones );
 
-        foreach ( $zone_ids as $zone_id ) {
+		foreach ( $zone_ids as $zone_id ) {
 
-            $shipping_zone = new \WC_Shipping_Zone( $zone_id );
+			$shipping_zone = new \WC_Shipping_Zone( $zone_id );
 
-            $shipping_methods = $shipping_zone->get_shipping_methods( true, 'values' );
+			$shipping_methods = $shipping_zone->get_shipping_methods( true, 'values' );
 
-            foreach ( $shipping_methods as $instance_id => $shipping_method ) {
-                if ( isset( $shipping_method->instance_settings['display_apaczka_map'] ) && 'yes' === $shipping_method->instance_settings['display_apaczka_map'] ) {
-                    $map_supplier = $shipping_method->instance_settings['supplier_apaczka_map'];
+			foreach ( $shipping_methods as $instance_id => $shipping_method ) {
+				if ( isset( $shipping_method->instance_settings['display_apaczka_map'] ) && 'yes' === $shipping_method->instance_settings['display_apaczka_map'] ) {
+					$map_supplier = $shipping_method->instance_settings['supplier_apaczka_map'];
 
-                    if ( 'ALL' === $map_supplier ) {
-                        //$config[ $instance_id ]['geowidget_supplier'] = array( 'DHL_PARCEL', 'DPD', 'INPOST', 'POCZTA', 'UPS', 'PWR' );
-                        $config[ $instance_id ]['geowidget_supplier'] = array(
-                            'RUCH',
-                            'INPOST',
-                            'INPOST_INTERNATIONAL',
-                            'POCZTA',
-                            'DPD',
-                            'UPS',
-                            'DHL'
-                        );
-                    } else {
-                        $single_carrier                               = $shipping_method->instance_settings['supplier_apaczka_map'];
-                        if ( 'DHL_PARCEL' === $single_carrier ) {
-                            $single_carrier = 'DHL';
-                        } elseif ( 'PWR' === $single_carrier ) {
-                            $single_carrier = 'RUCH';
-                        }
-                        $config[ $instance_id ]['geowidget_supplier'] = array( $single_carrier );
-                    }
+					if ( 'ALL' === strtoupper( $map_supplier ) || 'ALL_APACZKA' === strtoupper( $map_supplier ) ) {
+						$config[ $instance_id ]['geowidget_supplier'] = array(
+							'RUCH',
+							'INPOST',
+							'INPOST_INTERNATIONAL',
+							'POCZTA',
+							'DPD',
+							'UPS',
+							'DHL',
+						);
+					} else {
+						$single_carrier = $shipping_method->instance_settings['supplier_apaczka_map'];
+						if ( 'DHL_PARCEL' === $single_carrier ) {
+							$single_carrier = 'DHL';
+						} elseif ( 'PWR' === $single_carrier ) {
+							$single_carrier = 'RUCH';
+						}
+						$config[ $instance_id ]['geowidget_supplier'] = array( $single_carrier );
+					}
 
-                    $config[ $instance_id ]['geowidget_only_cod'] = $shipping_method->instance_settings['only_cod_apaczka_map'];
-                }
-            }
-        }
+					$config[ $instance_id ]['geowidget_only_cod'] = $shipping_method->instance_settings['only_cod_apaczka_map'];
+				}
+			}
+		}
 
-        return $config;
-    }
-
-
-    /**
-     * Get website language
-     *
-     * @return string
-     */
-    public function get_website_language() {
-
-        $lang = '';
-
-        // Check for WPML.
-        if ( class_exists( 'SitePress' ) ) {
-            $lang = apply_filters( 'wpml_current_language', null );
-            return $lang;
-        }
-
-        // Check for Polylang.
-        if ( function_exists( 'pll_current_language' ) ) {
-            $lang = pll_current_language();
-            return $lang;
-        }
-
-        // Standard WordPress (no multilingual plugin).
-        $locale = get_locale();
-        $lang   = substr( $locale, 0, 2 );
-
-        return $lang;
-    }
+		return $config;
+	}
 
 
-    /**
-     * Show parcel machine in order details
-     *
-     * @param array    $items $items.
-     *
-     * @param WC_Order $order $order.
-     *
-     * @return array
-     */
-    public function show_selected_point_data_in_order_details( $items, $order ) {
+	/**
+	 * Get website language
+	 *
+	 * @return string
+	 */
+	public function get_website_language() {
 
-        static $details_shown = false;
+		$lang = '';
 
-        $locker_data = $order->get_meta( 'apaczka_delivery_point' );
-        if ( empty( $locker_data ) ) {
-            return $items;
-        }
+		// Check for WPML.
+		if ( class_exists( 'SitePress' ) ) {
+			$lang = apply_filters( 'wpml_current_language', null );
+			return $lang;
+		}
 
-        if ( ! $details_shown ) {
-            $locker_id       = ! empty( $locker_data['apm_access_point_id'] ) ? $locker_data['apm_access_point_id'] : '';
-            $locker_operator = ! empty( $locker_data['apm_supplier'] ) ? $locker_data['apm_supplier'] : '';
-            if ( ! empty( $locker_operator ) ) {
-                if( 'RUCH' === $locker_operator ) {
-                    $locker_operator = 'ORLEN PACZKA';
-                }
-                $locker_id = esc_html( $locker_operator ) . ': ' . esc_attr( $locker_id );
-            }
+		// Check for Polylang.
+		if ( function_exists( 'pll_current_language' ) ) {
+			$lang = pll_current_language();
+			return $lang;
+		}
 
-            $locker_desc        = '';
-            $locker_name        = ! empty( $locker_data['apm_name'] ) ? $locker_data['apm_name'] : '';
-            $locker_street      = ! empty( $locker_data['apm_street'] ) ? $locker_data['apm_street'] : '';
-            $locker_postal_code = ! empty( $locker_data['apm_postal_code'] ) ? $locker_data['apm_postal_code'] : '';
-            $locker_city        = ! empty( $locker_data['apm_city'] ) ? $locker_data['apm_city'] : '';
+		// Standard WordPress (no multilingual plugin).
+		$locale = get_locale();
+		$lang   = substr( $locale, 0, 2 );
 
-            $locker_desc .= $locker_name . '<br>' . $locker_street . '<br>' . $locker_postal_code . ' ' . $locker_city;
+		return $lang;
+	}
 
-            $shipping_method_id          = '';
-            $shipping_method_instance_id = '';
 
-            foreach ( $order->get_items( 'shipping' ) as $item_id => $item ) {
-                $shipping_method_id          = $item->get_method_id();
-                $shipping_method_instance_id = $item->get_instance_id();
-            }
+	/**
+	 * Show parcel machine in order details
+	 *
+	 * @param array    $items $items.
+	 *
+	 * @param WC_Order $order $order.
+	 *
+	 * @return array
+	 */
+	public function show_selected_point_data_in_order_details( $items, $order ) {
 
-            $items['shipping']['value']
-                .= sprintf(
-                '<br>%1s:<br><span class="apaczka-pl-chosen-locker-point point">%1s</span><br><span class="apaczka-pl-chosen-locker-point description">%3s</span>',
-                esc_html__( 'Selected point', 'apaczka-pl' ),
-                esc_attr( $locker_id ),
-                $locker_desc
-            );
+		static $details_shown = false;
 
-            $details_shown = true;
-        }
+		$locker_data = $order->get_meta( 'apaczka_delivery_point' );
+		if ( empty( $locker_data ) ) {
+			return $items;
+		}
 
-        return $items;
-    }
+		if ( ! $details_shown ) {
+			$locker_id       = ! empty( $locker_data['apm_access_point_id'] ) ? $locker_data['apm_access_point_id'] : '';
+			$locker_operator = ! empty( $locker_data['apm_supplier'] ) ? $locker_data['apm_supplier'] : '';
+			if ( ! empty( $locker_operator ) ) {
+				if ( 'RUCH' === $locker_operator ) {
+					$locker_operator = 'ORLEN PACZKA';
+				}
+				$locker_id = esc_html( $locker_operator ) . ': ' . esc_attr( $locker_id );
+			}
 
+			$locker_desc        = '';
+			$locker_name        = ! empty( $locker_data['apm_name'] ) ? $locker_data['apm_name'] : '';
+			$locker_street      = ! empty( $locker_data['apm_street'] ) ? $locker_data['apm_street'] : '';
+			$locker_postal_code = ! empty( $locker_data['apm_postal_code'] ) ? $locker_data['apm_postal_code'] : '';
+			$locker_city        = ! empty( $locker_data['apm_city'] ) ? $locker_data['apm_city'] : '';
+
+			$locker_desc .= $locker_name . '<br>' . $locker_street . '<br>' . $locker_postal_code . ' ' . $locker_city;
+
+			$shipping_method_id          = '';
+			$shipping_method_instance_id = '';
+
+			foreach ( $order->get_items( 'shipping' ) as $item_id => $item ) {
+				$shipping_method_id          = $item->get_method_id();
+				$shipping_method_instance_id = $item->get_instance_id();
+			}
+
+			if ( ! empty( $items['shipping']['value'] ) ) {
+				$items['shipping']['value']
+					.= sprintf(
+						'<br>%1s:<br><span class="apaczka-pl-chosen-locker-point point">%1s</span><br><span class="apaczka-pl-chosen-locker-point description">%3s</span>',
+						esc_html__( 'Selected point', 'apaczka-pl' ),
+						esc_attr( $locker_id ),
+						$locker_desc
+					);
+			}
+
+			$details_shown = true;
+		}
+
+		return $items;
+	}
+
+
+
+	/**
+	 * Displays a map selection button for debugging purposes.
+	 *
+	 * Shows a "Select point" button when debug mode is enabled and the current
+	 * shipping method has map configuration. Only displays when the shipping method
+	 * is selected by the customer.
+	 *
+	 * @param object $shipping The shipping method object.
+	 */
+	public function show_map_button_debug( $shipping ) {
+
+		if ( 'yes' !== get_option( 'apaczka_woocommerce_settings_general_apaczka_map_debug_mode' ) ) {
+			return;
+		}
+
+		$selected_method             = null;
+		$method_has_config           = false;
+		$selected_method_instance_id = null;
+
+		if ( function_exists( 'WC' ) && property_exists( WC(), 'session' ) ) {
+			$chosen_shipping_methods = WC()->session->get( 'chosen_shipping_methods' );
+			if ( is_array( $chosen_shipping_methods ) && 1 === count( $chosen_shipping_methods ) ) {
+				$selected_method = reset( $chosen_shipping_methods );
+			}
+		}
+
+		$map_config = $this->get_map_config();
+
+		$data = explode( ':', $selected_method );
+		if ( ! empty( $data[1] ) ) {
+			$selected_method_instance_id = (int) $data[1];
+		}
+
+		if ( ! empty( $map_config[ $shipping->instance_id ] ) ) {
+			$method_has_config = true;
+		}
+
+		if ( $method_has_config && ( $selected_method_instance_id === $shipping->instance_id ) ) {
+
+			$allowed_html = array(
+				'div'    => array(),
+				'button' => array(
+					'type'  => array(),
+					'class' => array(),
+					'id'    => array(),
+				),
+			);
+
+			echo wp_kses( '<div><button id="apaczka_pl_geowidget_classic" type="button" class="button alt apaczka_pl_after_rate_btn">' . esc_html__( 'Select point', 'apaczka-pl' ) . '</button></div>', $allowed_html );
+		}
+	}
+
+
+
+	/**
+	 * Generates the URL for the WooCommerce logs section in the admin area.
+	 *
+	 * This function constructs the URL to the logs tab in the WooCommerce status page.
+	 * It checks if WooCommerce is active before attempting to generate the URL.
+	 *
+	 * @uses admin_url() To get the base admin URL.
+	 * @uses add_query_arg() To append query parameters to the URL.
+	 *
+	 * @return string The URL to the WooCommerce logs section if WooCommerce is active,
+	 *                      or false if WooCommerce is not active.
+	 */
+	public function get_woocommerce_logs_section_url() {
+
+		if ( ! function_exists( 'wc_get_page_permalink' ) ) {
+			return ''; // WooCommerce is not active.
+		}
+
+		$base_url   = admin_url( 'admin.php' );
+		$query_args = array(
+			'page' => 'wc-status',
+			'tab'  => 'logs',
+		);
+
+		return add_query_arg( $query_args, $base_url );
+	}
 }

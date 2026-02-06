@@ -1,7 +1,9 @@
 var BPWidget, i18n, APACZKA_FIELD, POSType, I18n;
-var bliskapaczka_alsendo_shipping_country;
-var bliskapaczka_alsendo_y = 52.2625;
-var bliskapaczka_alsendo_x = 21.07828;
+
+let bliskapaczka_alsendo_shipping_country = 'PL';
+let bliskapaczka_alsendo_y = 52.2625;
+let bliskapaczka_alsendo_x = 21.07828;
+
 document.addEventListener("DOMContentLoaded", function() {
 
     let wc_block_data = window.wcSettings;
@@ -48,10 +50,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }, false );
 
 });
-
-
-
-
 class ApaczkaMap {
     constructor(t) {
         this.DAYS_MAP = {
@@ -170,10 +168,10 @@ function posId(t) {
     }
 
     var Z = Object.create || function (t) {
-        return R.prototype = t, new R
+        return D.prototype = t, new D
     };
 
-    function R() {
+    function D() {
     }
 
     function a(t, e) {
@@ -183,10 +181,10 @@ function posId(t) {
         })
     }
 
-    var D = 0;
+    var R = 0;
 
     function d(t) {
-        return "_leaflet_id" in t || (t._leaflet_id = ++D), t._leaflet_id
+        return "_leaflet_id" in t || (t._leaflet_id = ++R), t._leaflet_id
     }
 
     function j(t, e, i) {
@@ -283,7 +281,7 @@ function posId(t) {
         create: Z,
         bind: a,
         get lastId() {
-            return D
+            return R
         },
         stamp: d,
         throttle: j,
@@ -676,14 +674,14 @@ function posId(t) {
         n = "msLaunchUri" in navigator && !("documentMode" in document), mt = x("webkit"), _t = x("android"),
         gt = x("android 2") || x("android 3"), vt = parseInt(/WebKit\/([0-9]+)|$/.exec(navigator.userAgent)[1], 10),
         vt = _t && x("Google") && vt < 537 && !("AudioNode" in window), yt = !!window.opera, bt = !n && x("chrome"),
-        Lt = x("gecko") && !mt && !yt && !Ee, xt = !bt && x("safari"), wt = x("phantom"), o = "OTransition" in pt,
+        xt = x("gecko") && !mt && !yt && !Ee, Lt = !bt && x("safari"), wt = x("phantom"), o = "OTransition" in pt,
         Pt = 0 === navigator.platform.indexOf("Win"), Ct = Ee && "transition" in pt,
         Et = "WebKitCSSMatrix" in window && "m11" in new window.WebKitCSSMatrix && !gt, pt = "MozPerspective" in pt,
         Tt = !window.L_DISABLE_3D && (Ct || Et || pt) && !o && !wt,
-        Mt = (qi = "undefined" != typeof orientation || x("mobile")) && mt, St = qi && Et,
-        kt = !window.PointerEvent && window.MSPointerEvent, Ot = !(!window.PointerEvent && !kt),
-        At = "ontouchstart" in window || !!window.TouchEvent, It = !window.L_NO_TOUCH && (At || Ot), zt = qi && yt,
-        Bt = qi && Lt, Nt = 1 < (window.devicePixelRatio || window.screen.deviceXDPI / window.screen.logicalXDPI),
+        Mt = (qi = "undefined" != typeof orientation || x("mobile")) && mt, kt = qi && Et,
+        St = !window.PointerEvent && window.MSPointerEvent, At = !(!window.PointerEvent && !St),
+        Ot = "ontouchstart" in window || !!window.TouchEvent, It = !window.L_NO_TOUCH && (Ot || At), zt = qi && yt,
+        Bt = qi && xt, Nt = 1 < (window.devicePixelRatio || window.screen.deviceXDPI / window.screen.logicalXDPI),
         Zt = function () {
             var t = !1;
             try {
@@ -696,9 +694,9 @@ function posId(t) {
             } catch (t) {
             }
             return t
-        }(), Rt = !!document.createElement("canvas").getContext,
-        Dt = !(!document.createElementNS || !ct("svg").createSVGRect),
-        jt = !!Dt && ((jt = document.createElement("div")).innerHTML = "<svg/>", "http://www.w3.org/2000/svg" === (jt.firstChild && jt.firstChild.namespaceURI));
+        }(), Dt = !!document.createElement("canvas").getContext,
+        Rt = !(!document.createElementNS || !ct("svg").createSVGRect),
+        jt = !!Rt && ((jt = document.createElement("div")).innerHTML = "<svg/>", "http://www.w3.org/2000/svg" === (jt.firstChild && jt.firstChild.namespaceURI));
 
     function x(t) {
         return 0 <= navigator.userAgent.toLowerCase().indexOf(t)
@@ -714,8 +712,8 @@ function posId(t) {
             androidStock: vt,
             opera: yt,
             chrome: bt,
-            gecko: Lt,
-            safari: xt,
+            gecko: xt,
+            safari: Lt,
             phantom: wt,
             opera12: o,
             win: Pt,
@@ -725,18 +723,18 @@ function posId(t) {
             any3d: Tt,
             mobile: qi,
             mobileWebkit: Mt,
-            mobileWebkit3d: St,
-            msPointer: kt,
-            pointer: Ot,
+            mobileWebkit3d: kt,
+            msPointer: St,
+            pointer: At,
             touch: It,
-            touchNative: At,
+            touchNative: Ot,
             mobileOpera: zt,
             mobileGecko: Bt,
             retina: Nt,
             passiveEvents: Zt,
-            canvas: Rt,
-            svg: Dt,
-            vml: !Dt && function () {
+            canvas: Dt,
+            svg: Rt,
+            vml: !Rt && function () {
                 try {
                     var t = document.createElement("div"), e = (t.innerHTML = '<v:shape adj="1"/>', t.firstChild);
                     return e.style.behavior = "url(#default#VML)", e && "object" == typeof e.adj
@@ -853,7 +851,7 @@ function posId(t) {
         e = e || new f(0, 0), t.style[se] = (w.ie3d ? "translate(" + e.x + "px," + e.y + "px)" : "translate3d(" + e.x + "px," + e.y + "px,0)") + (i ? " scale(" + i + ")" : "")
     }
 
-    function S(t, e) {
+    function k(t, e) {
         t._leaflet_pos = e, w.any3d ? ge(t, e) : (t.style.left = e.x + "px", t.style.top = e.y + "px")
     }
 
@@ -862,20 +860,20 @@ function posId(t) {
     }
 
     function ye() {
-        k(window, "dragstart", I)
+        S(window, "dragstart", I)
     }
 
     function be() {
-        A(window, "dragstart", I)
+        O(window, "dragstart", I)
     }
 
-    function Le(t) {
+    function xe(t) {
         for (; -1 === t.tabIndex;) t = t.parentNode;
-        t.style && (xe(), oe = (ne = t).style.outlineStyle, t.style.outlineStyle = "none", k(window, "keydown", xe))
+        t.style && (Le(), oe = (ne = t).style.outlineStyle, t.style.outlineStyle = "none", S(window, "keydown", Le))
     }
 
-    function xe() {
-        ne && (ne.style.outlineStyle = oe, oe = ne = void 0, A(window, "keydown", xe))
+    function Le() {
+        ne && (ne.style.outlineStyle = oe, oe = ne = void 0, O(window, "keydown", Le))
     }
 
     function we(t) {
@@ -888,15 +886,15 @@ function posId(t) {
         return {x: e.width / t.offsetWidth || 1, y: e.height / t.offsetHeight || 1, boundingClientRect: e}
     }
 
-    function k(t, e, i, n) {
-        if (e && "object" == typeof e) for (var o in e) Se(t, o, e[o], i); else for (var s = 0, r = (e = H(e)).length; s < r; s++) Se(t, e[s], i, n);
+    function S(t, e, i, n) {
+        if (e && "object" == typeof e) for (var o in e) ke(t, o, e[o], i); else for (var s = 0, r = (e = H(e)).length; s < r; s++) ke(t, e[s], i, n);
         return this
     }
 
     var Ce = "onselectstart" in document ? (ie = function () {
-        k(window, "selectstart", I)
+        S(window, "selectstart", I)
     }, function () {
-        A(window, "selectstart", I)
+        O(window, "selectstart", I)
     }) : (ee = _e(["userSelect", "WebkitUserSelect", "OUserSelect", "MozUserSelect", "msUserSelect"]), ie = function () {
         var t;
         ee && (t = document.documentElement.style, te = t[ee], t[ee] = "none")
@@ -922,7 +920,7 @@ function posId(t) {
         setOpacity: M,
         testProp: _e,
         setTransform: ge,
-        setPosition: S,
+        setPosition: k,
         getPosition: ve,
         get disableTextSelection() {
             return ie
@@ -932,29 +930,29 @@ function posId(t) {
         },
         disableImageDrag: ye,
         enableImageDrag: be,
-        preventOutline: Le,
-        restoreOutline: xe,
+        preventOutline: xe,
+        restoreOutline: Le,
         getSizedParentNode: we,
         getScale: Pe
-    }, O = "_leaflet_events";
+    }, A = "_leaflet_events";
 
-    function A(t, e, i, n) {
-        if (1 === arguments.length) Te(t), delete t[O]; else if (e && "object" == typeof e) for (var o in e) ke(t, o, e[o], i); else if (e = H(e), 2 === arguments.length) Te(t, function (t) {
+    function O(t, e, i, n) {
+        if (1 === arguments.length) Te(t), delete t[A]; else if (e && "object" == typeof e) for (var o in e) Se(t, o, e[o], i); else if (e = H(e), 2 === arguments.length) Te(t, function (t) {
             return -1 !== q(e, t)
-        }); else for (var s = 0, r = e.length; s < r; s++) ke(t, e[s], i, n);
+        }); else for (var s = 0, r = e.length; s < r; s++) Se(t, e[s], i, n);
         return this
     }
 
     function Te(t, e) {
-        for (var i in t[O]) {
+        for (var i in t[A]) {
             var n = i.split(/\d/)[0];
-            e && !e(n) || ke(t, n, null, null, i)
+            e && !e(n) || Se(t, n, null, null, i)
         }
     }
 
     var Me = {mouseenter: "mouseover", mouseleave: "mouseout", wheel: !("onwheel" in window) && "mousewheel"};
 
-    function Se(e, t, i, n) {
+    function ke(e, t, i, n) {
         var o, s, r, a, l, h, u = t + d(i) + (n ? "_" + d(n) : "");
 
         function c(t) {
@@ -970,7 +968,7 @@ function posId(t) {
             }(t)) : l = 1, h = e)
         }
 
-        e[O] && e[O][u] || (s = o = function (t) {
+        e[A] && e[A][u] || (s = o = function (t) {
             return i.call(n || e, t || window.event)
         }, !w.touchNative && w.pointer && 0 === t.indexOf("touch") ? o = function (t, e, i) {
             return "touchstart" !== e || $t || (document.addEventListener(Ft, Yt, !0), document.addEventListener(Ut, Kt, !0), document.addEventListener(Ht, Xt, !0), document.addEventListener(Wt, Xt, !0), $t = !0), Vt[e] ? (i = Vt[e].bind(this, i), t.addEventListener(Gt[e], i, !1), i) : (console.warn("wrong event specified:", e), p)
@@ -978,25 +976,25 @@ function posId(t) {
             dblclick: a,
             simDblclick: c
         }) : "addEventListener" in e ? "touchstart" === t || "touchmove" === t || "wheel" === t || "mousewheel" === t ? e.addEventListener(Me[t] || t, o, !!w.passiveEvents && {passive: !1}) : "mouseenter" === t || "mouseleave" === t ? e.addEventListener(Me[t], o = function (t) {
-            t = t || window.event, De(e, t) && s(t)
-        }, !1) : e.addEventListener(t, s, !1) : e.attachEvent("on" + t, o), e[O] = e[O] || {}, e[O][u] = o)
+            t = t || window.event, Re(e, t) && s(t)
+        }, !1) : e.addEventListener(t, s, !1) : e.attachEvent("on" + t, o), e[A] = e[A] || {}, e[A][u] = o)
     }
 
-    function ke(t, e, i, n, o) {
+    function Se(t, e, i, n, o) {
         var s, r;
-        o = o || e + d(i) + (n ? "_" + d(n) : ""), (i = t[O] && t[O][o]) && (!w.touchNative && w.pointer && 0 === e.indexOf("touch") ? (n = t, r = i, Gt[s = e] ? n.removeEventListener(Gt[s], r, !1) : console.warn("wrong event specified:", s)) : w.touch && "dblclick" === e ? ((r = t).removeEventListener("dblclick", (n = i).dblclick), r.removeEventListener("click", n.simDblclick)) : "removeEventListener" in t ? t.removeEventListener(Me[e] || e, i, !1) : t.detachEvent("on" + e, i), t[O][o] = null)
-    }
-
-    function Oe(t) {
-        return t.stopPropagation ? t.stopPropagation() : t.originalEvent ? t.originalEvent._stopped = !0 : t.cancelBubble = !0, this
+        o = o || e + d(i) + (n ? "_" + d(n) : ""), (i = t[A] && t[A][o]) && (!w.touchNative && w.pointer && 0 === e.indexOf("touch") ? (n = t, r = i, Gt[s = e] ? n.removeEventListener(Gt[s], r, !1) : console.warn("wrong event specified:", s)) : w.touch && "dblclick" === e ? ((r = t).removeEventListener("dblclick", (n = i).dblclick), r.removeEventListener("click", n.simDblclick)) : "removeEventListener" in t ? t.removeEventListener(Me[e] || e, i, !1) : t.detachEvent("on" + e, i), t[A][o] = null)
     }
 
     function Ae(t) {
-        return Se(t, "wheel", Oe), this
+        return t.stopPropagation ? t.stopPropagation() : t.originalEvent ? t.originalEvent._stopped = !0 : t.cancelBubble = !0, this
+    }
+
+    function Oe(t) {
+        return ke(t, "wheel", Ae), this
     }
 
     function Ie(t) {
-        return k(t, "mousedown touchstart dblclick contextmenu", Oe), t._leaflet_disable_click = !0, this
+        return S(t, "mousedown touchstart dblclick contextmenu", Ae), t._leaflet_disable_click = !0, this
     }
 
     function I(t) {
@@ -1004,7 +1002,7 @@ function posId(t) {
     }
 
     function ze(t) {
-        return I(t), Oe(t), this
+        return I(t), Ae(t), this
     }
 
     function Be(t) {
@@ -1020,11 +1018,11 @@ function posId(t) {
 
     var Ze = w.linux && w.chrome ? window.devicePixelRatio : w.mac ? 3 * window.devicePixelRatio : 0 < window.devicePixelRatio ? 2 * window.devicePixelRatio : 1;
 
-    function Re(t) {
+    function De(t) {
         return w.edge ? t.wheelDeltaY / 2 : t.deltaY && 0 === t.deltaMode ? -t.deltaY / Ze : t.deltaY && 1 === t.deltaMode ? 20 * -t.deltaY : t.deltaY && 2 === t.deltaMode ? 60 * -t.deltaY : t.deltaX || t.deltaZ ? 0 : t.wheelDelta ? (t.wheelDeltaY || t.wheelDelta) / 2 : t.detail && Math.abs(t.detail) < 32765 ? 20 * -t.detail : t.detail ? t.detail / -32765 * 60 : 0
     }
 
-    function De(t, e) {
+    function Re(t, e) {
         var i = e.relatedTarget;
         if (!i) return !0;
         try {
@@ -1037,19 +1035,19 @@ function posId(t) {
 
     var ft = {
         __proto__: null,
-        on: k,
-        off: A,
-        stopPropagation: Oe,
-        disableScrollPropagation: Ae,
+        on: S,
+        off: O,
+        stopPropagation: Ae,
+        disableScrollPropagation: Oe,
         disableClickPropagation: Ie,
         preventDefault: I,
         stop: ze,
         getPropagationPath: Be,
         getMousePosition: Ne,
-        getWheelDelta: Re,
-        isExternalTarget: De,
-        addListener: k,
-        removeListener: A
+        getWheelDelta: De,
+        isExternalTarget: Re,
+        addListener: S,
+        removeListener: O
     }, je = it.extend({
         run: function (t, e, i, n) {
             this.stop(), this._el = t, this._inProgress = !0, this._duration = i || .25, this._easeOutPower = 1 / Math.max(n || .5, .2), this._startPos = ve(t), this._offset = e.subtract(this._startPos), this._startTime = +new Date, this.fire("start"), this._animate()
@@ -1061,7 +1059,7 @@ function posId(t) {
             var e = +new Date - this._startTime, i = 1e3 * this._duration;
             e < i ? this._runFrame(this._easeOut(e / i), t) : (this._runFrame(1), this._complete())
         }, _runFrame: function (t, e) {
-            t = this._startPos.add(this._offset.multiplyBy(t)), e && t._round(), S(this._el, t), this.fire("step")
+            t = this._startPos.add(this._offset.multiplyBy(t)), e && t._round(), k(this._el, t), this.fire("step")
         }, _complete: function () {
             r(this._animId), this._inProgress = !1, this.fire("end")
         }, _easeOut: function (t) {
@@ -1087,7 +1085,7 @@ function posId(t) {
             trackResize: !0
         },
         initialize: function (t, e) {
-            e = l(this, e), this._handlers = [], this._layers = {}, this._zoomBoundLayers = {}, this._sizeChanged = !0, this._initContainer(t), this._initLayout(), this._onResize = a(this._onResize, this), this._initEvents(), e.maxBounds && this.setMaxBounds(e.maxBounds), void 0 !== e.zoom && (this._zoom = this._limitZoom(e.zoom)), e.center && void 0 !== e.zoom && this.setView(b(e.center), e.zoom, {reset: !0}), this.callInitHooks(), this._zoomAnimated = re && w.any3d && !w.mobileOpera && this.options.zoomAnimation, this._zoomAnimated && (this._createAnimProxy(), k(this._proxy, ae, this._catchTransitionEnd, this)), this._addLayers(this.options.layers)
+            e = l(this, e), this._handlers = [], this._layers = {}, this._zoomBoundLayers = {}, this._sizeChanged = !0, this._initContainer(t), this._initLayout(), this._onResize = a(this._onResize, this), this._initEvents(), e.maxBounds && this.setMaxBounds(e.maxBounds), void 0 !== e.zoom && (this._zoom = this._limitZoom(e.zoom)), e.center && void 0 !== e.zoom && this.setView(b(e.center), e.zoom, {reset: !0}), this.callInitHooks(), this._zoomAnimated = re && w.any3d && !w.mobileOpera && this.options.zoomAnimation, this._zoomAnimated && (this._createAnimProxy(), S(this._proxy, ae, this._catchTransitionEnd, this)), this._addLayers(this.options.layers)
         },
         setView: function (t, e, i) {
             return (e = void 0 === e ? this._zoom : this._limitZoom(e), t = this._limitCenter(b(t), e, this.options.maxBounds), i = i || {}, this._stop(), this._loaded && !i.reset && !0 !== i && (void 0 !== i.animate && (i.zoom = h({animate: i.animate}, i.zoom), i.pan = h({
@@ -1351,7 +1349,7 @@ function posId(t) {
         _initContainer: function (t) {
             if (!(t = this._container = le(t))) throw new Error("Map container not found.");
             if (t._leaflet_id) throw new Error("Map container is already initialized.");
-            k(t, "scroll", this._onScroll, this), this._containerId = d(t)
+            S(t, "scroll", this._onScroll, this), this._containerId = d(t)
         },
         _initLayout: function () {
             var t = this._container,
@@ -1360,10 +1358,10 @@ function posId(t) {
         },
         _initPanes: function () {
             var t = this._panes = {};
-            this._paneRenderers = {}, this._mapPane = this.createPane("mapPane", this._container), S(this._mapPane, new f(0, 0)), this.createPane("tilePane"), this.createPane("overlayPane"), this.createPane("shadowPane"), this.createPane("markerPane"), this.createPane("tooltipPane"), this.createPane("popupPane"), this.options.markerZoomAnimation || (E(t.markerPane, "leaflet-zoom-hide"), E(t.shadowPane, "leaflet-zoom-hide"))
+            this._paneRenderers = {}, this._mapPane = this.createPane("mapPane", this._container), k(this._mapPane, new f(0, 0)), this.createPane("tilePane"), this.createPane("overlayPane"), this.createPane("shadowPane"), this.createPane("markerPane"), this.createPane("tooltipPane"), this.createPane("popupPane"), this.options.markerZoomAnimation || (E(t.markerPane, "leaflet-zoom-hide"), E(t.shadowPane, "leaflet-zoom-hide"))
         },
         _resetView: function (t, e, i) {
-            S(this._mapPane, new f(0, 0));
+            k(this._mapPane, new f(0, 0));
             var n = !this._loaded,
                 o = (this._loaded = !0, e = this._limitZoom(e), this.fire("viewprereset"), this._zoom !== e);
             this._moveStart(o, i)._move(t, e)._moveEnd(o), this.fire("viewreset"), n && this.fire("load")
@@ -1383,7 +1381,7 @@ function posId(t) {
             return r(this._flyToFrame), this._panAnim && this._panAnim.stop(), this
         },
         _rawPanBy: function (t) {
-            S(this._mapPane, this._getMapPanePos().subtract(t))
+            k(this._mapPane, this._getMapPanePos().subtract(t))
         },
         _getZoomSpan: function () {
             return this.getMaxZoom() - this.getMinZoom()
@@ -1396,7 +1394,7 @@ function posId(t) {
         },
         _initEvents: function (t) {
             this._targets = {};
-            var e = t ? A : k;
+            var e = t ? O : S;
             e((this._targets[d(this._container)] = this)._container, "click dblclick mousedown mouseup mouseover mouseout mousemove contextmenu keypress keydown keyup", this._handleDOMEvent, this), this.options.trackResize && e(window, "resize", this._onResize, this), w.any3d && this.options.transform3DLimit && (t ? this.off : this.on).call(this, "moveend", this._onMoveEnd)
         },
         _onResize: function () {
@@ -1418,7 +1416,7 @@ function posId(t) {
                     break
                 }
                 if (i && i.listens(e, !0)) {
-                    if (o && !De(s, t)) break;
+                    if (o && !Re(s, t)) break;
                     if (n.push(i), o) break
                 }
                 if (s === this._container) break;
@@ -1434,7 +1432,7 @@ function posId(t) {
         },
         _handleDOMEvent: function (t) {
             var e, i = t.target || t.srcElement;
-            !this._loaded || i._leaflet_disable_events || "click" === t.type && this._isClickDisabled(i) || ("mousedown" === (e = t.type) && Le(i), this._fireDOMEvent(t, e))
+            !this._loaded || i._leaflet_disable_events || "click" === t.type && this._isClickDisabled(i) || ("mousedown" === (e = t.type) && xe(i), this._fireDOMEvent(t, e))
         },
         _mouseEvents: ["click", "dblclick", "mouseover", "mouseout", "contextmenu"],
         _fireDOMEvent: function (t, e, i) {
@@ -1632,12 +1630,12 @@ function posId(t) {
             return T(this._container, "leaflet-control-layers-expanded"), this
         }, _initLayout: function () {
             var t = "leaflet-control-layers", e = this._container = P("div", t), i = this.options.collapsed,
-                n = (e.setAttribute("aria-haspopup", !0), Ie(e), Ae(e), this._section = P("section", t + "-list")),
-                o = (i && (this._map.on("click", this.collapse, this), k(e, {
+                n = (e.setAttribute("aria-haspopup", !0), Ie(e), Oe(e), this._section = P("section", t + "-list")),
+                o = (i && (this._map.on("click", this.collapse, this), S(e, {
                     mouseenter: this._expandSafely,
                     mouseleave: this.collapse
                 }, this)), this._layersLink = P("a", t + "-toggle", e));
-            o.href = "#", o.title = "Layers", o.setAttribute("role", "button"), k(o, {
+            o.href = "#", o.title = "Layers", o.setAttribute("role", "button"), S(o, {
                 keydown: function (t) {
                     13 === t.keyCode && this._expandSafely()
                 }, click: function (t) {
@@ -1669,7 +1667,7 @@ function posId(t) {
             return t = '<input type="radio" class="leaflet-control-layers-selector" name="' + t + '"' + (e ? ' checked="checked"' : "") + "/>", (e = document.createElement("div")).innerHTML = t, e.firstChild
         }, _addItem: function (t) {
             var e, i = document.createElement("label"), n = this._map.hasLayer(t.layer);
-            t.overlay ? ((e = document.createElement("input")).type = "checkbox", e.className = "leaflet-control-layers-selector", e.defaultChecked = n) : e = this._createRadioElement("leaflet-base-layers_" + d(this), n), this._layerControlInputs.push(e), e.layerId = d(t.layer), k(e, "click", this._onInputClick, this);
+            t.overlay ? ((e = document.createElement("input")).type = "checkbox", e.className = "leaflet-control-layers-selector", e.defaultChecked = n) : e = this._createRadioElement("leaflet-base-layers_" + d(this), n), this._layerControlInputs.push(e), e.layerId = d(t.layer), S(e, "click", this._onInputClick, this);
             (n = document.createElement("span")).innerHTML = " " + t.name;
             var o = document.createElement("span");
             return i.appendChild(o), o.appendChild(e), o.appendChild(n), (t.overlay ? this._overlaysList : this._baseLayersList).appendChild(i), this._checkDisabledLayers(), i
@@ -1687,9 +1685,9 @@ function posId(t) {
         }, _expandIfNotCollapsed: function () {
             return this._map && !this.options.collapsed && this.expand(), this
         }, _expandSafely: function () {
-            var t = this._section, e = (this._preventClick = !0, k(t, "click", I), this.expand(), this);
+            var t = this._section, e = (this._preventClick = !0, S(t, "click", I), this.expand(), this);
             setTimeout(function () {
-                A(t, "click", I), e._preventClick = !1
+                O(t, "click", I), e._preventClick = !1
             })
         }
     })), He = B.extend({
@@ -1713,7 +1711,7 @@ function posId(t) {
         }, _zoomOut: function (t) {
             !this._disabled && this._map._zoom > this._map.getMinZoom() && this._map.zoomOut(this._map.options.zoomDelta * (t.shiftKey ? 3 : 1))
         }, _createButton: function (t, e, i, n, o) {
-            return (i = P("a", i, n)).innerHTML = t, i.href = "#", i.title = e, i.setAttribute("role", "button"), i.setAttribute("aria-label", e), Ie(i), k(i, "click", ze), k(i, "click", o, this), k(i, "click", this._refocusOnMap, this), i
+            return (i = P("a", i, n)).innerHTML = t, i.href = "#", i.title = e, i.setAttribute("role", "button"), i.setAttribute("aria-label", e), Ie(i), S(i, "click", ze), S(i, "click", o, this), S(i, "click", this._refocusOnMap, this), i
         }, _updateDisabled: function () {
             var t = this._map, e = "leaflet-disabled";
             T(this._zoomInButton, e), T(this._zoomOutButton, e), this._zoomInButton.setAttribute("aria-disabled", "false"), this._zoomOutButton.setAttribute("aria-disabled", "false"), !this._disabled && t._zoom !== t.getMinZoom() || (E(this._zoomOutButton, e), this._zoomOutButton.setAttribute("aria-disabled", "true")), !this._disabled && t._zoom !== t.getMaxZoom() || (E(this._zoomInButton, e), this._zoomInButton.setAttribute("aria-disabled", "true"))
@@ -1804,22 +1802,22 @@ function posId(t) {
         options: {clickTolerance: 3}, initialize: function (t, e, i, n) {
             l(this, n), this._element = t, this._dragStartTarget = e || t, this._preventOutline = i
         }, enable: function () {
-            this._enabled || (k(this._dragStartTarget, Ve, this._onDown, this), this._enabled = !0)
+            this._enabled || (S(this._dragStartTarget, Ve, this._onDown, this), this._enabled = !0)
         }, disable: function () {
-            this._enabled && (qe._dragging === this && this.finishDrag(!0), A(this._dragStartTarget, Ve, this._onDown, this), this._enabled = !1, this._moved = !1)
+            this._enabled && (qe._dragging === this && this.finishDrag(!0), O(this._dragStartTarget, Ve, this._onDown, this), this._enabled = !1, this._moved = !1)
         }, _onDown: function (t) {
             var e, i;
-            this._enabled && (this._moved = !1, pe(this._element, "leaflet-zoom-anim") || (t.touches && 1 !== t.touches.length ? qe._dragging === this && this.finishDrag() : qe._dragging || t.shiftKey || 1 !== t.which && 1 !== t.button && !t.touches || ((qe._dragging = this)._preventOutline && Le(this._element), ye(), ie(), this._moving) || (this.fire("down"), i = t.touches ? t.touches[0] : t, e = we(this._element), this._startPoint = new f(i.clientX, i.clientY), this._startPos = ve(this._element), this._parentScale = Pe(e), i = "mousedown" === t.type, k(document, i ? "mousemove" : "touchmove", this._onMove, this), k(document, i ? "mouseup" : "touchend touchcancel", this._onUp, this))))
+            this._enabled && (this._moved = !1, pe(this._element, "leaflet-zoom-anim") || (t.touches && 1 !== t.touches.length ? qe._dragging === this && this.finishDrag() : qe._dragging || t.shiftKey || 1 !== t.which && 1 !== t.button && !t.touches || ((qe._dragging = this)._preventOutline && xe(this._element), ye(), ie(), this._moving) || (this.fire("down"), i = t.touches ? t.touches[0] : t, e = we(this._element), this._startPoint = new f(i.clientX, i.clientY), this._startPos = ve(this._element), this._parentScale = Pe(e), i = "mousedown" === t.type, S(document, i ? "mousemove" : "touchmove", this._onMove, this), S(document, i ? "mouseup" : "touchend touchcancel", this._onUp, this))))
         }, _onMove: function (t) {
             var e;
             this._enabled && (t.touches && 1 < t.touches.length ? this._moved = !0 : !(e = new f((e = t.touches && 1 === t.touches.length ? t.touches[0] : t).clientX, e.clientY)._subtract(this._startPoint)).x && !e.y || Math.abs(e.x) + Math.abs(e.y) < this.options.clickTolerance || (e.x /= this._parentScale.x, e.y /= this._parentScale.y, I(t), this._moved || (this.fire("dragstart"), this._moved = !0, E(document.body, "leaflet-dragging"), this._lastTarget = t.target || t.srcElement, window.SVGElementInstance && this._lastTarget instanceof window.SVGElementInstance && (this._lastTarget = this._lastTarget.correspondingUseElement), E(this._lastTarget, "leaflet-drag-target")), this._newPos = this._startPos.add(e), this._moving = !0, this._lastEvent = t, this._updatePosition()))
         }, _updatePosition: function () {
             var t = {originalEvent: this._lastEvent};
-            this.fire("predrag", t), S(this._element, this._newPos), this.fire("drag", t)
+            this.fire("predrag", t), k(this._element, this._newPos), this.fire("drag", t)
         }, _onUp: function () {
             this._enabled && this.finishDrag()
         }, finishDrag: function (t) {
-            T(document.body, "leaflet-dragging"), this._lastTarget && (T(this._lastTarget, "leaflet-drag-target"), this._lastTarget = null), A(document, "mousemove touchmove", this._onMove, this), A(document, "mouseup touchend touchcancel", this._onUp, this), be(), Ce();
+            T(document.body, "leaflet-dragging"), this._lastTarget && (T(this._lastTarget, "leaflet-drag-target"), this._lastTarget = null), O(document, "mousemove touchmove", this._onMove, this), O(document, "mouseup touchend touchcancel", this._onUp, this), be(), Ce();
             var e = this._moved && this._moving;
             this._moving = !1, qe._dragging = !1, e && this.fire("dragend", {
                 noInertia: t,
@@ -1967,7 +1965,7 @@ function posId(t) {
                 }
             },
             SphericalMercator: rt
-        }, xt = h({}, st, {code: "EPSG:3395", projection: yt, transformation: lt(Lt = .5 / (Math.PI * yt.R), .5, -Lt, .5)}),
+        }, Lt = h({}, st, {code: "EPSG:3395", projection: yt, transformation: lt(xt = .5 / (Math.PI * yt.R), .5, -xt, .5)}),
         ri = h({}, st, {code: "EPSG:4326", projection: vt, transformation: lt(1 / 180, 1, -1 / 180, .5)}),
         wt = h({}, ot, {
             projection: vt, transformation: lt(1, 0, -1, 0), scale: function (t) {
@@ -1979,7 +1977,7 @@ function posId(t) {
                 return Math.sqrt(i * i + e * e)
             }, infinite: !0
         }),
-        o = (ot.Earth = st, ot.EPSG3395 = xt, ot.EPSG3857 = ht, ot.EPSG900913 = ut, ot.EPSG4326 = ri, ot.Simple = wt, it.extend({
+        o = (ot.Earth = st, ot.EPSG3395 = Lt, ot.EPSG3857 = ht, ot.EPSG900913 = ut, ot.EPSG4326 = ri, ot.Simple = wt, it.extend({
             options: {
                 pane: "overlayPane",
                 attribution: null,
@@ -2147,14 +2145,14 @@ function posId(t) {
                 var e = this._marker, i = e._map, n = this._marker.options.autoPanSpeed,
                     o = this._marker.options.autoPanPadding, s = ve(e._icon), r = i.getPixelBounds(),
                     a = i.getPixelOrigin();
-                (a = c(r.min._subtract(a).add(o), r.max._subtract(a).subtract(o))).contains(s) || (o = m((Math.max(a.max.x, s.x) - a.max.x) / (r.max.x - a.max.x) - (Math.min(a.min.x, s.x) - a.min.x) / (r.min.x - a.min.x), (Math.max(a.max.y, s.y) - a.max.y) / (r.max.y - a.max.y) - (Math.min(a.min.y, s.y) - a.min.y) / (r.min.y - a.min.y)).multiplyBy(n), i.panBy(o, {animate: !1}), this._draggable._newPos._add(o), this._draggable._startPos._add(o), S(e._icon, this._draggable._newPos), this._onDrag(t), this._panRequest = y(this._adjustPan.bind(this, t)))
+                (a = c(r.min._subtract(a).add(o), r.max._subtract(a).subtract(o))).contains(s) || (o = m((Math.max(a.max.x, s.x) - a.max.x) / (r.max.x - a.max.x) - (Math.min(a.min.x, s.x) - a.min.x) / (r.min.x - a.min.x), (Math.max(a.max.y, s.y) - a.max.y) / (r.max.y - a.max.y) - (Math.min(a.min.y, s.y) - a.min.y) / (r.min.y - a.min.y)).multiplyBy(n), i.panBy(o, {animate: !1}), this._draggable._newPos._add(o), this._draggable._startPos._add(o), k(e._icon, this._draggable._newPos), this._onDrag(t), this._panRequest = y(this._adjustPan.bind(this, t)))
             }, _onDragStart: function () {
                 this._oldLatLng = this._marker.getLatLng(), this._marker.closePopup && this._marker.closePopup(), this._marker.fire("movestart").fire("dragstart")
             }, _onPreDrag: function (t) {
                 this._marker.options.autoPan && (r(this._panRequest), this._panRequest = y(this._adjustPan.bind(this, t)))
             }, _onDrag: function (t) {
                 var e = this._marker, i = e._shadow, n = ve(e._icon), o = e._map.layerPointToLatLng(n);
-                i && S(i, n), e._latlng = o, t.latlng = o, t.oldLatLng = this._oldLatLng, e.fire("move", t).fire("drag", t)
+                i && k(i, n), e._latlng = o, t.latlng = o, t.oldLatLng = this._oldLatLng, e.fire("move", t).fire("drag", t)
             }, _onDragEnd: function (t) {
                 r(this._panRequest), delete this._oldLatLng, this._marker.fire("moveend").fire("dragend", t)
             }
@@ -2207,18 +2205,18 @@ function posId(t) {
                 i !== this._icon && (this._icon && this._removeIcon(), n = !0, t.title && (i.title = t.title), "IMG" === i.tagName) && (i.alt = t.alt || ""), E(i, e), t.keyboard && (i.tabIndex = "0", i.setAttribute("role", "button")), this._icon = i, t.riseOnHover && this.on({
                     mouseover: this._bringToFront,
                     mouseout: this._resetZIndex
-                }), this.options.autoPanOnFocus && k(i, "focus", this._panOnFocus, this);
+                }), this.options.autoPanOnFocus && S(i, "focus", this._panOnFocus, this);
                 var o = !1;
                 (i = t.icon.createShadow(this._shadow)) !== this._shadow && (this._removeShadow(), o = !0), i && (E(i, e), i.alt = ""), this._shadow = i, t.opacity < 1 && this._updateOpacity(), n && this.getPane().appendChild(this._icon), this._initInteraction(), i && o && this.getPane(t.shadowPane).appendChild(this._shadow)
             }, _removeIcon: function () {
                 this.options.riseOnHover && this.off({
                     mouseover: this._bringToFront,
                     mouseout: this._resetZIndex
-                }), this.options.autoPanOnFocus && A(this._icon, "focus", this._panOnFocus, this), C(this._icon), this.removeInteractiveTarget(this._icon), this._icon = null
+                }), this.options.autoPanOnFocus && O(this._icon, "focus", this._panOnFocus, this), C(this._icon), this.removeInteractiveTarget(this._icon), this._icon = null
             }, _removeShadow: function () {
                 this._shadow && C(this._shadow), this._shadow = null
             }, _setPos: function (t) {
-                this._icon && S(this._icon, t), this._shadow && S(this._shadow, t), this._zIndex = t.y + this.options.zIndexOffset, this._resetZIndex()
+                this._icon && k(this._icon, t), this._shadow && k(this._shadow, t), this._zIndex = t.y + this.options.zIndexOffset, this._resetZIndex()
             }, _updateZIndex: function (t) {
                 this._icon && (this._icon.style.zIndex = this._zIndex + t)
             }, _animateZoom: function (t) {
@@ -2431,7 +2429,7 @@ function posId(t) {
 
     function yi(t, e) {
         var i, n, o, s, r = "Feature" === t.type ? t.geometry : t, a = r ? r.coordinates : null, l = [],
-            h = e && e.pointToLayer, u = e && e.coordsToLatLng || Li;
+            h = e && e.pointToLayer, u = e && e.coordsToLatLng || xi;
         if (!a && !r) return null;
         switch (r.type) {
             case"Point":
@@ -2441,10 +2439,10 @@ function posId(t) {
                 return new li(l);
             case"LineString":
             case"MultiLineString":
-                return n = xi(a, "LineString" === r.type ? 0 : 1, u), new _i(n, e);
+                return n = Li(a, "LineString" === r.type ? 0 : 1, u), new _i(n, e);
             case"Polygon":
             case"MultiPolygon":
-                return n = xi(a, "Polygon" === r.type ? 1 : 2, u), new gi(n, e);
+                return n = Li(a, "Polygon" === r.type ? 1 : 2, u), new gi(n, e);
             case"GeometryCollection":
                 for (o = 0, s = r.geometries.length; o < s; o++) {
                     var c = yi({geometry: r.geometries[o], type: "Feature", properties: t.properties}, e);
@@ -2466,12 +2464,12 @@ function posId(t) {
         return t ? t(e, i) : new di(i, n && n.markersInheritOptions && n)
     }
 
-    function Li(t) {
+    function xi(t) {
         return new v(t[1], t[0], t[2])
     }
 
-    function xi(t, e, i) {
-        for (var n, o = [], s = 0, r = t.length; s < r; s++) n = e ? xi(t[s], e - 1, i) : (i || Li)(t[s]), o.push(n);
+    function Li(t, e, i) {
+        for (var n, o = [], s = 0, r = t.length; s < r; s++) n = e ? Li(t[s], e - 1, i) : (i || xi)(t[s]), o.push(n);
         return o
     }
 
@@ -2582,7 +2580,7 @@ function posId(t) {
             var t = this._image,
                 e = new _(this._map.latLngToLayerPoint(this._bounds.getNorthWest()), this._map.latLngToLayerPoint(this._bounds.getSouthEast())),
                 i = e.getSize();
-            S(t, e.min), t.style.width = i.x + "px", t.style.height = i.y + "px"
+            k(t, e.min), t.style.width = i.x + "px", t.style.height = i.y + "px"
         },
         _updateOpacity: function () {
             M(this._image, this.options.opacity)
@@ -2598,7 +2596,7 @@ function posId(t) {
         getCenter: function () {
             return this._bounds.getCenter()
         }
-    }), Si = Mi.extend({
+    }), ki = Mi.extend({
         options: {autoplay: !0, loop: !0, keepAspectRatio: !0, muted: !1, playsInline: !0},
         _initImage: function () {
             var t = "VIDEO" === this._url.tagName, e = this._image = t ? this._url : P("video");
@@ -2613,12 +2611,12 @@ function posId(t) {
                 }
             }
         }
-    }), ki = Mi.extend({
+    }), Si = Mi.extend({
         _initImage: function () {
             var t = this._image = this._url;
             E(t, "leaflet-image-layer"), this._zoomAnimated && E(t, "leaflet-zoom-animated"), this.options.className && E(t, this.options.className), t.onselectstart = p, t.onmousemove = p
         }
-    }), Oi = o.extend({
+    }), Ai = o.extend({
         options: {interactive: !1, offset: [0, 0], className: "", pane: void 0, content: ""},
         initialize: function (t, e) {
             t && (t instanceof v || u(t)) ? (this._latlng = b(t), l(this, e)) : (l(this, t), this._source = e), this.options.content && (this._content = this.options.content)
@@ -2699,12 +2697,12 @@ function posId(t) {
         },
         _updatePosition: function () {
             var t, e, i;
-            this._map && (e = this._map.latLngToLayerPoint(this._latlng), t = m(this.options.offset), i = this._getAnchor(), this._zoomAnimated ? S(this._container, e.add(i)) : t = t.add(e).add(i), e = this._containerBottom = -t.y, i = this._containerLeft = -Math.round(this._containerWidth / 2) + t.x, this._container.style.bottom = e + "px", this._container.style.left = i + "px")
+            this._map && (e = this._map.latLngToLayerPoint(this._latlng), t = m(this.options.offset), i = this._getAnchor(), this._zoomAnimated ? k(this._container, e.add(i)) : t = t.add(e).add(i), e = this._containerBottom = -t.y, i = this._containerLeft = -Math.round(this._containerWidth / 2) + t.x, this._container.style.bottom = e + "px", this._container.style.left = i + "px")
         },
         _getAnchor: function () {
             return [0, 0]
         }
-    }), Ai = (z.include({
+    }), Oi = (z.include({
         _initOverlay: function (t, e, i, n) {
             var o = e;
             return o instanceof t || (o = new t(n).setContent(e)), i && o.setLatLng(i), o
@@ -2714,7 +2712,7 @@ function posId(t) {
             var o = i;
             return o instanceof t ? (l(o, n), o._source = this) : (o = e && !n ? e : new t(n, this)).setContent(i), o
         }
-    }), Oi.extend({
+    }), Ai.extend({
         options: {
             pane: "popupPane",
             offset: [0, 7],
@@ -2731,19 +2729,19 @@ function posId(t) {
             closeOnEscapeKey: !0,
             className: ""
         }, openOn: function (t) {
-            return !(t = arguments.length ? t : this._source._map).hasLayer(this) && t._popup && t._popup.options.autoClose && t.removeLayer(t._popup), t._popup = this, Oi.prototype.openOn.call(this, t)
+            return !(t = arguments.length ? t : this._source._map).hasLayer(this) && t._popup && t._popup.options.autoClose && t.removeLayer(t._popup), t._popup = this, Ai.prototype.openOn.call(this, t)
         }, onAdd: function (t) {
-            Oi.prototype.onAdd.call(this, t), t.fire("popupopen", {popup: this}), this._source && (this._source.fire("popupopen", {popup: this}, !0), this._source instanceof pi || this._source.on("preclick", Oe))
+            Ai.prototype.onAdd.call(this, t), t.fire("popupopen", {popup: this}), this._source && (this._source.fire("popupopen", {popup: this}, !0), this._source instanceof pi || this._source.on("preclick", Ae))
         }, onRemove: function (t) {
-            Oi.prototype.onRemove.call(this, t), t.fire("popupclose", {popup: this}), this._source && (this._source.fire("popupclose", {popup: this}, !0), this._source instanceof pi || this._source.off("preclick", Oe))
+            Ai.prototype.onRemove.call(this, t), t.fire("popupclose", {popup: this}), this._source && (this._source.fire("popupclose", {popup: this}, !0), this._source instanceof pi || this._source.off("preclick", Ae))
         }, getEvents: function () {
-            var t = Oi.prototype.getEvents.call(this);
+            var t = Ai.prototype.getEvents.call(this);
             return (void 0 !== this.options.closeOnClick ? this.options.closeOnClick : this._map.options.closePopupOnClick) && (t.preclick = this.close), this.options.keepInView && (t.moveend = this._adjustPan), t
         }, _initLayout: function () {
             var t = "leaflet-popup",
                 e = this._container = P("div", t + " " + (this.options.className || "") + " leaflet-zoom-animated"),
                 i = this._wrapper = P("div", t + "-content-wrapper", e);
-            this._contentNode = P("div", t + "-content", i), Ie(e), Ae(this._contentNode), k(e, "contextmenu", Oe), this._tipContainer = P("div", t + "-tip-container", e), this._tip = P("div", t + "-tip", this._tipContainer), this.options.closeButton && ((i = this._closeButton = P("a", t + "-close-button", e)).setAttribute("role", "button"), i.setAttribute("aria-label", "Close popup"), i.href = "#close", i.innerHTML = '<span aria-hidden="true">&#215;</span>', k(i, "click", function (t) {
+            this._contentNode = P("div", t + "-content", i), Ie(e), Oe(this._contentNode), S(e, "contextmenu", Ae), this._tipContainer = P("div", t + "-tip-container", e), this._tip = P("div", t + "-tip", this._tipContainer), this.options.closeButton && ((i = this._closeButton = P("a", t + "-close-button", e)).setAttribute("role", "button"), i.setAttribute("aria-label", "Close popup"), i.href = "#close", i.innerHTML = '<span aria-hidden="true">&#215;</span>', S(i, "click", function (t) {
                 I(t), this.close()
             }, this))
         }, _updateLayout: function () {
@@ -2754,7 +2752,7 @@ function posId(t) {
             (n && n < i ? (e.height = n + "px", E) : T)(t, "leaflet-popup-scrolled"), this._containerWidth = this._container.offsetWidth
         }, _animateZoom: function (t) {
             var t = this._map._latLngToNewLayerPoint(this._latlng, t.zoom, t.center), e = this._getAnchor();
-            S(this._container, t.add(e))
+            k(this._container, t.add(e))
         }, _adjustPan: function () {
             var t, e, i, n, o, s, r, a;
             this.options.autoPan && (this._map._panAnim && this._map._panAnim.stop(), this._autopanning ? this._autopanning = !1 : (t = this._map, e = parseInt(he(this._container, "marginBottom"), 10) || 0, e = this._container.offsetHeight + e, a = this._containerWidth, (i = new f(this._containerLeft, -e - this._containerBottom))._add(ve(this._container)), i = t.layerPointToContainerPoint(i), o = m(this.options.autoPanPadding), n = m(this.options.autoPanPaddingTopLeft || o), o = m(this.options.autoPanPaddingBottomRight || o), s = t.getSize(), r = 0, i.x + a + o.x > s.x && (r = i.x + a - s.x + o.x), i.x - r - n.x < (a = 0) && (r = i.x - n.x), i.y + e + o.y > s.y && (a = i.y + e - s.y + o.y), i.y - a - n.y < 0 && (a = i.y - n.y), (r || a) && (this.options.keepInView && (this._autopanning = !0), t.fire("autopanstart").panBy([r, a]))))
@@ -2763,13 +2761,13 @@ function posId(t) {
         }
     })), Ii = (z.mergeOptions({closePopupOnClick: !0}), z.include({
         openPopup: function (t, e, i) {
-            return this._initOverlay(Ai, t, e, i).openOn(this), this
+            return this._initOverlay(Oi, t, e, i).openOn(this), this
         }, closePopup: function (t) {
             return (t = arguments.length ? t : this._popup) && t.close(), this
         }
     }), o.include({
         bindPopup: function (t, e) {
-            return this._popup = this._initOverlay(Ai, this._popup, t, e), this._popupHandlersAdded || (this.on({
+            return this._popup = this._initOverlay(Oi, this._popup, t, e), this._popupHandlersAdded || (this.on({
                 click: this._openPopup,
                 keypress: this._onKeyPress,
                 remove: this.closePopup,
@@ -2802,16 +2800,16 @@ function posId(t) {
         }, _onKeyPress: function (t) {
             13 === t.originalEvent.keyCode && this._openPopup(t)
         }
-    }), Oi.extend({
+    }), Ai.extend({
         options: {pane: "tooltipPane", offset: [0, 0], direction: "auto", permanent: !1, sticky: !1, opacity: .9},
         onAdd: function (t) {
-            Oi.prototype.onAdd.call(this, t), this.setOpacity(this.options.opacity), t.fire("tooltipopen", {tooltip: this}), this._source && (this.addEventParent(this._source), this._source.fire("tooltipopen", {tooltip: this}, !0))
+            Ai.prototype.onAdd.call(this, t), this.setOpacity(this.options.opacity), t.fire("tooltipopen", {tooltip: this}), this._source && (this.addEventParent(this._source), this._source.fire("tooltipopen", {tooltip: this}, !0))
         },
         onRemove: function (t) {
-            Oi.prototype.onRemove.call(this, t), t.fire("tooltipclose", {tooltip: this}), this._source && (this.removeEventParent(this._source), this._source.fire("tooltipclose", {tooltip: this}, !0))
+            Ai.prototype.onRemove.call(this, t), t.fire("tooltipclose", {tooltip: this}), this._source && (this.removeEventParent(this._source), this._source.fire("tooltipclose", {tooltip: this}, !0))
         },
         getEvents: function () {
-            var t = Oi.prototype.getEvents.call(this);
+            var t = Ai.prototype.getEvents.call(this);
             return this.options.permanent || (t.preclick = this.close), t
         },
         _initLayout: function () {
@@ -2827,7 +2825,7 @@ function posId(t) {
                 i = i.layerPointToContainerPoint(t), s = this.options.direction, r = n.offsetWidth, a = n.offsetHeight,
                 l = m(this.options.offset), h = this._getAnchor(),
                 i = "top" === s ? (e = r / 2, a) : "bottom" === s ? (e = r / 2, 0) : (e = "center" === s ? r / 2 : "right" === s ? 0 : "left" === s ? r : i.x < o.x ? (s = "right", 0) : (s = "left", r + 2 * (l.x + h.x)), a / 2);
-            t = t.subtract(m(e, i, !0)).add(l).add(h), T(n, "leaflet-tooltip-right"), T(n, "leaflet-tooltip-left"), T(n, "leaflet-tooltip-top"), T(n, "leaflet-tooltip-bottom"), E(n, "leaflet-tooltip-" + s), S(n, t)
+            t = t.subtract(m(e, i, !0)).add(l).add(h), T(n, "leaflet-tooltip-right"), T(n, "leaflet-tooltip-left"), T(n, "leaflet-tooltip-top"), T(n, "leaflet-tooltip-bottom"), E(n, "leaflet-tooltip-" + s), k(n, t)
         },
         _updatePosition: function () {
             var t = this._map.latLngToLayerPoint(this._latlng);
@@ -2875,9 +2873,9 @@ function posId(t) {
             this.getElement ? this._addFocusListenersOnLayer(this) : this.eachLayer && this.eachLayer(this._addFocusListenersOnLayer, this)
         }, _addFocusListenersOnLayer: function (t) {
             var e = "function" == typeof t.getElement && t.getElement();
-            e && (k(e, "focus", function () {
+            e && (S(e, "focus", function () {
                 this._tooltip._source = t, this.openTooltip()
-            }, this), k(e, "blur", this.closeTooltip, this))
+            }, this), S(e, "blur", this.closeTooltip, this))
         }, _setAriaDescribedByOnLayer: function (t) {
             (t = "function" == typeof t.getElement && t.getElement()) && t.setAttribute("aria-describedby", this._tooltip._container.id)
         }, _openTooltip: function (t) {
@@ -3018,7 +3016,7 @@ function posId(t) {
         }, _setZoomTransform: function (t, e, i) {
             var n = this._map.getZoomScale(i, t.zoom),
                 e = t.origin.multiplyBy(n).subtract(this._map._getNewPixelOrigin(e, i)).round();
-            w.any3d ? ge(t.el, e, n) : S(t.el, e)
+            w.any3d ? ge(t.el, e, n) : k(t.el, e)
         }, _resetGrid: function () {
             var t = this._map, e = t.options.crs, i = this._tileSize = this.getTileSize(), n = this._tileZoom,
                 o = this._map.getPixelWorldBounds(this._tileZoom);
@@ -3089,7 +3087,7 @@ function posId(t) {
         }, _addTile: function (t, e) {
             var i = this._getTilePos(t), n = this._tileCoordsToKey(t),
                 o = this.createTile(this._wrapCoords(t), a(this._tileReady, this, t));
-            this._initTile(o), this.createTile.length < 2 && y(a(this._tileReady, this, t, null, o)), S(o, i), this._tiles[n] = {
+            this._initTile(o), this.createTile.length < 2 && y(a(this._tileReady, this, t, null, o)), k(o, i), this._tiles[n] = {
                 el: o,
                 coords: t,
                 current: !0
@@ -3131,7 +3129,7 @@ function posId(t) {
             return this._url === t && void 0 === e && (e = !0), this._url = t, e || this.redraw(), this
         }, createTile: function (t, e) {
             var i = document.createElement("img");
-            return k(i, "load", a(this._tileOnLoad, this, e, i)), k(i, "error", a(this._tileOnError, this, e, i)), !this.options.crossOrigin && "" !== this.options.crossOrigin || (i.crossOrigin = !0 === this.options.crossOrigin ? "" : this.options.crossOrigin), "string" == typeof this.options.referrerPolicy && (i.referrerPolicy = this.options.referrerPolicy), i.alt = "", i.src = this.getTileUrl(t), i
+            return S(i, "load", a(this._tileOnLoad, this, e, i)), S(i, "error", a(this._tileOnError, this, e, i)), !this.options.crossOrigin && "" !== this.options.crossOrigin || (i.crossOrigin = !0 === this.options.crossOrigin ? "" : this.options.crossOrigin), "string" == typeof this.options.referrerPolicy && (i.referrerPolicy = this.options.referrerPolicy), i.alt = "", i.src = this.getTileUrl(t), i
         }, getTileUrl: function (t) {
             var e = {r: w.retina ? "@2x" : "", s: this._getSubdomain(t), x: t.x, y: t.y, z: this._getZoomForUrl()};
             return this._map && !this._map.options.crs.infinite && (t = this._globalTileRange.max.y - t.y, this.options.tms && (e.y = t), e["-y"] = t), V(this._url, h(e, this.options))
@@ -3165,7 +3163,7 @@ function posId(t) {
         return new Ni(t, e)
     }
 
-    var Ri = Ni.extend({
+    var Di = Ni.extend({
         defaultWmsParams: {
             service: "WMS",
             request: "GetMap",
@@ -3192,8 +3190,8 @@ function posId(t) {
         }, setParams: function (t, e) {
             return h(this.wmsParams, t), e || this.redraw(), this
         }
-    }), Di = (Ni.WMS = Ri, Zi.wms = function (t, e) {
-        return new Ri(t, e)
+    }), Ri = (Ni.WMS = Di, Zi.wms = function (t, e) {
+        return new Di(t, e)
     }, o.extend({
         options: {padding: .1}, initialize: function (t) {
             l(this, t), d(this), this._layers = this._layers || {}
@@ -3212,7 +3210,7 @@ function posId(t) {
             var i = this._map.getZoomScale(e, this._zoom),
                 n = this._map.getSize().multiplyBy(.5 + this.options.padding), o = this._map.project(this._center, e),
                 n = n.multiplyBy(-i).add(o).subtract(this._map._getNewPixelOrigin(t, e));
-            w.any3d ? ge(this._container, n, i) : S(this._container, n)
+            w.any3d ? ge(this._container, n, i) : k(this._container, n)
         }, _reset: function () {
             for (var t in this._update(), this._updateTransform(this._center, this._zoom), this._layers) this._layers[t]._reset()
         }, _onZoomEnd: function () {
@@ -3224,19 +3222,19 @@ function posId(t) {
                 i = this._map.containerPointToLayerPoint(e.multiplyBy(-t)).round();
             this._bounds = new _(i, i.add(e.multiplyBy(1 + 2 * t)).round()), this._center = this._map.getCenter(), this._zoom = this._map.getZoom()
         }
-    })), ji = Di.extend({
+    })), ji = Ri.extend({
         options: {tolerance: 0}, getEvents: function () {
-            var t = Di.prototype.getEvents.call(this);
+            var t = Ri.prototype.getEvents.call(this);
             return t.viewprereset = this._onViewPreReset, t
         }, _onViewPreReset: function () {
             this._postponeUpdatePaths = !0
         }, onAdd: function () {
-            Di.prototype.onAdd.call(this), this._draw()
+            Ri.prototype.onAdd.call(this), this._draw()
         }, _initContainer: function () {
             var t = this._container = document.createElement("canvas");
-            k(t, "mousemove", this._onMouseMove, this), k(t, "click dblclick mousedown mouseup contextmenu", this._onClick, this), k(t, "mouseout", this._handleMouseOut, this), t._leaflet_disable_events = !0, this._ctx = t.getContext("2d")
+            S(t, "mousemove", this._onMouseMove, this), S(t, "click dblclick mousedown mouseup contextmenu", this._onClick, this), S(t, "mouseout", this._handleMouseOut, this), t._leaflet_disable_events = !0, this._ctx = t.getContext("2d")
         }, _destroyContainer: function () {
-            r(this._redrawRequest), delete this._ctx, C(this._container), A(this._container), delete this._container
+            r(this._redrawRequest), delete this._ctx, C(this._container), O(this._container), delete this._container
         }, _updatePaths: function () {
             if (!this._postponeUpdatePaths) {
                 for (var t in this._redrawBounds = null, this._layers) this._layers[t]._update();
@@ -3244,9 +3242,9 @@ function posId(t) {
             }
         }, _update: function () {
             var t, e, i, n;
-            this._map._animatingZoom && this._bounds || (Di.prototype._update.call(this), t = this._bounds, e = this._container, i = t.getSize(), n = w.retina ? 2 : 1, S(e, t.min), e.width = n * i.x, e.height = n * i.y, e.style.width = i.x + "px", e.style.height = i.y + "px", w.retina && this._ctx.scale(2, 2), this._ctx.translate(-t.min.x, -t.min.y), this.fire("update"))
+            this._map._animatingZoom && this._bounds || (Ri.prototype._update.call(this), t = this._bounds, e = this._container, i = t.getSize(), n = w.retina ? 2 : 1, k(e, t.min), e.width = n * i.x, e.height = n * i.y, e.style.width = i.x + "px", e.style.height = i.y + "px", w.retina && this._ctx.scale(2, 2), this._ctx.translate(-t.min.x, -t.min.y), this.fire("update"))
         }, _reset: function () {
-            Di.prototype._reset.call(this), this._postponeUpdatePaths && (this._postponeUpdatePaths = !1, this._updatePaths())
+            Ri.prototype._reset.call(this), this._postponeUpdatePaths && (this._postponeUpdatePaths = !1, this._updatePaths())
         }, _initPath: function (t) {
             this._updateDashArray(t), t = (this._layers[d(t)] = t)._order = {
                 layer: t,
@@ -3347,7 +3345,7 @@ function posId(t) {
         _initContainer: function () {
             this._container = P("div", "leaflet-vml-container")
         }, _update: function () {
-            this._map._animatingZoom || (Di.prototype._update.call(this), this.fire("update"))
+            this._map._animatingZoom || (Ri.prototype._update.call(this), this.fire("update"))
         }, _initPath: function (t) {
             var e = t._container = Ui("shape");
             E(e, "leaflet-vml-shape " + (this.options.className || "")), e.coordsize = "1 1", t._path = Ui("path"), e.appendChild(t._path), this._updateStyle(t), this._layers[d(t)] = t
@@ -3370,14 +3368,14 @@ function posId(t) {
         }, _bringToBack: function (t) {
             de(t._container)
         }
-    }, Hi = w.vml ? Ui : ct, Wi = Di.extend({
+    }, Hi = w.vml ? Ui : ct, Wi = Ri.extend({
         _initContainer: function () {
             this._container = Hi("svg"), this._container.setAttribute("pointer-events", "none"), this._rootGroup = Hi("g"), this._container.appendChild(this._rootGroup)
         }, _destroyContainer: function () {
-            C(this._container), A(this._container), delete this._container, delete this._rootGroup, delete this._svgSize
+            C(this._container), O(this._container), delete this._container, delete this._rootGroup, delete this._svgSize
         }, _update: function () {
             var t, e, i;
-            this._map._animatingZoom && this._bounds || (Di.prototype._update.call(this), e = (t = this._bounds).getSize(), i = this._container, this._svgSize && this._svgSize.equals(e) || (this._svgSize = e, i.setAttribute("width", e.x), i.setAttribute("height", e.y)), S(i, t.min), i.setAttribute("viewBox", [t.min.x, t.min.y, e.x, e.y].join(" ")), this.fire("update"))
+            this._map._animatingZoom && this._bounds || (Ri.prototype._update.call(this), e = (t = this._bounds).getSize(), i = this._container, this._svgSize && this._svgSize.equals(e) || (this._svgSize = e, i.setAttribute("width", e.x), i.setAttribute("height", e.y)), k(i, t.min), i.setAttribute("viewBox", [t.min.x, t.min.y, e.x, e.y].join(" ")), this.fire("update"))
         }, _initPath: function (t) {
             var e = t._path = Hi("path");
             t.options.className && E(e, t.options.className), t.options.interactive && E(e, "leaflet-interactive"), this._updateStyle(t), this._layers[d(t)] = t
@@ -3429,13 +3427,13 @@ function posId(t) {
                 return [(t = g(t)).getSouthWest(), t.getNorthWest(), t.getNorthEast(), t.getSouthEast()]
             }
         }),
-        pt = (Wi.create = Hi, Wi.pointsToPath = dt, vi.geometryToLayer = yi, vi.coordsToLatLng = Li, vi.coordsToLatLngs = xi, vi.latLngToCoords = wi, vi.latLngsToCoords = Pi, vi.getFeature = Ci, vi.asFeature = Ei, z.mergeOptions({boxZoom: !0}), n.extend({
+        pt = (Wi.create = Hi, Wi.pointsToPath = dt, vi.geometryToLayer = yi, vi.coordsToLatLng = xi, vi.coordsToLatLngs = Li, vi.latLngToCoords = wi, vi.latLngsToCoords = Pi, vi.getFeature = Ci, vi.asFeature = Ei, z.mergeOptions({boxZoom: !0}), n.extend({
             initialize: function (t) {
                 this._map = t, this._container = t._container, this._pane = t._panes.overlayPane, this._resetStateTimeout = 0, t.on("unload", this._destroy, this)
             }, addHooks: function () {
-                k(this._container, "mousedown", this._onMouseDown, this)
+                S(this._container, "mousedown", this._onMouseDown, this)
             }, removeHooks: function () {
-                A(this._container, "mousedown", this._onMouseDown, this)
+                O(this._container, "mousedown", this._onMouseDown, this)
             }, moved: function () {
                 return this._moved
             }, _destroy: function () {
@@ -3446,7 +3444,7 @@ function posId(t) {
                 0 !== this._resetStateTimeout && (clearTimeout(this._resetStateTimeout), this._resetStateTimeout = 0)
             }, _onMouseDown: function (t) {
                 if (!t.shiftKey || 1 !== t.which && 1 !== t.button) return !1;
-                this._clearDeferredResetState(), this._resetState(), ie(), ye(), this._startPoint = this._map.mouseEventToContainerPoint(t), k(document, {
+                this._clearDeferredResetState(), this._resetState(), ie(), ye(), this._startPoint = this._map.mouseEventToContainerPoint(t), S(document, {
                     contextmenu: ze,
                     mousemove: this._onMouseMove,
                     mouseup: this._onMouseUp,
@@ -3455,9 +3453,9 @@ function posId(t) {
             }, _onMouseMove: function (t) {
                 this._moved || (this._moved = !0, this._box = P("div", "leaflet-zoom-box", this._container), E(this._container, "leaflet-crosshair"), this._map.fire("boxzoomstart")), this._point = this._map.mouseEventToContainerPoint(t);
                 var e = (t = new _(this._point, this._startPoint)).getSize();
-                S(this._box, t.min), this._box.style.width = e.x + "px", this._box.style.height = e.y + "px"
+                k(this._box, t.min), this._box.style.width = e.x + "px", this._box.style.height = e.y + "px"
             }, _finish: function () {
-                this._moved && (C(this._box), T(this._container, "leaflet-crosshair")), Ce(), be(), A(document, {
+                this._moved && (C(this._box), T(this._container, "leaflet-crosshair")), Ce(), be(), O(document, {
                     contextmenu: ze,
                     mousemove: this._onMouseMove,
                     mouseup: this._onMouseUp,
@@ -3541,13 +3539,13 @@ function posId(t) {
                 this._map = t, this._setPanDelta(t.options.keyboardPanDelta), this._setZoomDelta(t.options.zoomDelta)
             }, addHooks: function () {
                 var t = this._map._container;
-                t.tabIndex <= 0 && (t.tabIndex = "0"), k(t, {
+                t.tabIndex <= 0 && (t.tabIndex = "0"), S(t, {
                     focus: this._onFocus,
                     blur: this._onBlur,
                     mousedown: this._onMouseDown
                 }, this), this._map.on({focus: this._addHooks, blur: this._removeHooks}, this)
             }, removeHooks: function () {
-                this._removeHooks(), A(this._map._container, {
+                this._removeHooks(), O(this._map._container, {
                     focus: this._onFocus,
                     blur: this._onBlur,
                     mousedown: this._onMouseDown
@@ -3568,9 +3566,9 @@ function posId(t) {
                 for (var e = this._zoomKeys = {}, i = this.keyCodes, n = 0, o = i.zoomIn.length; n < o; n++) e[i.zoomIn[n]] = t;
                 for (n = 0, o = i.zoomOut.length; n < o; n++) e[i.zoomOut[n]] = -t
             }, _addHooks: function () {
-                k(document, "keydown", this._onKeyDown, this)
+                S(document, "keydown", this._onKeyDown, this)
             }, _removeHooks: function () {
-                A(document, "keydown", this._onKeyDown, this)
+                O(document, "keydown", this._onKeyDown, this)
             }, _onKeyDown: function (t) {
                 if (!(t.altKey || t.ctrlKey || t.metaKey)) {
                     var e, i, n = t.keyCode, o = this._map;
@@ -3581,17 +3579,17 @@ function posId(t) {
                     ze(t)
                 }
             }
-        })), St = (z.addInitHook("addHandler", "keyboard", Mt), z.mergeOptions({
+        })), kt = (z.addInitHook("addHandler", "keyboard", Mt), z.mergeOptions({
             scrollWheelZoom: !0,
             wheelDebounceTime: 40,
             wheelPxPerZoomLevel: 60
         }), n.extend({
             addHooks: function () {
-                k(this._map._container, "wheel", this._onWheelScroll, this), this._delta = 0
+                S(this._map._container, "wheel", this._onWheelScroll, this), this._delta = 0
             }, removeHooks: function () {
-                A(this._map._container, "wheel", this._onWheelScroll, this)
+                O(this._map._container, "wheel", this._onWheelScroll, this)
             }, _onWheelScroll: function (t) {
-                var e = Re(t), i = this._map.options.wheelDebounceTime,
+                var e = De(t), i = this._map.options.wheelDebounceTime,
                     e = (this._delta += e, this._lastMousePos = this._map.mouseEventToContainerPoint(t), this._startTime || (this._startTime = +new Date), Math.max(i - (+new Date - this._startTime), 0));
                 clearTimeout(this._timer), this._timer = setTimeout(a(this._performZoom, this), e), ze(t)
             }, _performZoom: function () {
@@ -3601,23 +3599,23 @@ function posId(t) {
                     n = t._limitZoom(e + (0 < this._delta ? i : -i)) - e;
                 this._delta = 0, this._startTime = null, n && ("center" === t.options.scrollWheelZoom ? t.setZoom(e + n) : t.setZoomAround(this._lastMousePos, e + n))
             }
-        })), kt = (z.addInitHook("addHandler", "scrollWheelZoom", St), z.mergeOptions({
+        })), St = (z.addInitHook("addHandler", "scrollWheelZoom", kt), z.mergeOptions({
             tapHold: w.touchNative && w.safari && w.mobile,
             tapTolerance: 15
         }), n.extend({
             addHooks: function () {
-                k(this._map._container, "touchstart", this._onDown, this)
+                S(this._map._container, "touchstart", this._onDown, this)
             }, removeHooks: function () {
-                A(this._map._container, "touchstart", this._onDown, this)
+                O(this._map._container, "touchstart", this._onDown, this)
             }, _onDown: function (t) {
                 var e;
                 clearTimeout(this._holdTimeout), 1 === t.touches.length && (e = t.touches[0], this._startPos = this._newPos = new f(e.clientX, e.clientY), this._holdTimeout = setTimeout(a(function () {
-                    this._cancel(), this._isTapValid() && (k(document, "touchend", I), k(document, "touchend touchcancel", this._cancelClickPrevent), this._simulateEvent("contextmenu", e))
-                }, this), 600), k(document, "touchend touchcancel contextmenu", this._cancel, this), k(document, "touchmove", this._onMove, this))
+                    this._cancel(), this._isTapValid() && (S(document, "touchend", I), S(document, "touchend touchcancel", this._cancelClickPrevent), this._simulateEvent("contextmenu", e))
+                }, this), 600), S(document, "touchend touchcancel contextmenu", this._cancel, this), S(document, "touchmove", this._onMove, this))
             }, _cancelClickPrevent: function t() {
-                A(document, "touchend", I), A(document, "touchend touchcancel", t)
+                O(document, "touchend", I), O(document, "touchend touchcancel", t)
             }, _cancel: function () {
-                clearTimeout(this._holdTimeout), A(document, "touchend touchcancel contextmenu", this._cancel, this), A(document, "touchmove", this._onMove, this)
+                clearTimeout(this._holdTimeout), O(document, "touchend touchcancel contextmenu", this._cancel, this), O(document, "touchmove", this._onMove, this)
             }, _onMove: function (t) {
                 t = t.touches[0], this._newPos = new f(t.clientX, t.clientY)
             }, _isTapValid: function () {
@@ -3633,17 +3631,17 @@ function posId(t) {
                     clientY: e.clientY
                 }))._simulated = !0, e.target.dispatchEvent(t)
             }
-        })), Ot = (z.addInitHook("addHandler", "tapHold", kt), z.mergeOptions({
+        })), At = (z.addInitHook("addHandler", "tapHold", St), z.mergeOptions({
             touchZoom: w.touch,
             bounceAtZoomLimits: !0
         }), n.extend({
             addHooks: function () {
-                E(this._map._container, "leaflet-touch-zoom"), k(this._map._container, "touchstart", this._onTouchStart, this)
+                E(this._map._container, "leaflet-touch-zoom"), S(this._map._container, "touchstart", this._onTouchStart, this)
             }, removeHooks: function () {
-                T(this._map._container, "leaflet-touch-zoom"), A(this._map._container, "touchstart", this._onTouchStart, this)
+                T(this._map._container, "leaflet-touch-zoom"), O(this._map._container, "touchstart", this._onTouchStart, this)
             }, _onTouchStart: function (t) {
                 var e, i, n = this._map;
-                !t.touches || 2 !== t.touches.length || n._animatingZoom || this._zooming || (e = n.mouseEventToContainerPoint(t.touches[0]), i = n.mouseEventToContainerPoint(t.touches[1]), this._centerPoint = n.getSize()._divideBy(2), this._startLatLng = n.containerPointToLatLng(this._centerPoint), "center" !== n.options.touchZoom && (this._pinchStartLatLng = n.containerPointToLatLng(e.add(i)._divideBy(2))), this._startDist = e.distanceTo(i), this._startZoom = n.getZoom(), this._moved = !1, this._zooming = !0, n._stop(), k(document, "touchmove", this._onTouchMove, this), k(document, "touchend touchcancel", this._onTouchEnd, this), I(t))
+                !t.touches || 2 !== t.touches.length || n._animatingZoom || this._zooming || (e = n.mouseEventToContainerPoint(t.touches[0]), i = n.mouseEventToContainerPoint(t.touches[1]), this._centerPoint = n.getSize()._divideBy(2), this._startLatLng = n.containerPointToLatLng(this._centerPoint), "center" !== n.options.touchZoom && (this._pinchStartLatLng = n.containerPointToLatLng(e.add(i)._divideBy(2))), this._startDist = e.distanceTo(i), this._startZoom = n.getZoom(), this._moved = !1, this._zooming = !0, n._stop(), S(document, "touchmove", this._onTouchMove, this), S(document, "touchend touchcancel", this._onTouchEnd, this), I(t))
             }, _onTouchMove: function (t) {
                 if (t.touches && 2 === t.touches.length && this._zooming) {
                     var e = this._map, i = e.mouseEventToContainerPoint(t.touches[0]),
@@ -3660,10 +3658,10 @@ function posId(t) {
                     }, void 0), this._animRequest = y(n, this, !0), I(t)
                 }
             }, _onTouchEnd: function () {
-                this._moved && this._zooming ? (this._zooming = !1, r(this._animRequest), A(document, "touchmove", this._onTouchMove, this), A(document, "touchend touchcancel", this._onTouchEnd, this), this._map.options.zoomAnimation ? this._map._animateZoom(this._center, this._map._limitZoom(this._zoom), !0, this._map.options.zoomSnap) : this._map._resetView(this._center, this._map._limitZoom(this._zoom))) : this._zooming = !1
+                this._moved && this._zooming ? (this._zooming = !1, r(this._animRequest), O(document, "touchmove", this._onTouchMove, this), O(document, "touchend touchcancel", this._onTouchEnd, this), this._map.options.zoomAnimation ? this._map._animateZoom(this._center, this._map._limitZoom(this._zoom), !0, this._map.options.zoomSnap) : this._map._resetView(this._center, this._map._limitZoom(this._zoom))) : this._zooming = !1
             }
         })),
-        $i = (z.addInitHook("addHandler", "touchZoom", Ot), z.BoxZoom = pt, z.DoubleClickZoom = Tt, z.Drag = qi, z.Keyboard = Mt, z.ScrollWheelZoom = St, z.TapHold = kt, z.TouchZoom = Ot, t.Bounds = _, t.Browser = w, t.CRS = ot, t.Canvas = ji, t.Circle = mi, t.CircleMarker = fi, t.Class = et, t.Control = B, t.DivIcon = zi, t.DivOverlay = Oi, t.DomEvent = ft, t.DomUtil = Ee, t.Draggable = qe, t.Evented = it, t.FeatureGroup = li, t.GeoJSON = vi, t.GridLayer = Bi, t.Handler = n, t.Icon = hi, t.ImageOverlay = Mi, t.LatLng = v, t.LatLngBounds = s, t.Layer = o, t.LayerGroup = ai, t.LineUtil = gt, t.Map = z, t.Marker = di, t.Mixin = mt, t.Path = pi, t.Point = f, t.PolyUtil = _t, t.Polygon = gi, t.Polyline = _i, t.Popup = Ai, t.PosAnimation = je, t.Projection = bt, t.Rectangle = Vi, t.Renderer = Di, t.SVG = Wi, t.SVGOverlay = ki, t.TileLayer = Ni, t.Tooltip = Ii, t.Transformation = at, t.Util = tt, t.VideoOverlay = Si, t.bind = a, t.bounds = c, t.canvas = Fi, t.circle = function (t, e, i) {
+        $i = (z.addInitHook("addHandler", "touchZoom", At), z.BoxZoom = pt, z.DoubleClickZoom = Tt, z.Drag = qi, z.Keyboard = Mt, z.ScrollWheelZoom = kt, z.TapHold = St, z.TouchZoom = At, t.Bounds = _, t.Browser = w, t.CRS = ot, t.Canvas = ji, t.Circle = mi, t.CircleMarker = fi, t.Class = et, t.Control = B, t.DivIcon = zi, t.DivOverlay = Ai, t.DomEvent = ft, t.DomUtil = Ee, t.Draggable = qe, t.Evented = it, t.FeatureGroup = li, t.GeoJSON = vi, t.GridLayer = Bi, t.Handler = n, t.Icon = hi, t.ImageOverlay = Mi, t.LatLng = v, t.LatLngBounds = s, t.Layer = o, t.LayerGroup = ai, t.LineUtil = gt, t.Map = z, t.Marker = di, t.Mixin = mt, t.Path = pi, t.Point = f, t.PolyUtil = _t, t.Polygon = gi, t.Polyline = _i, t.Popup = Oi, t.PosAnimation = je, t.Projection = bt, t.Rectangle = Vi, t.Renderer = Ri, t.SVG = Wi, t.SVGOverlay = Si, t.TileLayer = Ni, t.Tooltip = Ii, t.Transformation = at, t.Util = tt, t.VideoOverlay = ki, t.bind = a, t.bounds = c, t.canvas = Fi, t.circle = function (t, e, i) {
             return new mi(t, e, i)
         }, t.circleMarker = function (t, e) {
             return new fi(t, e)
@@ -3688,15 +3686,15 @@ function posId(t) {
         }, t.polyline = function (t, e) {
             return new _i(t, e)
         }, t.popup = function (t, e) {
-            return new Ai(t, e)
+            return new Oi(t, e)
         }, t.rectangle = function (t, e) {
             return new Vi(t, e)
         }, t.setOptions = l, t.stamp = d, t.svg = Gi, t.svgOverlay = function (t, e, i) {
-            return new ki(t, e, i)
+            return new Si(t, e, i)
         }, t.tileLayer = Zi, t.tooltip = function (t, e) {
             return new Ii(t, e)
         }, t.transformation = lt, t.version = "1.9.4", t.videoOverlay = function (t, e, i) {
-            return new Si(t, e, i)
+            return new ki(t, e, i)
         }, window.L);
     t.noConflict = function () {
         return window.L = $i, this
@@ -3919,7 +3917,7 @@ function posId(t) {
                     return s.onClick(t)
                 }
             }), l.DomEvent.disableClickPropagation(this.button), this.resetButton = a("button", this.classNames.resetButton, this.searchElement.form, {
-                text: "×",
+                text: "Ã—",
                 "aria-label": this.options.clearSearchLabel,
                 onClick: function () {
                     "" === s.searchElement.input.value ? s.close() : s.clearResults(null, !0)
@@ -4027,14 +4025,14 @@ function posId(t) {
 
     (e = p = p || {})[e.SEARCH = 0] = "SEARCH", e[e.REVERSE = 1] = "REVERSE";
 
-    function L(t, e) {
+    function x(t, e) {
         if (t === e) return !0;
         if (t && e && "object" == typeof t && "object" == typeof e) {
             if (t.constructor !== e.constructor) return !1;
             var i, n, o;
             if (Array.isArray(t)) {
                 if ((i = t.length) != e.length) return !1;
-                for (n = i; 0 != n--;) if (!L(t[n], e[n])) return !1
+                for (n = i; 0 != n--;) if (!x(t[n], e[n])) return !1
             } else {
                 if (t.constructor === RegExp) return t.source === e.source && t.flags === e.flags;
                 if (t.valueOf !== Object.prototype.valueOf) return t.valueOf() === e.valueOf();
@@ -4043,7 +4041,7 @@ function posId(t) {
                 for (n = i; 0 != n--;) if (!Object.prototype.hasOwnProperty.call(e, o[n])) return !1;
                 for (n = i; 0 != n--;) {
                     var s = o[n];
-                    if (!L(t[s], e[s])) return !1
+                    if (!x(t[s], e[s])) return !1
                 }
             }
             return !0
@@ -4051,7 +4049,7 @@ function posId(t) {
         return t != t && e != e
     }
 
-    var x, e = function () {
+    var L, e = function () {
         function t(t) {
             void 0 === t && (t = {}), this.options = void 0, this.options = t
         }
@@ -4208,9 +4206,9 @@ function posId(t) {
         return s(t, e), t
     }(E);
     const M = "__googleMapsScriptId";
-    (k = x = x || {})[k.INITIALIZED = 0] = "INITIALIZED", k[k.LOADING = 1] = "LOADING", k[k.SUCCESS = 2] = "SUCCESS", k[k.FAILURE = 3] = "FAILURE";
+    (S = L = L || {})[S.INITIALIZED = 0] = "INITIALIZED", S[S.LOADING = 1] = "LOADING", S[S.SUCCESS = 2] = "SUCCESS", S[S.FAILURE = 3] = "FAILURE";
 
-    class S {
+    class k {
         constructor({
                         apiKey: t,
                         authReferrerPolicy: e,
@@ -4226,11 +4224,11 @@ function posId(t) {
                         url: c = "https://maps.googleapis.com/maps/api/js",
                         version: d
                     }) {
-            if (this.CALLBACK = "__googleMapsCallback", this.callbacks = [], this.done = !1, this.loading = !1, this.errors = [], this.apiKey = t, this.authReferrerPolicy = e, this.channel = i, this.client = n, this.id = o || M, this.language = s, this.libraries = r, this.mapIds = a, this.nonce = l, this.region = h, this.retries = u, this.url = c, this.version = d, S.instance) {
-                if (L(this.options, S.instance.options)) return S.instance;
-                throw new Error(`Loader must not be called again with different options. ${JSON.stringify(this.options)} !== ` + JSON.stringify(S.instance.options))
+            if (this.CALLBACK = "__googleMapsCallback", this.callbacks = [], this.done = !1, this.loading = !1, this.errors = [], this.apiKey = t, this.authReferrerPolicy = e, this.channel = i, this.client = n, this.id = o || M, this.language = s, this.libraries = r, this.mapIds = a, this.nonce = l, this.region = h, this.retries = u, this.url = c, this.version = d, k.instance) {
+                if (x(this.options, k.instance.options)) return k.instance;
+                throw new Error(`Loader must not be called again with different options. ${JSON.stringify(this.options)} !== ` + JSON.stringify(k.instance.options))
             }
-            S.instance = this
+            k.instance = this
         }
 
         get options() {
@@ -4251,7 +4249,7 @@ function posId(t) {
         }
 
         get status() {
-            return this.errors.length ? x.FAILURE : this.done ? x.SUCCESS : this.loading ? x.LOADING : x.INITIALIZED
+            return this.errors.length ? L.FAILURE : this.done ? L.SUCCESS : this.loading ? L.LOADING : L.INITIALIZED
         }
 
         get failed() {
@@ -4321,10 +4319,10 @@ function posId(t) {
         }
     }
 
-    var k = function (i) {
+    var S = function (i) {
         function t(t) {
             var e;
-            return (e = i.call(this, t) || this).loader = null, e.geocoder = null, "undefined" != typeof window && (e.loader = new S(t).load().then(function (t) {
+            return (e = i.call(this, t) || this).loader = null, e.geocoder = null, "undefined" != typeof window && (e.loader = new k(t).load().then(function (t) {
                 t = new t.maps.Geocoder;
                 return e.geocoder = t
             })), e
@@ -4358,7 +4356,7 @@ function posId(t) {
                 return Promise.reject(e)
             }
         }, t
-    }(e), O = function (o) {
+    }(e), A = function (o) {
         function t() {
             for (var t, e = arguments.length, i = new Array(e), n = 0; n < e; n++) i[n] = arguments[n];
             return (t = o.call.apply(o, [this].concat(i)) || this).searchUrl = "https://maps.googleapis.com/maps/api/geocode/json", t
@@ -4380,7 +4378,7 @@ function posId(t) {
                 }
             })
         }, t
-    }(e), A = function (o) {
+    }(e), O = function (o) {
         function t() {
             for (var t, e = arguments.length, i = new Array(e), n = 0; n < e; n++) i[n] = arguments[n];
             return (t = o.call.apply(o, [this].concat(i)) || this).searchUrl = "https://geocode.search.hereapi.com/v1/autosuggest", t
@@ -4503,7 +4501,7 @@ function posId(t) {
                 }
             })
         }, t
-    }(e), R = function (n) {
+    }(e), D = function (n) {
         function t(t) {
             (e = n.call(this, t = void 0 === t ? {} : t) || this).searchUrl = void 0, e.reverseUrl = void 0;
             var e, i = "https://api.geoapify.com/v1/geocode";
@@ -4527,7 +4525,7 @@ function posId(t) {
             })
         }, t
     }(e);
-    t.AlgoliaProvider = w, t.BingProvider = P, t.EsriProvider = C, t.GeoApiFrProvider = Z, t.GeoSearchControl = b, t.GeoapifyProvider = R, t.GeocodeEarthProvider = T, t.GoogleProvider = k, t.HereProvider = A, t.JsonProvider = e, t.LegacyGoogleProvider = O, t.LocationIQProvider = z, t.MapBoxProvider = N, t.OpenCageProvider = B, t.OpenStreetMapProvider = I, t.PeliasProvider = E, t.SearchControl = b, t.SearchElement = m
+    t.AlgoliaProvider = w, t.BingProvider = P, t.EsriProvider = C, t.GeoApiFrProvider = Z, t.GeoSearchControl = b, t.GeoapifyProvider = D, t.GeocodeEarthProvider = T, t.GoogleProvider = S, t.HereProvider = O, t.JsonProvider = e, t.LegacyGoogleProvider = A, t.LocationIQProvider = z, t.MapBoxProvider = N, t.OpenCageProvider = B, t.OpenStreetMapProvider = I, t.PeliasProvider = E, t.SearchControl = b, t.SearchElement = m
 }), function (t, e) {
     "object" == typeof exports && "undefined" != typeof module ? e(exports) : "function" == typeof define && define.amd ? define(["exports"], e) : e(((t = t || self).Leaflet = t.Leaflet || {}, t.Leaflet.markercluster = {}))
 }(this, function (t) {
@@ -5310,18 +5308,18 @@ function posId(t) {
             }
         }, 2492: (t, e, i) => {
             var c = i(6384), d = i(7114), p = i(8351), f = i(6096), m = i(4160), _ = i(1469), g = i(4144), v = i(6719),
-                y = "[object Arguments]", b = "[object Array]", L = "[object Object]",
-                x = Object.prototype.hasOwnProperty;
+                y = "[object Arguments]", b = "[object Array]", x = "[object Object]",
+                L = Object.prototype.hasOwnProperty;
             t.exports = function (t, e, i, n, o, s) {
-                var r = _(t), a = _(e), l = r ? b : m(t), a = a ? b : m(e), h = (l = l == y ? L : l) == L,
-                    u = (a = a == y ? L : a) == L, a = l == a;
+                var r = _(t), a = _(e), l = r ? b : m(t), a = a ? b : m(e), h = (l = l == y ? x : l) == x,
+                    u = (a = a == y ? x : a) == x, a = l == a;
                 if (a && g(t)) {
                     if (!g(e)) return !1;
                     h = !(r = !0)
                 }
                 if (a && !h) return s = s || new c, r || v(t) ? d(t, e, i, n, o, s) : p(t, e, l, i, n, o, s);
                 if (!(1 & i)) {
-                    r = h && x.call(t, "__wrapped__"), l = u && x.call(e, "__wrapped__");
+                    r = h && L.call(t, "__wrapped__"), l = u && L.call(e, "__wrapped__");
                     if (r || l) return o(r ? t.value() : t, l ? e.value() : e, i, n, s = s || new c)
                 }
                 return !!a && (s = s || new c, f(t, e, i, n, o, s))
@@ -5602,7 +5600,7 @@ function posId(t) {
                 }
             }
         }, 5393: (t, e, i) => {
-            var n = i(2663), o = i(3816), s = i(8748), r = RegExp("['’]", "g");
+            var n = i(2663), o = i(3816), s = i(8748), r = RegExp("['â€™]", "g");
             t.exports = function (e) {
                 return function (t) {
                     return n(s(o(t).replace(r, "")), e, "")
@@ -5622,196 +5620,196 @@ function posId(t) {
             t.exports = i
         }, 9389: (t, e, i) => {
             i = i(8674)({
-                "À": "A",
-                "Á": "A",
-                "Â": "A",
-                "Ã": "A",
-                "Ä": "A",
-                "Å": "A",
-                "à": "a",
-                "á": "a",
-                "â": "a",
-                "ã": "a",
-                "ä": "a",
-                "å": "a",
-                "Ç": "C",
-                "ç": "c",
-                "Ð": "D",
-                "ð": "d",
-                "È": "E",
-                "É": "E",
-                "Ê": "E",
-                "Ë": "E",
-                "è": "e",
-                "é": "e",
-                "ê": "e",
-                "ë": "e",
-                "Ì": "I",
-                "Í": "I",
-                "Î": "I",
-                "Ï": "I",
-                "ì": "i",
-                "í": "i",
-                "î": "i",
-                "ï": "i",
-                "Ñ": "N",
-                "ñ": "n",
-                "Ò": "O",
-                "Ó": "O",
-                "Ô": "O",
-                "Õ": "O",
-                "Ö": "O",
-                "Ø": "O",
-                "ò": "o",
-                "ó": "o",
-                "ô": "o",
-                "õ": "o",
-                "ö": "o",
-                "ø": "o",
-                "Ù": "U",
-                "Ú": "U",
-                "Û": "U",
-                "Ü": "U",
-                "ù": "u",
-                "ú": "u",
-                "û": "u",
-                "ü": "u",
-                "Ý": "Y",
-                "ý": "y",
-                "ÿ": "y",
-                "Æ": "Ae",
-                "æ": "ae",
-                "Þ": "Th",
-                "þ": "th",
-                "ß": "ss",
-                "Ā": "A",
-                "Ă": "A",
-                "Ą": "A",
-                "ā": "a",
-                "ă": "a",
-                "ą": "a",
-                "Ć": "C",
-                "Ĉ": "C",
-                "Ċ": "C",
-                "Č": "C",
-                "ć": "c",
-                "ĉ": "c",
-                "ċ": "c",
-                "č": "c",
-                "Ď": "D",
-                "Đ": "D",
-                "ď": "d",
-                "đ": "d",
-                "Ē": "E",
-                "Ĕ": "E",
-                "Ė": "E",
-                "Ę": "E",
-                "Ě": "E",
-                "ē": "e",
-                "ĕ": "e",
-                "ė": "e",
-                "ę": "e",
-                "ě": "e",
-                "Ĝ": "G",
-                "Ğ": "G",
-                "Ġ": "G",
-                "Ģ": "G",
-                "ĝ": "g",
-                "ğ": "g",
-                "ġ": "g",
-                "ģ": "g",
-                "Ĥ": "H",
-                "Ħ": "H",
-                "ĥ": "h",
-                "ħ": "h",
-                "Ĩ": "I",
-                "Ī": "I",
-                "Ĭ": "I",
-                "Į": "I",
-                "İ": "I",
-                "ĩ": "i",
-                "ī": "i",
-                "ĭ": "i",
-                "į": "i",
-                "ı": "i",
-                "Ĵ": "J",
-                "ĵ": "j",
-                "Ķ": "K",
-                "ķ": "k",
-                "ĸ": "k",
-                "Ĺ": "L",
-                "Ļ": "L",
-                "Ľ": "L",
-                "Ŀ": "L",
-                "Ł": "L",
-                "ĺ": "l",
-                "ļ": "l",
-                "ľ": "l",
-                "ŀ": "l",
-                "ł": "l",
-                "Ń": "N",
-                "Ņ": "N",
-                "Ň": "N",
-                "Ŋ": "N",
-                "ń": "n",
-                "ņ": "n",
-                "ň": "n",
-                "ŋ": "n",
-                "Ō": "O",
-                "Ŏ": "O",
-                "Ő": "O",
-                "ō": "o",
-                "ŏ": "o",
-                "ő": "o",
-                "Ŕ": "R",
-                "Ŗ": "R",
-                "Ř": "R",
-                "ŕ": "r",
-                "ŗ": "r",
-                "ř": "r",
-                "Ś": "S",
-                "Ŝ": "S",
-                "Ş": "S",
-                "Š": "S",
-                "ś": "s",
-                "ŝ": "s",
-                "ş": "s",
-                "š": "s",
-                "Ţ": "T",
-                "Ť": "T",
-                "Ŧ": "T",
-                "ţ": "t",
-                "ť": "t",
-                "ŧ": "t",
-                "Ũ": "U",
-                "Ū": "U",
-                "Ŭ": "U",
-                "Ů": "U",
-                "Ű": "U",
-                "Ų": "U",
-                "ũ": "u",
-                "ū": "u",
-                "ŭ": "u",
-                "ů": "u",
-                "ű": "u",
-                "ų": "u",
-                "Ŵ": "W",
-                "ŵ": "w",
-                "Ŷ": "Y",
-                "ŷ": "y",
-                "Ÿ": "Y",
-                "Ź": "Z",
-                "Ż": "Z",
-                "Ž": "Z",
-                "ź": "z",
-                "ż": "z",
-                "ž": "z",
-                "Ĳ": "IJ",
-                "ĳ": "ij",
-                "Œ": "Oe",
-                "œ": "oe",
-                "ŉ": "'n",
-                "ſ": "s"
+                "Ã€": "A",
+                "Ã": "A",
+                "Ã‚": "A",
+                "Ãƒ": "A",
+                "Ã„": "A",
+                "Ã…": "A",
+                "Ã ": "a",
+                "Ã¡": "a",
+                "Ã¢": "a",
+                "Ã£": "a",
+                "Ã¤": "a",
+                "Ã¥": "a",
+                "Ã‡": "C",
+                "Ã§": "c",
+                "Ã": "D",
+                "Ã°": "d",
+                "Ãˆ": "E",
+                "Ã‰": "E",
+                "ÃŠ": "E",
+                "Ã‹": "E",
+                "Ã¨": "e",
+                "Ã©": "e",
+                "Ãª": "e",
+                "Ã«": "e",
+                "ÃŒ": "I",
+                "Ã": "I",
+                "ÃŽ": "I",
+                "Ã": "I",
+                "Ã¬": "i",
+                "Ã­": "i",
+                "Ã®": "i",
+                "Ã¯": "i",
+                "Ã‘": "N",
+                "Ã±": "n",
+                "Ã’": "O",
+                "Ã“": "O",
+                "Ã”": "O",
+                "Ã•": "O",
+                "Ã–": "O",
+                "Ã˜": "O",
+                "Ã²": "o",
+                "Ã³": "o",
+                "Ã´": "o",
+                "Ãµ": "o",
+                "Ã¶": "o",
+                "Ã¸": "o",
+                "Ã™": "U",
+                "Ãš": "U",
+                "Ã›": "U",
+                "Ãœ": "U",
+                "Ã¹": "u",
+                "Ãº": "u",
+                "Ã»": "u",
+                "Ã¼": "u",
+                "Ã": "Y",
+                "Ã½": "y",
+                "Ã¿": "y",
+                "Ã†": "Ae",
+                "Ã¦": "ae",
+                "Ãž": "Th",
+                "Ã¾": "th",
+                "ÃŸ": "ss",
+                "Ä€": "A",
+                "Ä‚": "A",
+                "Ä„": "A",
+                "Ä": "a",
+                "Äƒ": "a",
+                "Ä…": "a",
+                "Ä†": "C",
+                "Äˆ": "C",
+                "ÄŠ": "C",
+                "ÄŒ": "C",
+                "Ä‡": "c",
+                "Ä‰": "c",
+                "Ä‹": "c",
+                "Ä": "c",
+                "ÄŽ": "D",
+                "Ä": "D",
+                "Ä": "d",
+                "Ä‘": "d",
+                "Ä’": "E",
+                "Ä”": "E",
+                "Ä–": "E",
+                "Ä˜": "E",
+                "Äš": "E",
+                "Ä“": "e",
+                "Ä•": "e",
+                "Ä—": "e",
+                "Ä™": "e",
+                "Ä›": "e",
+                "Äœ": "G",
+                "Äž": "G",
+                "Ä ": "G",
+                "Ä¢": "G",
+                "Ä": "g",
+                "ÄŸ": "g",
+                "Ä¡": "g",
+                "Ä£": "g",
+                "Ä¤": "H",
+                "Ä¦": "H",
+                "Ä¥": "h",
+                "Ä§": "h",
+                "Ä¨": "I",
+                "Äª": "I",
+                "Ä¬": "I",
+                "Ä®": "I",
+                "Ä°": "I",
+                "Ä©": "i",
+                "Ä«": "i",
+                "Ä­": "i",
+                "Ä¯": "i",
+                "Ä±": "i",
+                "Ä´": "J",
+                "Äµ": "j",
+                "Ä¶": "K",
+                "Ä·": "k",
+                "Ä¸": "k",
+                "Ä¹": "L",
+                "Ä»": "L",
+                "Ä½": "L",
+                "Ä¿": "L",
+                "Å": "L",
+                "Äº": "l",
+                "Ä¼": "l",
+                "Ä¾": "l",
+                "Å€": "l",
+                "Å‚": "l",
+                "Åƒ": "N",
+                "Å…": "N",
+                "Å‡": "N",
+                "ÅŠ": "N",
+                "Å„": "n",
+                "Å†": "n",
+                "Åˆ": "n",
+                "Å‹": "n",
+                "ÅŒ": "O",
+                "ÅŽ": "O",
+                "Å": "O",
+                "Å": "o",
+                "Å": "o",
+                "Å‘": "o",
+                "Å”": "R",
+                "Å–": "R",
+                "Å˜": "R",
+                "Å•": "r",
+                "Å—": "r",
+                "Å™": "r",
+                "Åš": "S",
+                "Åœ": "S",
+                "Åž": "S",
+                "Å ": "S",
+                "Å›": "s",
+                "Å": "s",
+                "ÅŸ": "s",
+                "Å¡": "s",
+                "Å¢": "T",
+                "Å¤": "T",
+                "Å¦": "T",
+                "Å£": "t",
+                "Å¥": "t",
+                "Å§": "t",
+                "Å¨": "U",
+                "Åª": "U",
+                "Å¬": "U",
+                "Å®": "U",
+                "Å°": "U",
+                "Å²": "U",
+                "Å©": "u",
+                "Å«": "u",
+                "Å­": "u",
+                "Å¯": "u",
+                "Å±": "u",
+                "Å³": "u",
+                "Å´": "W",
+                "Åµ": "w",
+                "Å¶": "Y",
+                "Å·": "y",
+                "Å¸": "Y",
+                "Å¹": "Z",
+                "Å»": "Z",
+                "Å½": "Z",
+                "Åº": "z",
+                "Å¼": "z",
+                "Å¾": "z",
+                "Ä²": "IJ",
+                "Ä³": "ij",
+                "Å’": "Oe",
+                "Å“": "oe",
+                "Å‰": "'n",
+                "Å¿": "s"
             });
             t.exports = i
         }, 8777: (t, e, i) => {
@@ -6308,8 +6306,8 @@ function posId(t) {
                 s = "\\xac\\xb1\\xd7\\xf7\\x00-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\xbf\\u2000-\\u206f \\t\\x0b\\f\\xa0\\ufeff\\n\\r\\u2028\\u2029\\u1680\\u180e\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u202f\\u205f\\u3000",
                 r = "[" + s + "]", a = "[" + i + "]", l = "[" + n + "]", s = "[^" + e + s + "\\d+" + i + n + o + "]",
                 i = "(?:\\ud83c[\\udde6-\\uddff]){2}", n = "[\\ud800-\\udbff][\\udc00-\\udfff]", o = "[" + o + "]",
-                h = "(?:" + l + "|" + s + ")", s = "(?:" + o + "|" + s + ")", u = "(?:['’](?:d|ll|m|re|s|t|ve))?",
-                c = "(?:['’](?:D|LL|M|RE|S|T|VE))?",
+                h = "(?:" + l + "|" + s + ")", s = "(?:" + o + "|" + s + ")", u = "(?:['â€™](?:d|ll|m|re|s|t|ve))?",
+                c = "(?:['â€™](?:D|LL|M|RE|S|T|VE))?",
                 d = "(?:[\\u0300-\\u036f\\ufe20-\\ufe2f\\u20d0-\\u20ff]|\\ud83c[\\udffb-\\udfff])?",
                 p = "[\\ufe0e\\ufe0f]?",
                 e = p + d + "(?:\\u200d(?:" + ["[^" + e + "]", i, n].join("|") + ")" + p + d + ")*",
@@ -6624,8 +6622,8 @@ function posId(t) {
             return null != t
         }
 
-        var i, X = /^-?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i, Z = Math.ceil, R = Math.floor,
-            D = "[BigNumber Error] ", j = D + "Number primitive has more than 15 significant digits: ", F = 1e14,
+        var i, X = /^-?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i, Z = Math.ceil, D = Math.floor,
+            R = "[BigNumber Error] ", j = R + "Number primitive has more than 15 significant digits: ", F = 1e14,
             U = 9007199254740991, H = [1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10, 1e11, 1e12, 1e13];
 
         function W(t) {
@@ -6654,7 +6652,7 @@ function posId(t) {
         }
 
         function q(t, e, i, n) {
-            if (t < e || i < t || t !== R(t)) throw Error(D + (n || "Argument") + ("number" == typeof t ? t < e || i < t ? " out of range: " : " not an integer: " : " not a primitive number: ") + String(t))
+            if (t < e || i < t || t !== D(t)) throw Error(R + (n || "Argument") + ("number" == typeof t ? t < e || i < t ? " out of range: " : " not an integer: " : " not a primitive number: ") + String(t))
         }
 
         function $(t) {
@@ -6680,14 +6678,14 @@ function posId(t) {
 
         const p = function N(t) {
             var _, c, d, e, h, r, a, l, u, p, g, i = M.prototype = {constructor: M, toString: null, valueOf: null},
-                f = new M(1), v = 20, y = 4, m = -7, b = 21, L = -1e7, x = 1e7, w = !1, n = 1, P = 0, C = {
+                f = new M(1), v = 20, y = 4, m = -7, b = 21, x = -1e7, L = 1e7, w = !1, n = 1, P = 0, C = {
                     prefix: "",
                     groupSize: 3,
                     secondaryGroupSize: 0,
                     groupSeparator: ",",
                     decimalSeparator: ".",
                     fractionGroupSize: 0,
-                    fractionGroupSeparator: " ",
+                    fractionGroupSeparator: "Â ",
                     suffix: ""
                 }, E = "0123456789abcdefghijklmnopqrstuvwxyz", T = !0;
 
@@ -6695,11 +6693,11 @@ function posId(t) {
                 var i, n, o, s, r, a, l, h, u = this;
                 if (!(u instanceof M)) return new M(t, e);
                 if (null == e) {
-                    if (t && !0 === t._isBigNumber) return u.s = t.s, void (!t.c || t.e > x ? u.c = u.e = null : t.e < L ? u.c = [u.e = 0] : (u.e = t.e, u.c = t.c.slice()));
+                    if (t && !0 === t._isBigNumber) return u.s = t.s, void (!t.c || t.e > L ? u.c = u.e = null : t.e < x ? u.c = [u.e = 0] : (u.e = t.e, u.c = t.c.slice()));
                     if ((a = "number" == typeof t) && 0 * t == 0) {
                         if (u.s = 1 / t < 0 ? (t = -t, -1) : 1, t === ~~t) {
                             for (s = 0, r = t; 10 <= r; r /= 10, s++) ;
-                            return void (x < s ? u.c = u.e = null : (u.e = s, u.c = [t]))
+                            return void (L < s ? u.c = u.e = null : (u.e = s, u.c = [t]))
                         }
                         h = String(t)
                     } else {
@@ -6708,7 +6706,7 @@ function posId(t) {
                     }
                     0 < (r = (h = -1 < (s = h.indexOf(".")) ? h.replace(".", "") : h).search(/e/i)) ? (s < 0 && (s = r), s += +h.slice(r + 1), h = h.substring(0, r)) : s < 0 && (s = h.length)
                 } else {
-                    if (q(e, 2, E.length, "Base"), 10 == e && T) return k(u = new M(t), v + u.e + 1, y);
+                    if (q(e, 2, E.length, "Base"), 10 == e && T) return S(u = new M(t), v + u.e + 1, y);
                     if (h = String(t), a = "number" == typeof t) {
                         if (0 * t != 0) return d(u, h, a, e);
                         if (u.s = 1 / t < 0 ? (h = h.slice(1), -1) : 1, M.DEBUG && 15 < h.replace(/^0\.0*|\./, "").length) throw Error(j + t)
@@ -6730,8 +6728,8 @@ function posId(t) {
                 for (r = 0; 48 === h.charCodeAt(r); r++) ;
                 for (l = h.length; 48 === h.charCodeAt(--l);) ;
                 if (h = h.slice(r, ++l)) {
-                    if (l -= r, a && M.DEBUG && 15 < l && (U < t || t !== R(t))) throw Error(j + u.s * t);
-                    if ((s = s - r - 1) > x) u.c = u.e = null; else if (s < L) u.c = [u.e = 0]; else {
+                    if (l -= r, a && M.DEBUG && 15 < l && (U < t || t !== D(t))) throw Error(j + u.s * t);
+                    if ((s = s - r - 1) > L) u.c = u.e = null; else if (s < x) u.c = [u.e = 0]; else {
                         if (u.e = s, u.c = [], r = (s + 1) % 14, s < 0 && (r += 14), r < l) {
                             for (r && u.c.push(+h.slice(0, r)), l -= 14; r < l;) u.c.push(+h.slice(r, r += 14));
                             r = 14 - (h = h.slice(r)).length
@@ -6745,7 +6743,7 @@ function posId(t) {
             function o(t, e, i, n) {
                 var o, s, r, a;
                 if (null == i ? i = y : q(i, 0, 8), !t.c) return t.toString();
-                if (o = t.c[0], s = t.e, null == e) a = G(t.c), a = 1 == n || 2 == n && (s <= m || b <= s) ? Y(a, s) : K(a, s, "0"); else if (i = (t = k(new M(t), e, i)).e, r = (a = G(t.c)).length, 1 == n || 2 == n && (e <= i || i <= m)) {
+                if (o = t.c[0], s = t.e, null == e) a = G(t.c), a = 1 == n || 2 == n && (s <= m || b <= s) ? Y(a, s) : K(a, s, "0"); else if (i = (t = S(new M(t), e, i)).e, r = (a = G(t.c)).length, 1 == n || 2 == n && (e <= i || i <= m)) {
                     for (; r < e; a += "0", r++) ;
                     a = Y(a, i)
                 } else if (e -= s, a = K(a, i, "0"), r < i + 1) {
@@ -6765,13 +6763,13 @@ function posId(t) {
                 return o
             }
 
-            function S(t, e, i) {
+            function k(t, e, i) {
                 for (var n = 1, o = e.length; !e[--o]; e.pop()) ;
                 for (o = e[0]; 10 <= o; o /= 10, n++) ;
-                return (i = n + 14 * i - 1) > x ? t.c = t.e = null : i < L ? t.c = [t.e = 0] : (t.e = i, t.c = e), t
+                return (i = n + 14 * i - 1) > L ? t.c = t.e = null : i < x ? t.c = [t.e = 0] : (t.e = i, t.c = e), t
             }
 
-            function k(t, e, i, n) {
+            function S(t, e, i, n) {
                 var o, s, r, a, l, h, u, c = t.c, d = H;
                 if (c) {
                     t:{
@@ -6785,7 +6783,7 @@ function posId(t) {
                             u = (r = (s %= 14) - 14 + o) < 0 ? 0 : l / d[o - r - 1] % 10 | 0
                         }
                         if (n = n || e < 0 || null != c[h + 1] || (r < 0 ? l : l % d[o - r - 1]), n = i < 4 ? (u || n) && (0 == i || i == (t.s < 0 ? 3 : 2)) : 5 < u || 5 == u && (4 == i || n || 6 == i && (0 < s ? 0 < r ? l / d[o - r] : 0 : c[h - 1]) % 10 & 1 || i == (t.s < 0 ? 8 : 7)), e < 1 || !c[0]) return c.length = 0, n ? (e -= t.e + 1, c[0] = d[(14 - e % 14) % 14], t.e = -e || 0) : c[0] = t.e = 0, t;
-                        if (0 == s ? (c.length = h, a = 1, h--) : (c.length = h + 1, a = d[14 - s], c[h] = 0 < r ? R(l / d[o - r] % d[r]) * a : 0), n) for (; ;) {
+                        if (0 == s ? (c.length = h, a = 1, h--) : (c.length = h + 1, a = d[14 - s], c[h] = 0 < r ? D(l / d[o - r] % d[r]) * a : 0), n) for (; ;) {
                             if (0 == h) {
                                 for (s = 1, r = c[0]; 10 <= r; r /= 10, s++) ;
                                 for (r = c[0] += a, a = 1; 10 <= r; r /= 10, a++) ;
@@ -6797,12 +6795,12 @@ function posId(t) {
                         }
                         for (s = c.length; 0 === c[--s]; c.pop()) ;
                     }
-                    t.e > x ? t.c = t.e = null : t.e < L && (t.c = [t.e = 0])
+                    t.e > L ? t.c = t.e = null : t.e < x && (t.c = [t.e = 0])
                 }
                 return t
             }
 
-            function O(t) {
+            function A(t) {
                 var e, i = t.e;
                 return null === i ? t.toString() : (e = G(t.c), e = i <= m || b <= i ? Y(e, i) : K(e, i, "0"), t.s < 0 ? "-" + e : e)
             }
@@ -6810,22 +6808,22 @@ function posId(t) {
             return M.clone = N, M.ROUND_UP = 0, M.ROUND_DOWN = 1, M.ROUND_CEIL = 2, M.ROUND_FLOOR = 3, M.ROUND_HALF_UP = 4, M.ROUND_HALF_DOWN = 5, M.ROUND_HALF_EVEN = 6, M.ROUND_HALF_CEIL = 7, M.ROUND_HALF_FLOOR = 8, M.EUCLID = 9, M.config = M.set = function (t) {
                 var e, i;
                 if (null != t) {
-                    if ("object" != typeof t) throw Error(D + "Object expected: " + t);
-                    if (t.hasOwnProperty(e = "DECIMAL_PLACES") && (q(i = t[e], 0, 1e9, e), v = i), t.hasOwnProperty(e = "ROUNDING_MODE") && (q(i = t[e], 0, 8, e), y = i), t.hasOwnProperty(e = "EXPONENTIAL_AT") && ((i = t[e]) && i.pop ? (q(i[0], -1e9, 0, e), q(i[1], 0, 1e9, e), m = i[0], b = i[1]) : (q(i, -1e9, 1e9, e), m = -(b = i < 0 ? -i : i))), t.hasOwnProperty(e = "RANGE")) if ((i = t[e]) && i.pop) q(i[0], -1e9, -1, e), q(i[1], 1, 1e9, e), L = i[0], x = i[1]; else {
-                        if (q(i, -1e9, 1e9, e), !i) throw Error(D + e + " cannot be zero: " + i);
-                        L = -(x = i < 0 ? -i : i)
+                    if ("object" != typeof t) throw Error(R + "Object expected: " + t);
+                    if (t.hasOwnProperty(e = "DECIMAL_PLACES") && (q(i = t[e], 0, 1e9, e), v = i), t.hasOwnProperty(e = "ROUNDING_MODE") && (q(i = t[e], 0, 8, e), y = i), t.hasOwnProperty(e = "EXPONENTIAL_AT") && ((i = t[e]) && i.pop ? (q(i[0], -1e9, 0, e), q(i[1], 0, 1e9, e), m = i[0], b = i[1]) : (q(i, -1e9, 1e9, e), m = -(b = i < 0 ? -i : i))), t.hasOwnProperty(e = "RANGE")) if ((i = t[e]) && i.pop) q(i[0], -1e9, -1, e), q(i[1], 1, 1e9, e), x = i[0], L = i[1]; else {
+                        if (q(i, -1e9, 1e9, e), !i) throw Error(R + e + " cannot be zero: " + i);
+                        x = -(L = i < 0 ? -i : i)
                     }
                     if (t.hasOwnProperty(e = "CRYPTO")) {
-                        if ((i = t[e]) !== !!i) throw Error(D + e + " not true or false: " + i);
-                        if (i && ("undefined" == typeof crypto || !crypto || !crypto.getRandomValues && !crypto.randomBytes)) throw w = !i, Error(D + "crypto unavailable");
+                        if ((i = t[e]) !== !!i) throw Error(R + e + " not true or false: " + i);
+                        if (i && ("undefined" == typeof crypto || !crypto || !crypto.getRandomValues && !crypto.randomBytes)) throw w = !i, Error(R + "crypto unavailable");
                         w = i
                     }
                     if (t.hasOwnProperty(e = "MODULO_MODE") && (q(i = t[e], 0, 9, e), n = i), t.hasOwnProperty(e = "POW_PRECISION") && (q(i = t[e], 0, 1e9, e), P = i), t.hasOwnProperty(e = "FORMAT")) {
-                        if ("object" != typeof (i = t[e])) throw Error(D + e + " not an object: " + i);
+                        if ("object" != typeof (i = t[e])) throw Error(R + e + " not an object: " + i);
                         C = i
                     }
                     if (t.hasOwnProperty(e = "ALPHABET")) {
-                        if ("string" != typeof (i = t[e]) || /^.?$|[+\-.\s]|(.).*\1/.test(i)) throw Error(D + e + " invalid: " + i);
+                        if ("string" != typeof (i = t[e]) || /^.?$|[+\-.\s]|(.).*\1/.test(i)) throw Error(R + e + " invalid: " + i);
                         T = "0123456789" == i.slice(0, 10), E = i
                     }
                 }
@@ -6833,7 +6831,7 @@ function posId(t) {
                     DECIMAL_PLACES: v,
                     ROUNDING_MODE: y,
                     EXPONENTIAL_AT: [m, b],
-                    RANGE: [L, x],
+                    RANGE: [x, L],
                     CRYPTO: w,
                     MODULO_MODE: n,
                     POW_PRECISION: P,
@@ -6845,20 +6843,20 @@ function posId(t) {
                 if (!M.DEBUG) return !0;
                 var e, i, n = t.c, o = t.e, s = t.s;
                 t:if ("[object Array]" == {}.toString.call(n)) {
-                    if ((1 === s || -1 === s) && -1e9 <= o && o <= 1e9 && o === R(o)) if (0 === n[0]) {
+                    if ((1 === s || -1 === s) && -1e9 <= o && o <= 1e9 && o === D(o)) if (0 === n[0]) {
                         if (0 === o && 1 === n.length) return !0
                     } else if ((e = (o + 1) % 14) < 1 && (e += 14), String(n[0]).length == e) {
-                        for (e = 0; e < n.length; e++) if ((i = n[e]) < 0 || F <= i || i !== R(i)) break t;
+                        for (e = 0; e < n.length; e++) if ((i = n[e]) < 0 || F <= i || i !== D(i)) break t;
                         if (0 !== i) return !0
                     }
                 } else if (null === n && null === o && (null === s || 1 === s || -1 === s)) return !0;
-                throw Error(D + "Invalid BigNumber: " + t)
+                throw Error(R + "Invalid BigNumber: " + t)
             }, M.maximum = M.max = function () {
                 return s(arguments, i.lt)
             }, M.minimum = M.min = function () {
                 return s(arguments, i.gt)
             }, M.random = (e = 9007199254740992, h = Math.random() * e & 2097151 ? function () {
-                return R(Math.random() * e)
+                return D(Math.random() * e)
             } : function () {
                 return 8388608 * (1073741824 * Math.random() | 0) + (8388608 * Math.random() | 0)
             }, function (t) {
@@ -6867,12 +6865,12 @@ function posId(t) {
                     for (e = crypto.getRandomValues(new Uint32Array(o *= 2)); r < o;) 9e15 <= (s = 131072 * e[r] + (e[r + 1] >>> 11)) ? (i = crypto.getRandomValues(new Uint32Array(2)), e[r] = i[0], e[r + 1] = i[1]) : (a.push(s % 1e14), r += 2);
                     r = o / 2
                 } else {
-                    if (!crypto.randomBytes) throw w = !1, Error(D + "crypto unavailable");
+                    if (!crypto.randomBytes) throw w = !1, Error(R + "crypto unavailable");
                     for (e = crypto.randomBytes(o *= 7); r < o;) 9e15 <= (s = 281474976710656 * (31 & e[r]) + 1099511627776 * e[r + 1] + 4294967296 * e[r + 2] + 16777216 * e[r + 3] + (e[r + 4] << 16) + (e[r + 5] << 8) + e[r + 6]) ? crypto.randomBytes(7).copy(e, r) : (a.push(s % 1e14), r += 7);
                     r = o / 7
                 }
                 if (!w) for (; r < o;) (s = h()) < 9e15 && (a[r++] = s % 1e14);
-                for (t %= 14, (o = a[--r]) && t && (a[r] = R(o / (s = H[14 - t])) * s); 0 === a[r]; a.pop(), r--) ;
+                for (t %= 14, (o = a[--r]) && t && (a[r] = D(o / (s = H[14 - t])) * s); 0 === a[r]; a.pop(), r--) ;
                 if (r < 0) a = [n = 0]; else {
                     for (n = -1; 0 === a[0]; a.splice(0, 1), n -= 14) ;
                     for (r = 1, s = a[0]; 10 <= s; s /= 10, r++) ;
@@ -6894,23 +6892,23 @@ function posId(t) {
                 }
                 return t
             }, _ = function (t, e, i, n, o) {
-                var s, r, a, l, h, u, c, d, p, f, m, _, g, v, y, b, L, x = t.s == e.s ? 1 : -1, w = t.c, P = e.c;
-                if (!(w && w[0] && P && P[0])) return new M(t.s && e.s && (w ? !P || w[0] != P[0] : P) ? w && 0 == w[0] || !P ? 0 * x : x / 0 : NaN);
-                for (p = (d = new M(x)).c = [], x = i + (r = t.e - e.e) + 1, o || (o = F, r = W(t.e / 14) - W(e.e / 14), x = x / 14 | 0), a = 0; P[a] == (w[a] || 0); a++) ;
-                if (P[a] > (w[a] || 0) && r--, x < 0) p.push(1), l = !0; else {
-                    for (v = w.length, b = P.length, x += 2, 1 < (h = R(o / (P[a = 0] + 1))) && (P = A(P, h, o), w = A(w, h, o), b = P.length, v = w.length), g = b, m = (f = w.slice(0, b)).length; m < b; f[m++] = 0) ;
-                    L = P.slice(), L = [0].concat(L), y = P[0], P[1] >= o / 2 && y++;
+                var s, r, a, l, h, u, c, d, p, f, m, _, g, v, y, b, x, L = t.s == e.s ? 1 : -1, w = t.c, P = e.c;
+                if (!(w && w[0] && P && P[0])) return new M(t.s && e.s && (w ? !P || w[0] != P[0] : P) ? w && 0 == w[0] || !P ? 0 * L : L / 0 : NaN);
+                for (p = (d = new M(L)).c = [], L = i + (r = t.e - e.e) + 1, o || (o = F, r = W(t.e / 14) - W(e.e / 14), L = L / 14 | 0), a = 0; P[a] == (w[a] || 0); a++) ;
+                if (P[a] > (w[a] || 0) && r--, L < 0) p.push(1), l = !0; else {
+                    for (v = w.length, b = P.length, L += 2, 1 < (h = D(o / (P[a = 0] + 1))) && (P = O(P, h, o), w = O(w, h, o), b = P.length, v = w.length), g = b, m = (f = w.slice(0, b)).length; m < b; f[m++] = 0) ;
+                    x = P.slice(), x = [0].concat(x), y = P[0], P[1] >= o / 2 && y++;
                     do {
                         if (h = 0, (s = I(P, f, b, m)) < 0) {
-                            if (_ = f[0], b != m && (_ = _ * o + (f[1] || 0)), 1 < (h = R(_ / y))) for (c = (u = A(P, h = o <= h ? o - 1 : h, o)).length, m = f.length; 1 == I(u, f, c, m);) h--, z(u, b < c ? L : P, c, o), c = u.length, s = 1; else 0 == h && (s = h = 1), c = (u = P.slice()).length;
-                            if (z(f, u = c < m ? [0].concat(u) : u, m, o), m = f.length, -1 == s) for (; I(P, f, b, m) < 1;) h++, z(f, b < m ? L : P, m, o), m = f.length
+                            if (_ = f[0], b != m && (_ = _ * o + (f[1] || 0)), 1 < (h = D(_ / y))) for (c = (u = O(P, h = o <= h ? o - 1 : h, o)).length, m = f.length; 1 == I(u, f, c, m);) h--, z(u, b < c ? x : P, c, o), c = u.length, s = 1; else 0 == h && (s = h = 1), c = (u = P.slice()).length;
+                            if (z(f, u = c < m ? [0].concat(u) : u, m, o), m = f.length, -1 == s) for (; I(P, f, b, m) < 1;) h++, z(f, b < m ? x : P, m, o), m = f.length
                         } else 0 === s && (h++, f = [0])
-                    } while (p[a++] = h, f[0] ? f[m++] = w[g] || 0 : (f = [w[g]], m = 1), (g++ < v || null != f[0]) && x--);
+                    } while (p[a++] = h, f[0] ? f[m++] = w[g] || 0 : (f = [w[g]], m = 1), (g++ < v || null != f[0]) && L--);
                     l = null != f[0], p[0] || p.splice(0, 1)
                 }
                 if (o == F) {
-                    for (a = 1, x = p[0]; 10 <= x; x /= 10, a++) ;
-                    k(d, i + (d.e = a + 14 * r - 1) + 1, n, l)
+                    for (a = 1, L = p[0]; 10 <= L; L /= 10, a++) ;
+                    S(d, i + (d.e = a + 14 * r - 1) + 1, n, l)
                 } else d.e = r, d.r = +l;
                 return d
             }, r = /^(-?)0([xbo])(?=\w[\w.]*$)/i, a = /^([^.]+)\.$/, l = /^\.([^.]+)$/, u = /^-?(Infinity|NaN)$/, p = /^\s*\+(?=[\w.])|^\s+|\s+$/g, d = function (t, e, i, n) {
@@ -6919,7 +6917,7 @@ function posId(t) {
                     if (!i && (s = s.replace(r, function (t, e, i) {
                         return o = "x" == (i = i.toLowerCase()) ? 16 : "b" == i ? 2 : 8, n && n != o ? t : e
                     }), n && (o = n, s = s.replace(a, "$1").replace(l, "0.$1")), e != s)) return new M(s, o);
-                    if (M.DEBUG) throw Error(D + "Not a" + (n ? " base " + n : "") + " number: " + e);
+                    if (M.DEBUG) throw Error(R + "Not a" + (n ? " base " + n : "") + " number: " + e);
                     t.s = null
                 }
                 t.c = t.e = null
@@ -6930,7 +6928,7 @@ function posId(t) {
                 return V(this, new M(t, e))
             }, i.decimalPlaces = i.dp = function (t, e) {
                 var i, n;
-                if (null != t) return q(t, 0, 1e9), null == e ? e = y : q(e, 0, 8), k(new M(this), t + this.e + 1, e);
+                if (null != t) return q(t, 0, 1e9), null == e ? e = y : q(e, 0, 8), S(new M(this), t + this.e + 1, e);
                 if (!(t = this.c)) return null;
                 if (i = 14 * ((n = t.length - 1) - W(this.e / 14)), n = t[n]) for (; n % 10 == 0; n /= 10, i--) ;
                 return i = i < 0 ? 0 : i
@@ -6940,8 +6938,8 @@ function posId(t) {
                 return _(this, new M(t, e), 0, 1)
             }, i.exponentiatedBy = i.pow = function (t, e) {
                 var i, n, o, s, r, a, l, h, u = this;
-                if ((t = new M(t)).c && !t.isInteger()) throw Error(D + "Exponent not an integer: " + O(t));
-                if (null != e && (e = new M(e)), r = 14 < t.e, !u.c || !u.c[0] || 1 == u.c[0] && !u.e && 1 == u.c.length || !t.c || !t.c[0]) return h = new M(Math.pow(+O(u), r ? t.s * (2 - $(t)) : +O(t))), e ? h.mod(e) : h;
+                if ((t = new M(t)).c && !t.isInteger()) throw Error(R + "Exponent not an integer: " + A(t));
+                if (null != e && (e = new M(e)), r = 14 < t.e, !u.c || !u.c[0] || 1 == u.c[0] && !u.e && 1 == u.c.length || !t.c || !t.c[0]) return h = new M(Math.pow(+A(u), r ? t.s * (2 - $(t)) : +A(t))), e ? h.mod(e) : h;
                 if (a = t.s < 0, e) {
                     if (e.c ? !e.c[0] : !e.s) return new M(NaN);
                     (n = !a && u.isInteger() && e.isInteger()) && (u = u.mod(e))
@@ -6949,24 +6947,24 @@ function posId(t) {
                     if (9 < t.e && (0 < u.e || u.e < -1 || (0 == u.e ? 1 < u.c[0] || r && 24e7 <= u.c[1] : u.c[0] < 8e13 || r && u.c[0] <= 9999975e7))) return s = u.s < 0 && $(t) ? -0 : 0, -1 < u.e && (s = 1 / s), new M(a ? 1 / s : s);
                     P && (s = Z(P / 14 + 2))
                 }
-                for (l = r ? (i = new M(.5), a && (t.s = 1), $(t)) : (o = Math.abs(+O(t))) % 2, h = new M(f); ;) {
+                for (l = r ? (i = new M(.5), a && (t.s = 1), $(t)) : (o = Math.abs(+A(t))) % 2, h = new M(f); ;) {
                     if (l) {
                         if (!(h = h.times(u)).c) break;
                         s ? h.c.length > s && (h.c.length = s) : n && (h = h.mod(e))
                     }
                     if (o) {
-                        if (0 === (o = R(o / 2))) break;
+                        if (0 === (o = D(o / 2))) break;
                         l = o % 2
-                    } else if (k(t = t.times(i), t.e + 1, 1), 14 < t.e) l = $(t); else {
-                        if (0 == (o = +O(t))) break;
+                    } else if (S(t = t.times(i), t.e + 1, 1), 14 < t.e) l = $(t); else {
+                        if (0 == (o = +A(t))) break;
                         l = o % 2
                     }
                     u = u.times(u), s ? u.c && u.c.length > s && (u.c.length = s) : n && (u = u.mod(e))
                 }
-                return n ? h : (a && (h = f.div(h)), e ? h.mod(e) : s ? k(h, P, y, void 0) : h)
+                return n ? h : (a && (h = f.div(h)), e ? h.mod(e) : s ? S(h, P, y, void 0) : h)
             }, i.integerValue = function (t) {
                 var e = new M(this);
-                return null == t ? t = y : q(t, 0, 8), k(e, e.e + 1, t)
+                return null == t ? t = y : q(t, 0, 8), S(e, e.e + 1, t)
             }, i.isEqualTo = i.eq = function (t, e) {
                 return 0 === V(this, new M(t, e))
             }, i.isFinite = function () {
@@ -7014,7 +7012,7 @@ function posId(t) {
                     h[n] -= u[n]
                 }
                 for (; 0 == h[0]; h.splice(0, 1), --l) ;
-                return h[0] ? S(t, h, l) : (t.s = 3 == y ? -1 : 1, t.c = [t.e = 0], t)
+                return h[0] ? k(t, h, l) : (t.s = 3 == y ? -1 : 1, t.c = [t.e = 0], t)
             }, i.modulo = i.mod = function (t, e) {
                 var i;
                 return t = new M(t, e), !this.c || !t.s || t.c && !t.c[0] ? new M(NaN) : !t.c || this.c && !this.c[0] ? new M(this) : (9 == n ? (e = t.s, t.s = 1, i = _(this, t, 0, 3), t.s = e, i.s *= e) : i = _(this, t, 0, n), (t = this.minus(i.times(t))).c[0] || 1 != n || (t.s = this.s), t)
@@ -7026,7 +7024,7 @@ function posId(t) {
                     for (c = m[n] % 1e7, d = m[n] / 1e7 | (i = 0), o = n + (s = a); n < o;) i = ((l = c * (l = f[--s] % 1e7) + (r = d * l + (h = f[s] / 1e7 | 0) * c) % 1e7 * 1e7 + p[o] + i) / 1e14 | 0) + (r / 1e7 | 0) + d * h, p[o--] = l % 1e14;
                     p[o] = i
                 }
-                return i ? ++e : p.splice(0, 1), S(t, p, e)
+                return i ? ++e : p.splice(0, 1), k(t, p, e)
             }, i.negated = function () {
                 var t = new M(this);
                 return t.s = -t.s || null, t
@@ -7044,10 +7042,10 @@ function posId(t) {
                     i.reverse()
                 }
                 for ((n = r.length) - (e = a.length) < 0 && (i = a, a = r, r = i, e = n), n = 0; e;) n = (r[--e] = r[e] + a[e] + n) / F | 0, r[e] = F === r[e] ? 0 : r[e] % F;
-                return n && (r = [n].concat(r), ++s), S(t, r, s)
+                return n && (r = [n].concat(r), ++s), k(t, r, s)
             }, i.precision = i.sd = function (t, e) {
                 var i, n;
-                if (null != t && t !== !!t) return q(t, 1, 1e9), null == e ? e = y : q(e, 0, 8), k(new M(this), t, e);
+                if (null != t && t !== !!t) return q(t, 1, 1e9), null == e ? e = y : q(e, 0, 8), S(new M(this), t, e);
                 if (!(e = this.c)) return null;
                 if (i = 14 * (n = e.length - 1) + 1, n = e[n]) {
                     for (; n % 10 == 0; n /= 10, i--) ;
@@ -7059,24 +7057,24 @@ function posId(t) {
             }, i.squareRoot = i.sqrt = function () {
                 var t, e, i, n, o, s = this.c, r = this.s, a = this.e, l = v + 4, h = new M("0.5");
                 if (1 !== r || !s || !s[0]) return new M(!r || r < 0 && (!s || s[0]) ? NaN : s ? this : 1 / 0);
-                if ((i = 0 == (r = Math.sqrt(+O(this))) || r == 1 / 0 ? (((e = G(s)).length + a) % 2 == 0 && (e += "0"), r = Math.sqrt(+e), a = W((a + 1) / 2) - (a < 0 || a % 2), new M(e = r == 1 / 0 ? "5e" + a : (e = r.toExponential()).slice(0, e.indexOf("e") + 1) + a)) : new M(r + "")).c[0]) for ((r = (a = i.e) + l) < 3 && (r = 0); ;) if (o = i, i = h.times(o.plus(_(this, o, l, 1))), G(o.c).slice(0, r) === (e = G(i.c)).slice(0, r)) {
+                if ((i = 0 == (r = Math.sqrt(+A(this))) || r == 1 / 0 ? (((e = G(s)).length + a) % 2 == 0 && (e += "0"), r = Math.sqrt(+e), a = W((a + 1) / 2) - (a < 0 || a % 2), new M(e = r == 1 / 0 ? "5e" + a : (e = r.toExponential()).slice(0, e.indexOf("e") + 1) + a)) : new M(r + "")).c[0]) for ((r = (a = i.e) + l) < 3 && (r = 0); ;) if (o = i, i = h.times(o.plus(_(this, o, l, 1))), G(o.c).slice(0, r) === (e = G(i.c)).slice(0, r)) {
                     if (i.e < a && --r, "9999" != (e = e.slice(r - 3, r + 1)) && (n || "4999" != e)) {
-                        +e && (+e.slice(1) || "5" != e.charAt(0)) || (k(i, i.e + v + 2, 1), t = !i.times(i).eq(this));
+                        +e && (+e.slice(1) || "5" != e.charAt(0)) || (S(i, i.e + v + 2, 1), t = !i.times(i).eq(this));
                         break
                     }
-                    if (!n && (k(o, o.e + v + 2, 0), o.times(o).eq(this))) {
+                    if (!n && (S(o, o.e + v + 2, 0), o.times(o).eq(this))) {
                         i = o;
                         break
                     }
                     l += 4, r += 4, n = 1
                 }
-                return k(i, i.e + v + 1, y, t)
+                return S(i, i.e + v + 1, y, t)
             }, i.toExponential = function (t, e) {
                 return null != t && (q(t, 0, 1e9), t++), o(this, t, e, 1)
             }, i.toFixed = function (t, e) {
                 return null != t && (q(t, 0, 1e9), t = t + this.e + 1), o(this, t, e)
             }, i.toFormat = function (t, e, i) {
-                if (null == i) null != t && e && "object" == typeof e ? (i = e, e = null) : t && "object" == typeof t ? (i = t, t = e = null) : i = C; else if ("object" != typeof i) throw Error(D + "Argument not an object: " + i);
+                if (null == i) null != t && e && "object" == typeof e ? (i = e, e = null) : t && "object" == typeof t ? (i = t, t = e = null) : i = C; else if ("object" != typeof i) throw Error(R + "Argument not an object: " + i);
                 if (t = this.toFixed(t, e), this.c) {
                     var n, e = t.split("."), o = +i.groupSize, s = +i.secondaryGroupSize, r = i.groupSeparator || "",
                         a = e[0], e = e[1], l = this.s < 0, h = l ? a.slice(1) : a, u = h.length;
@@ -7089,22 +7087,22 @@ function posId(t) {
                 return (i.prefix || "") + t + (i.suffix || "")
             }, i.toFraction = function (t) {
                 var e, i, n, o, s, r, a, l, h, u, c = this.c;
-                if (null != t && (!(a = new M(t)).isInteger() && (a.c || 1 !== a.s) || a.lt(f))) throw Error(D + "Argument " + (a.isInteger() ? "out of range: " : "not an integer: ") + O(a));
+                if (null != t && (!(a = new M(t)).isInteger() && (a.c || 1 !== a.s) || a.lt(f))) throw Error(R + "Argument " + (a.isInteger() ? "out of range: " : "not an integer: ") + A(a));
                 if (!c) return new M(this);
-                for (e = new M(f), h = i = new M(f), n = l = new M(f), c = G(c), s = e.e = c.length - this.e - 1, e.c[0] = H[(r = s % 14) < 0 ? 14 + r : r], t = !t || 0 < a.comparedTo(e) ? 0 < s ? e : h : a, r = x, x = 1 / 0, a = new M(c), l.c[0] = 0; u = _(a, e, 0, 1), 1 != (o = i.plus(u.times(n))).comparedTo(t);) i = n, n = o, h = l.plus(u.times(o = h)), l = o, e = a.minus(u.times(o = e)), a = o;
-                return o = _(t.minus(i), n, 0, 1), l = l.plus(o.times(h)), i = i.plus(o.times(n)), l.s = h.s = this.s, c = _(h, n, s *= 2, y).minus(this).abs().comparedTo(_(l, i, s, y).minus(this).abs()) < 1 ? [h, n] : [l, i], x = r, c
+                for (e = new M(f), h = i = new M(f), n = l = new M(f), c = G(c), s = e.e = c.length - this.e - 1, e.c[0] = H[(r = s % 14) < 0 ? 14 + r : r], t = !t || 0 < a.comparedTo(e) ? 0 < s ? e : h : a, r = L, L = 1 / 0, a = new M(c), l.c[0] = 0; u = _(a, e, 0, 1), 1 != (o = i.plus(u.times(n))).comparedTo(t);) i = n, n = o, h = l.plus(u.times(o = h)), l = o, e = a.minus(u.times(o = e)), a = o;
+                return o = _(t.minus(i), n, 0, 1), l = l.plus(o.times(h)), i = i.plus(o.times(n)), l.s = h.s = this.s, c = _(h, n, s *= 2, y).minus(this).abs().comparedTo(_(l, i, s, y).minus(this).abs()) < 1 ? [h, n] : [l, i], L = r, c
             }, i.toNumber = function () {
-                return +O(this)
+                return +A(this)
             }, i.toPrecision = function (t, e) {
                 return null != t && q(t, 1, 1e9), o(this, t, e, 2)
             }, i.toString = function (t) {
                 var e, i = this, n = i.s, o = i.e;
-                return null === o ? n ? (e = "Infinity", n < 0 && (e = "-" + e)) : e = "NaN" : (e = null == t ? o <= m || b <= o ? Y(G(i.c), o) : K(G(i.c), o, "0") : 10 === t && T ? K(G((i = k(new M(i), v + o + 1, y)).c), i.e, "0") : (q(t, 2, E.length, "Base"), c(K(G(i.c), o, "0"), 10, t, n, !0)), n < 0 && i.c[0] && (e = "-" + e)), e
+                return null === o ? n ? (e = "Infinity", n < 0 && (e = "-" + e)) : e = "NaN" : (e = null == t ? o <= m || b <= o ? Y(G(i.c), o) : K(G(i.c), o, "0") : 10 === t && T ? K(G((i = S(new M(i), v + o + 1, y)).c), i.e, "0") : (q(t, 2, E.length, "Base"), c(K(G(i.c), o, "0"), 10, t, n, !0)), n < 0 && i.c[0] && (e = "-" + e)), e
             }, i.valueOf = i.toJSON = function () {
-                return O(this)
+                return A(this)
             }, i._isBigNumber = !0, i[Symbol.toStringTag] = "BigNumber", i[Symbol.for("nodejs.util.inspect.custom")] = i.valueOf, null != t && M.set(t), M;
 
-            function A(t, e, i) {
+            function O(t, e, i) {
                 var n, o, s, r = 0, a = t.length, l = e % 1e7, h = e / 1e7 | 0;
                 for (t = t.slice(); a--;) r = ((o = l * (s = t[a] % 1e7) + (n = h * s + (s = t[a] / 1e7 | 0) * l) % 1e7 * 1e7 + r) / i | 0) + (n / 1e7 | 0) + h * s, t[a] = o % i;
                 return t = r ? [r].concat(t) : t
@@ -7138,7 +7136,7 @@ function posId(t) {
         }
 
         (t = i = i || {})[t.up = p.ROUND_UP] = "up", t[t.down = p.ROUND_DOWN] = "down", t[t.truncate = p.ROUND_DOWN] = "truncate", t[t.halfUp = p.ROUND_HALF_UP] = "halfUp", t[t.default = p.ROUND_HALF_UP] = "default", t[t.halfDown = p.ROUND_HALF_DOWN] = "halfDown", t[t.halfEven = p.ROUND_HALF_EVEN] = "halfEven", t[t.banker = p.ROUND_HALF_EVEN] = "banker", t[t.ceiling = p.ROUND_CEIL] = "ceiling", t[t.ceil = p.ROUND_CEIL] = "ceil", t[t.floor = p.ROUND_FLOOR] = "floor";
-        var t = nt(6796), S = nt.n(t);
+        var t = nt(6796), k = nt.n(t);
 
         function f(t, e) {
             [o, {precision: n, significant: i}] = [t, e];
@@ -7165,7 +7163,7 @@ function posId(t) {
                 whole: r,
                 significand: a,
                 precision: e.precision
-            }][0], "0" === u || null === n ? o : (n = Math.max(0, n - u.length), (null != o ? o : "").substr(0, n))) : null != a ? a : S()("0", null != (u = e.precision) ? u : 0), e.stripInsignificantZeros && (a = a && a.replace(/0+$/, "")), i.isNaN() && (h = t.toString()), a && i.isFinite() && (h += (e.separator || ".") + a), [o, {
+            }][0], "0" === u || null === n ? o : (n = Math.max(0, n - u.length), (null != o ? o : "").substr(0, n))) : null != a ? a : k()("0", null != (u = e.precision) ? u : 0), e.stripInsignificantZeros && (a = a && a.replace(/0+$/, "")), i.isNaN() && (h = t.toString()), a && i.isFinite() && (h += (e.separator || ".") + a), [o, {
                 formattedNumber: n,
                 unit: u
             }] = [s, {formattedNumber: h, unit: e.unit}], o.replace("%n", n).replace("%u", u)
@@ -7201,7 +7199,7 @@ function posId(t) {
             return n.push(t.defaultValue), n.find(t => h(t))
         }
 
-        var t = nt(9734), k = nt.n(t), t = nt(7287);
+        var t = nt(9734), S = nt.n(t), t = nt(7287);
         const _ = {
                 0: "unit",
                 1: "ten",
@@ -7218,7 +7216,7 @@ function posId(t) {
                 "-9": "nano",
                 "-12": "pico",
                 "-15": "femto"
-            }, O = nt.n(t)()(Object.values(_), Object.keys(_).map(t => parseInt(t, 10))),
+            }, A = nt.n(t)()(Object.values(_), Object.keys(_).map(t => parseInt(t, 10))),
             g = ["byte", "kb", "mb", "gb", "tb", "pb", "eb"];
 
         function b(t) {
@@ -7251,7 +7249,7 @@ function posId(t) {
             return h(r) ? (n.count = e, t.interpolate(t, r, n)) : t.missingTranslation.get(o.split(t.defaultSeparator).concat([l[0]]), n)
         }
 
-        var t = nt(3218), A = nt.n(t), t = nt(2348), I = nt.n(t);
+        var t = nt(3218), O = nt.n(t), t = nt(2348), I = nt.n(t);
 
         class z {
             constructor(t) {
@@ -7264,7 +7262,7 @@ function posId(t) {
             }
 
             compute(e, i) {
-                return !Array.isArray(e) && A()(e) ? Object.keys(e).map(t => this.compute(e[t], i + "." + t)) : i
+                return !Array.isArray(e) && O()(e) ? Object.keys(e).map(t => this.compute(e[t], i + "." + t)) : i
             }
         }
 
@@ -7281,7 +7279,7 @@ function posId(t) {
             return e = (e = e instanceof Array ? e.join(t.defaultSeparator) : e).split(t.defaultSeparator).slice(-1)[0], t.missingTranslationPrefix + e.replace("_", " ").replace(/([a-z])([A-Z])/g, (t, e, i) => e + " " + i.toLowerCase())
         }
 
-        const L = (t, e, i) => t <= i && i <= e, Q = (t, e, i) => {
+        const x = (t, e, i) => t <= i && i <= e, Q = (t, e, i) => {
             var e = a(t, e, i), i = ("locale" in i ? i : t).locale, n = l(i);
             return `[missing "${["string" == n ? i : n, e].join(t.defaultSeparator)}" translation]`
         }, tt = (t, e, i) => {
@@ -7304,7 +7302,7 @@ function posId(t) {
             }
         }
 
-        const x = {
+        const L = {
             defaultLocale: "en",
             availableLocales: ["en"],
             locale: "en",
@@ -7320,7 +7318,7 @@ function posId(t) {
 
         class it {
             constructor(t = {}, e = {}) {
-                this._locale = x.locale, this._defaultLocale = x.defaultLocale, this._version = 0, this.onChangeHandlers = [], this.translations = {}, this.availableLocales = [], this.t = this.translate, this.p = this.pluralize, this.l = this.localize, this.distanceOfTimeInWords = this.timeAgoInWords;
+                this._locale = L.locale, this._defaultLocale = L.defaultLocale, this._version = 0, this.onChangeHandlers = [], this.translations = {}, this.availableLocales = [], this.t = this.translate, this.p = this.pluralize, this.l = this.localize, this.distanceOfTimeInWords = this.timeAgoInWords;
                 var {
                     locale: e,
                     enableFallback: i,
@@ -7332,7 +7330,7 @@ function posId(t) {
                     defaultSeparator: l,
                     placeholder: h,
                     transformKey: u
-                } = Object.assign(Object.assign({}, x), e);
+                } = Object.assign(Object.assign({}, L), e);
                 this.locale = e, this.defaultLocale = a, this.defaultSeparator = l, this.enableFallback = i, this.locale = e, this.missingBehavior = n, this.missingTranslationPrefix = o, this.missingPlaceholder = s, this.nullPlaceholder = r, this.placeholder = h, this.pluralization = new d(this), this.locales = new c(this), this.missingTranslation = new et(this), this.transformKey = u, this.interpolate = m, this.store(t)
             }
 
@@ -7496,7 +7494,7 @@ function posId(t) {
                     let i = f(new p(s), e);
                     var r, o = ((t, e) => {
                         const i = t.isZero() ? 0 : Math.floor(Math.log10(t.abs().toNumber()));
-                        return t = e, k()(Object.keys(t).map(t => O[t]), t => -1 * t).find(t => i >= t) || 0
+                        return t = e, S()(Object.keys(t).map(t => A[t]), t => -1 * t).find(t => i >= t) || 0
                     })(new p(i), t), s = (s = t, r = o, s[_[r.toString()]] || "");
                     if (i = f(new p(i).div(Math.pow(10, o)), e), n.stripInsignificantZeros) {
                         let [t, e] = i.split(".");
@@ -7630,14 +7628,14 @@ function posId(t) {
                     t > e && ([o, s, t, e] = [s, o, e, t]);
                     var l = Math.round(e - t), h = Math.round((e - t) / 60), u = h / 60 / 24, c = Math.round(h / 60),
                         u = Math.round(u), d = Math.round(u / 30);
-                    if (L(0, 1, h)) return r.includeSeconds ? L(0, 4, l) ? f("less_than_x_seconds", 5) : L(5, 9, l) ? f("less_than_x_seconds", 10) : L(10, 19, l) ? f("less_than_x_seconds", 20) : L(20, 39, l) ? f("half_a_minute") : L(40, 59, l) ? f("less_than_x_minutes", 1) : f("x_minutes", 1) : 0 === h ? f("less_than_x_minutes", 1) : f("x_minutes", h);
-                    if (L(2, 44, h)) return f("x_minutes", h);
-                    if (L(45, 89, h)) return f("about_x_hours", 1);
-                    if (L(90, 1439, h)) return f("about_x_hours", c);
-                    if (L(1440, 2519, h)) return f("x_days", 1);
-                    if (L(2520, 43199, h)) return f("x_days", u);
-                    if (L(43200, 86399, h)) return f("about_x_months", Math.round(h / 43200));
-                    if (L(86400, 525599, h)) return f("x_months", d);
+                    if (x(0, 1, h)) return r.includeSeconds ? x(0, 4, l) ? f("less_than_x_seconds", 5) : x(5, 9, l) ? f("less_than_x_seconds", 10) : x(10, 19, l) ? f("less_than_x_seconds", 20) : x(20, 39, l) ? f("half_a_minute") : x(40, 59, l) ? f("less_than_x_minutes", 1) : f("x_minutes", 1) : 0 === h ? f("less_than_x_minutes", 1) : f("x_minutes", h);
+                    if (x(2, 44, h)) return f("x_minutes", h);
+                    if (x(45, 89, h)) return f("about_x_hours", 1);
+                    if (x(90, 1439, h)) return f("about_x_hours", c);
+                    if (x(1440, 2519, h)) return f("x_days", 1);
+                    if (x(2520, 43199, h)) return f("x_days", u);
+                    if (x(43200, 86399, h)) return f("about_x_months", Math.round(h / 43200));
+                    if (x(86400, 525599, h)) return f("x_months", d);
                     let i = o.getFullYear(), n = (3 <= o.getMonth() + 1 && (i += 1), s.getFullYear());
                     return s.getMonth() + 1 < 3 && --n, r = h - 1440 * (i > n ? 0 : N()(i, n).filter(t => 1 == new Date(t, 1, 29).getMonth()).length), l = Math.trunc(r / 525600), (c = parseFloat((r / 525600 - l).toPrecision(3))) < .25 ? f("about_x_years", l) : c < .75 ? f("over_x_years", l) : f("almost_x_years", l + 1)
                 }
@@ -7696,14 +7694,14 @@ function posId(t) {
             t && (t.classList ? t.classList.remove(e) : t.className = t.className.replace(new RegExp("(^|\\b)" + e.split(" ").join("|") + "(\\b|$)", "gi"), " "))
         }
 
-        function r(e, t) {
+        function i(e, t) {
             t = document.getElementsByClassName(t);
             Array.from(t).forEach(t => {
                 s(t, e)
             })
         }
 
-        function a(n, o, s) {
+        function r(n, o, s) {
             let r;
             return function () {
                 const t = this, e = arguments;
@@ -7714,10 +7712,16 @@ function posId(t) {
             }
         }
 
+        function a(t, e) {
+            "BUTTON" !== t.tagName && "A" !== t.tagName && t.setAttribute("role", "button"), t.addEventListener("click", e), t.addEventListener("keydown", t => {
+                "Enter" !== t.key && " " !== t.key || (t.preventDefault(), e(t))
+            })
+        }
+
         var l, h, e;
         (e = l = l || {})[e.DELIVERY = "DELIVERY"] = "DELIVERY", e[e.POSTING = "POSTING"] = "POSTING";
 
-        class i {
+        class c {
             constructor(t = !1) {
                 let e;
                 t ? (e = "https://pos.sandbox-bliskapaczka.pl", this.apiContextUrl = "https://api.sandbox-bliskapaczka.pl") : (e = "https://pos.bliskapaczka.pl", this.apiContextUrl = "https://api.bliskapaczka.pl"), this.posEndpointUrl = e + "/api/v1/pos", this.configurationUrl = this.apiContextUrl + "/v2/config/pointsmap/", this.openStreetMapApiUrl = "https://osm-search-eu.apaczka.pl/search"
@@ -7763,12 +7767,12 @@ function posId(t) {
 
             listPos(t, e, i, n, o) {
                 var s = this.posEndpointUrl + "/filter", r = new URLSearchParams;
-                r.append("fields", "operator,code,latitude,longitude,brand,cod,brandPretty,operatorPretty,available,street,city,postalCode"), t.brandMode ? (t.operators && r.append("operators", t.operators.map(t => t.operator).join(",")), r.append("brands", e.join(" "))) : r.append("operators", e.join(",")), (t.codOnly || i) && r.append("cod", "true"), t.countryCodes && r.append("countryCodes", t.countryCodes), t.mapState.coordinates && t.mapState.radius && (r.append("lat", "" + t.mapState.coordinates.lat), r.append("lon", "" + t.mapState.coordinates.lng), r.append("distance", "" + t.mapState.radius), r.append("distanceUnit", "KM"), this.lastPosListParams = {
+                r.append("fields", "operator,code,latitude,longitude,brand,cod,brandPretty,operatorPretty,available,street,city,postalCode"), this.applyOptionFilters(r, t, e, i), t.mapState.coordinates && t.mapState.radius && (r.append("lat", "" + t.mapState.coordinates.lat), r.append("lon", "" + t.mapState.coordinates.lng), r.append("distance", "" + t.mapState.radius), r.append("distanceUnit", "KM"), this.lastPosListParams = {
                     coordinates: {
                         lat: t.mapState.coordinates.lat,
                         lng: t.mapState.coordinates.lng
                     }, radius: t.mapState.radius, zoom: t.mapState.zoom, brandMode: t.brandMode
-                }), t.posType && r.append("posType", l[t.posType].toLowerCase()), s += "?" + r.toString(), this.xhrRequest(s, "GET", !0, t => {
+                }), s += "?" + r.toString(), this.xhrRequest(s, "GET", !0, t => {
                     n(t)
                 }, t => {
                     this.lastPosListParams = null, o(t)
@@ -7777,7 +7781,7 @@ function posId(t) {
 
             autocompletePosFilter(t, e, i, n) {
                 var o = this.posEndpointUrl + "/filter", s = new URLSearchParams;
-                s.append("searchText", t), s.append("size", "10"), e.countryCodes && s.append("countryCodes", e.countryCodes), s.append("fields", "code,city,street,brand,operator"), e.brandMode ? (e.operators && s.append("operators", e.operators.map(t => t.operator).join(",")), s.append("brand", i.join(" "))) : s.append("operators", i.join(",")), e.posType && s.append("posType", l[e.posType].toLowerCase()), o += "?" + s.toString(), this.xhrRequest(o, "GET", !0, t => {
+                s.append("searchText", t), s.append("size", "10"), s.append("fields", "code,city,street,brand,operator"), this.applyOptionFilters(s, e, i), o += "?" + s.toString(), this.xhrRequest(o, "GET", !0, t => {
                     n(t)
                 }, () => {
                 })
@@ -7803,11 +7807,15 @@ function posId(t) {
                     o(s.responseText)
                 }, s.send()
             }
+
+            applyOptionFilters(t, e, i, n) {
+                e.brandMode ? (e.operators && t.append("operators", e.operators.map(t => t.operator).join(",")), t.append("brands", i.join(" "))) : t.append("operators", i.join(",")), e.countryCodes && t.append("countryCodes", e.countryCodes), (e.codOnly || n) && t.append("cod", "true"), e.posType && t.append("posType", l[e.posType].toLowerCase()), e.pointTypes && t.append("pointTypes", e.pointTypes)
+            }
         }
 
-        class c {
+        class d {
             static asset(t) {
-                return "https://widget.bliskapaczka.pl/v8.2/" + t
+                return "https://map.alsendo.com/v8.6/" + t
             }
 
             static posImage(t) {
@@ -7839,8 +7847,8 @@ function posId(t) {
 
             static footer(t, e, i) {
                 return `<div class="bp-footer-content">
-                                <a href="${t ? i || "https://apaczka.pl" : "https://bliskapaczka.pl"}" target="_blank">
-                                    <img class="${t ? "custom-footer-logo" : "bp-footer-logo"}" src="${t ? e || this.asset("images/apaczka_logo.svg") : this.asset("images/alsendo_logo.svg")}">
+                                <a href="${t ? i || "https://apaczka.pl" : "https://bliskapaczka.pl"}" class="footer-link" target="_blank">
+                                    <img class="${t ? "custom-footer-logo" : "bp-footer-logo"}" src="${t ? e || this.asset("images/apaczka_logo.svg") : this.asset("images/alsendo_logo.svg")}" alt="${i18n.t("partials.partner_logo")}">
                                 </a>
                                 ${t ? `<div class="powered-by">
                                                     <div class="powered-by-label">
@@ -7851,7 +7859,8 @@ function posId(t) {
             }
 
             static parcelPrice(t) {
-                return t && (t.price || 0 == t.price) ? t.price.toFixed(2).replace(".", ",") + " zł" : ""
+                var e = (null == t ? void 0 : t.currency) || "zÅ‚";
+                return t && (t.price || 0 == t.price) ? t.price.toFixed(2).replace(".", ",") + " " + e : ""
             }
 
             static posType(t) {
@@ -7865,7 +7874,7 @@ function posId(t) {
 
             static pointTypeTag(t, e) {
                 var i = [];
-                return "RUCH" === e && (t.includes("PSD") && i.push("Salonik RUCH"), t.includes("APM") && i.push("Automat paczkowy Orlen Paczka"), t.includes("PKN")) && i.push("Stacja paliw Orlen"), "INPOST" === e && (t.some(t => ["POP", "POK", "PARCEL_LOCKER_SUPERPOP"].includes(t)) && i.push("Punkt obsługi przesyłki PaczkoPunkt"), 1 == t.length) && "PARCEL_LOCKER" === t[0] && i.push("Paczkomat 24/7"), i
+                return "RUCH" === e && (t.includes("PSD") && i.push("Salonik RUCH"), t.includes("APM") && i.push("Automat paczkowy Orlen Paczka"), t.includes("PKN")) && i.push("Stacja paliw Orlen"), "INPOST" === e && (t.some(t => ["POP", "POK", "PARCEL_LOCKER_SUPERPOP"].includes(t)) && i.push("Punkt obsÅ‚ugi przesyÅ‚ki PaczkoPunkt"), 1 == t.length) && "PARCEL_LOCKER" === t[0] && i.push("Paczkomat 24/7"), i
             }
 
             static getPointLogo(t) {
@@ -7919,7 +7928,7 @@ function posId(t) {
                     return i = i.replace("00:00 - 23:59", "24h")
                 }(i) : function (t) {
                     {
-                        if ("ZABKA" == t.brand) return "Dostęp zgodnie z godzinami otwarcia sklepu";
+                        if ("ZABKA" == t.brand) return "DostÄ™p zgodnie z godzinami otwarcia sklepu";
                         if ("INPOST" == t.brand) return "24/7"
                     }
                     return i18n.t("partials.no_data")
@@ -7929,11 +7938,28 @@ function posId(t) {
             }
         }
 
-        c.DEFAULT_GLOBAL_ZOOM = 15, c.DEFAULT_POINT_ZOOM = 18, c.MIN_MAP_ZOOM = 10, (e = h = h || {})[e.OPERATOR = "OPERATOR"] = "OPERATOR", e[e.BRAND = "BRAND"] = "BRAND", e[e.COD = "COD"] = "COD";
+        d.DEFAULT_GLOBAL_ZOOM = 15, d.DEFAULT_POINT_ZOOM = 18, d.MIN_MAP_ZOOM = 10, (e = h = h || {})[e.OPERATOR = "OPERATOR"] = "OPERATOR", e[e.BRAND = "BRAND"] = "BRAND", e[e.COD = "COD"] = "COD";
 
-        class d {
+        class p {
             constructor() {
-                this.changeFiltersPositionState = !1
+                this.changeFiltersPositionState = !1, this.keyboardNavigationHandler = e => {
+                    var t, i = this.filtersContent;
+                    if (i) {
+                        var n = i.querySelector(".cod-only"), i = Array.from(i.querySelectorAll(".bp-filter"));
+                        const o = document.activeElement;
+                        if ("Escape" === e.key) e.preventDefault(), this.collapseFilters(), null != (t = this.filtersButtonElement) && t.focus(); else {
+                            if (["ArrowDown", "ArrowUp"].includes(e.key)) {
+                                e.preventDefault();
+                                let t = i.findIndex(t => t === o);
+                                i[t = -1 === t ? 0 : "ArrowDown" === e.key ? (t + 1) % i.length : (t - 1 + i.length) % i.length].focus(), i[t].scrollIntoView({
+                                    block: "nearest",
+                                    behavior: "smooth"
+                                })
+                            }
+                            "Tab" !== e.key || e.shiftKey || o !== n || (e.preventDefault(), null != (t = i[0]) && t.focus())
+                        }
+                    }
+                }
             }
 
             initWithBrands(t, e, i, n) {
@@ -7949,15 +7975,16 @@ function posId(t) {
                     t && (t.checked = !0)
                 });
                 var n = this.findCodFilterElement();
-                n && (n.checked = t.filterValue), e && (this.filtersButtonElement.style.display = "none"), i && (this.tryCreateExpandFiltersButton(), this.changeFiltersPositionState = i && !!document.querySelector(".bp-media-lg")), this.filtersButtonElement.addEventListener("click", () => {
-                    this.isCollapsed() ? this.expandFilters() : this.collapseFilters()
+                n && (n.checked = t.filterValue), e && (this.filtersButtonElement.style.display = "none"), i && (this.tryCreateExpandFiltersButton(), this.changeFiltersPositionState = i && !!document.querySelector(".bp-media-lg")), a(this.filtersButtonElement, () => {
+                    var t;
+                    this.isCollapsed() ? (this.expandFilters(), (t = document.getElementsByClassName("bp-filters-content")[0]) && t.focus()) : this.collapseFilters()
                 }), this.filtersContent.addEventListener("scroll", () => {
                     this.processFiltersInsetShadow()
                 }), window.addEventListener("resize", () => {
                     this.filtersContent && this.processFiltersInsetShadow()
-                }), this.closeButton.addEventListener("click", () => {
+                }), a(this.closeButton, () => {
                     this.collapseFilters()
-                }), this.processFiltersInsetShadow()
+                }), this.processFiltersInsetShadow(), this.filtersContent.removeEventListener("keydown", this.keyboardNavigationHandler), this.filtersContent.addEventListener("keydown", this.keyboardNavigationHandler)
             }
 
             processFiltersInsetShadow() {
@@ -7982,9 +8009,14 @@ function posId(t) {
                 }), i
             }
 
-            onChange(e) {
-                this.forEachFilterElement(t => {
-                    t && t.addEventListener("change", e)
+            onChange(t) {
+                this.forEachFilterElement(e => {
+                    if (e) {
+                        const i = e.closest("label");
+                        i && (e.addEventListener("change", t), i.classList.contains("cod-only") ? i.setAttribute("tabindex", "0") : i.setAttribute("tabindex", "-1"), i.setAttribute("role", "checkbox"), i.setAttribute("aria-checked", String(e.checked)), i.addEventListener("keydown", t => {
+                            "Enter" !== t.key && " " !== t.key || (t.preventDefault(), e.checked = !e.checked, i.setAttribute("aria-checked", String(e.checked)), e.dispatchEvent(new Event("change", {bubbles: !0})))
+                        }))
+                    }
                 })
             }
 
@@ -7999,13 +8031,7 @@ function posId(t) {
             createBrandsFilters(t) {
                 var e, i = [];
                 for (e of t) {
-                    var n = {
-                        type: h.BRAND,
-                        brand: e.brand,
-                        value: e.price,
-                        elementId: "BPFilter" + e.brand,
-                        checked: e.checked
-                    };
+                    var n = {type: h.BRAND, brand: e.brand, elementId: "BPFilter" + e.brand, checked: e.checked};
                     i.push(n)
                 }
                 return i
@@ -8062,7 +8088,10 @@ function posId(t) {
 
             expandFilters() {
                 var t;
-                this.changeFiltersPositionState ? r("active", "bp-pos-info") : r("active", "switchable"), o(this.filtersButtonElement, "active"), o(this.filtersElement, "active"), this.filtersButtonElement && (t = i18n.t("filters.collapse_text"), this.filtersButtonElement.title = t), this.processFiltersInsetShadow()
+                this.changeFiltersPositionState ? i("active", "bp-pos-info") : i("active", "switchable"), o(this.filtersButtonElement, "active"), o(this.filtersElement, "active"), this.filtersButtonElement && (t = i18n.t("filters.collapse_text"), this.filtersButtonElement.title = t), this.processFiltersInsetShadow(), requestAnimationFrame(() => {
+                    var t = this.filtersContent.querySelector(".cod-only");
+                    null != t && t.focus()
+                })
             }
 
             collapseFilters() {
@@ -8096,18 +8125,18 @@ function posId(t) {
             }
 
             display() {
-                var t = c.asset("images/icons/icon_close.svg"), e = this.createFiltersDisplay();
+                var t = d.asset("images/icons/icon_close.svg"), e = this.createFiltersDisplay();
                 return `
-                  <div class="bp-filters-content" id="BPWidgetFiltersContent">
+                  <div class="bp-filters-content" tabindex="0" id="BPWidgetFiltersContent">
                     <div class="filter-header">
                       <div class="title">${i18n.t("filters.label")}</div>
-                      <div id="closeFilters"><img src="${t}"></div>
+                      <div id="closeFilters"><img src="${t}" alt="${i18n.t("partials.close_icon")}"></div>
                     </div>
                     <div class="bp-filters-wrapper">
                       <div id="BPWidgetFiltersButtons">
                         ${e.cod}
                       </div>
-                      <ul class="checkbox-filter">${e.operators}</ul>
+                      <ul class="checkbox-filter" tabindex="-1">${e.operators}</ul>
                     </div>
                   </div>
                 `
@@ -8119,11 +8148,11 @@ function posId(t) {
                 for (e of this.filters) {
                     let t = "";
                     var o, s = e.elementId, r = "bp-filter";
-                    e.operator || e.brand ? (r += e.operator ? " operator" : " brand", o = e.operator ? c.operatorLogo(e.operator) : c.brandLogo(e.brand || ""), t = `
+                    e.operator || e.brand ? (r += e.operator ? " operator" : " brand", o = e.operator ? d.operatorLogo(e.operator) : d.brandLogo(e.brand || ""), t = `
                             <li>
-                                <label class="${r}">
+                                <label class="${r}" tabindex="-1">
                                     <input id="${s}" type="checkbox" name="${e.operator || e.brand}" />
-                                    <span class="widget-checkbox" tabindex="0">
+                                    <span class="widget-checkbox">
                                         <div class="filter-checkbox-content">
                                             ${o}
                                         </div>
@@ -8133,7 +8162,7 @@ function posId(t) {
                         `) : e.show && (r = e.show && e.value ? " disabled " : "", o = i18n.t("filters.cod_only"), n = `
                             <label class="cod-only">
                                 <input type="checkbox" id="${s}" name="codFilter" ${r} />
-                                <span class="switch" tabindex="0"></span> 
+                                <span class="switch"></span> 
                                 <span class="checkbox-desc ${r}">${o}</span>
                             </label>
                         `), "" != t && i.push(t)
@@ -8142,7 +8171,7 @@ function posId(t) {
             }
         }
 
-        class p {
+        class f {
             constructor() {
                 this.MARKER_ICON_OPTIONS = {
                     iconSize: [33, 48],
@@ -8153,10 +8182,18 @@ function posId(t) {
             init(t, e, i, n, o) {
                 this.map = t, this.operators = e, this.selectPointCallback = i, this.submitPointCallback = n, this.unselectPointCallback = o, null != this.markersCluster && t.removeLayer(this.markersCluster), t.on("click", () => {
                     this.selectPointCallback(void 0)
-                }), this.posListElement.innerHTML = p.displayPointDescription(), this.markersCluster = L.markerClusterGroup({
+                }), this.posListElement.innerHTML = f.displayPointDescription(), this.markersCluster = L.markerClusterGroup({
                     disableClusteringAtZoom: 20,
                     spiderfyOnMaxZoom: !0
-                }), t.addLayer(this.markersCluster), this.markers = [], this.markersMapByCode = new Map
+                }), t.addLayer(this.markersCluster), t.on("layeradd", () => {
+                    document.querySelectorAll(".marker-cluster").forEach(t => {
+                        t.setAttribute("tabindex", "-1"), t.removeAttribute("role")
+                    })
+                });
+                const s = document.querySelector(".leaflet-control-attribution");
+                s && s.querySelectorAll("a").forEach(t => {
+                    t.setAttribute("tabindex", "-1")
+                }), this.markers = [], this.markersMapByCode = new Map
             }
 
             clearMarkers() {
@@ -8175,8 +8212,21 @@ function posId(t) {
                 return t || null
             }
 
-            selectMarker(t, e, i) {
-                t && e && (i && (i = t.getLatLng(), this.map.setView(i, this.map.getZoom())), this.isPosAvailable(e) && (this.currentMarker && this.currentMarker.setIcon(new L.Icon(this.setMarkerIconOptions(this.getMarkerIcon(this.currentMarker.pos.operator)))), this.currentMarker = t, this.currentMarker.setIcon(new L.Icon(this.setMarkerIconOptions(this.getMarkerIconActive(e.operator))))), this.updateMarkerDescription(e))
+            selectMarker(e, t, i) {
+                if (e && t) {
+                    var n = e.getLatLng();
+                    if (i) {
+                        const o = () => {
+                            var t = this.markersCluster.getVisibleParent(e);
+                            t && t.spiderfy && t.spiderfy(), this.map.off("moveend", o)
+                        };
+                        this.map.on("moveend", o), this.map.setView(n, 20)
+                    } else {
+                        i = this.markersCluster.getVisibleParent(e);
+                        i && i.spiderfy && i.spiderfy()
+                    }
+                    this.isPosAvailable(t) && (this.currentMarker && this.currentMarker.setIcon(new L.Icon(this.setMarkerIconOptions(this.getMarkerIcon(this.currentMarker.pos.operator)))), this.currentMarker = e, this.currentMarker.setIcon(new L.Icon(this.setMarkerIconOptions(this.getMarkerIconActive(t.operator))))), this.updateMarkerDescription(t), this.removeTabindexFromMarkers()
+                }
             }
 
             unselectMarker() {
@@ -8198,12 +8248,12 @@ function posId(t) {
 
             setMarkerIconOptions(t) {
                 var e = this.MARKER_ICON_OPTIONS;
-                return e.iconUrl = c.asset(t), e
+                return e.iconUrl = d.asset(t), e
             }
 
             createMarker(e) {
                 let i = L.marker([e.latitude, e.longitude]);
-                i.bindPopup(p.createMarkerShortDescription(e), {offset: [0, -30], closeButton: !1});
+                i.bindPopup(f.createMarkerShortDescription(e), {offset: [0, -30], closeButton: !1});
                 var t = this.setMarkerIconOptions(this.isPosAvailable(e) ? this.getMarkerIcon(e.operator) : this.getMarkerIconDisabled(e.operator));
                 return i.setIcon(new L.Icon(t)), i.pos = {
                     posId: e.operator + "/" + e.code,
@@ -8214,28 +8264,43 @@ function posId(t) {
                     code: e.code,
                     cod: e.cod
                 }, i.on("click", t => {
-                    var e;
-                    t.target.pos.posId != (null == (e = this.currentMarker) ? void 0 : e.pos.posId) && (r("active", "switchable"), r("opened-side-panel", "bp-filters-content"), this.selectPointCallback(t.target))
+                    this.handleMarkerSelect(t.target)
+                }), i.once("add", () => {
+                    var t = i.getElement();
+                    t && (t.setAttribute("tabindex", "-1"), t.setAttribute("role", "button"), t.addEventListener("keydown", t => {
+                        "Enter" !== t.key && " " !== t.key || (t.preventDefault(), this.handleMarkerSelect(i))
+                    }))
                 }), "ontouchstart" in document.documentElement || (i.on("mouseover", () => {
                     var t;
-                    this.isPosAvailable(e) && ((t = this.MARKER_ICON_OPTIONS).iconUrl = c.asset(this.getMarkerIconActive(e.operator)), i.setIcon(new L.Icon(t))), i.openPopup(), setTimeout(() => {
+                    this.isPosAvailable(e) && ((t = this.MARKER_ICON_OPTIONS).iconUrl = d.asset(this.getMarkerIconActive(e.operator)), i.setIcon(new L.Icon(t))), i.openPopup(), setTimeout(() => {
                         o(document.getElementsByClassName("si-wrapper-right")[0], "active")
                     }, 50)
                 }), i.on("mouseout", () => {
                     var t;
-                    i != this.currentMarker && this.isPosAvailable(e) && ((t = this.MARKER_ICON_OPTIONS).iconUrl = c.asset(this.getMarkerIcon(e.operator)), i.setIcon(new L.Icon(t))), i.closePopup()
+                    i != this.currentMarker && this.isPosAvailable(e) && ((t = this.MARKER_ICON_OPTIONS).iconUrl = d.asset(this.getMarkerIcon(e.operator)), i.setIcon(new L.Icon(t))), i.closePopup()
                 })), i
+            }
+
+            handleMarkerSelect(t) {
+                var e;
+                (null != (e = null == (e = t.pos) ? void 0 : e.posId) ? e : null == (e = null == (e = t.options) ? void 0 : e.pos) ? void 0 : e.posId) !== (null == (e = this.currentMarker) ? void 0 : e.pos.posId) && (i("active", "switchable"), i("opened-side-panel", "bp-filters-content"), this.selectPointCallback(t))
+            }
+
+            removeTabindexFromMarkers() {
+                document.querySelectorAll(".leaflet-marker-icon, .marker-cluster").forEach(t => {
+                    t.setAttribute("tabindex", "-1")
+                })
             }
 
             static createMarkerShortDescription(t) {
                 return `
                             <div class="bp-marker-desc">
                                 <div class="bp-brand-logo-wrapper">
-                                    <div class="bp-brand-logo">${c.getPointLogo(t)}</div>
+                                    <div class="bp-brand-logo">${d.getPointLogo(t)}</div>
                                 </div>
                                 <div class="bp-marker-desc-operator-block-wrapper">
                                     <div class="bp-marker-desc-operator-block">
-                                            <div class="bp-marker-desc-brand">${c.getPointName(t)}</div>
+                                            <div class="bp-marker-desc-brand">${d.getPointName(t)}</div>
                                     </div>
                                 </div>
                             </div>
@@ -8243,7 +8308,7 @@ function posId(t) {
             }
 
             static createErrorDescription(t, e, i) {
-                var n = c.asset("images/icons/icon_close.svg"), o = c.submitButton(!1);
+                var n = d.asset("images/icons/icon_close.svg"), o = d.submitButton(!1);
                 return `
                             <div class="bp-point-desc">
                                 <div class="bp-point-desc-header">
@@ -8260,7 +8325,7 @@ function posId(t) {
                                         </div>
                                     </div>
                                     <div class="bp-point-desc-point-block-close">
-                                            <img src="${n}">
+                                            <img src="${n}" alt="${i18n.t("partials.close_icon")}">
                                     </div>
                                 </div>
                                 <div class="bp-point-desc-description-row">
@@ -8274,18 +8339,18 @@ function posId(t) {
                                     </div>
                                 </div>
                                 <div class="bp-point-desc-operator-row">
-                                    ${i18n.t("markers.operator")} ${c.getOperatorName(t)}
+                                    ${i18n.t("markers.operator")} ${d.getOperatorName(t)}
                                 </div>
                             </div>
                     `
             }
 
             createMarkerDescription(e) {
-                var t = c.getPointLogo(e), i = c.getPointName(e), n = e.operatorPretty,
+                var t = d.getPointLogo(e), i = d.getPointName(e), n = e.operatorPretty,
                     o = e.description ? `<div class="bp-point-desc-description-row-content">${e.description}</div>` : "",
-                    s = c.posTags(e), r = c.addressDescription(e),
-                    a = c.parcelPrice(u(this.operators, t => t.operator == e.operator)),
-                    l = c.openingHoursDescription(e), h = "" != a, h = c.submitButtonOrText(h, this.isPosAvailable(e));
+                    s = d.posTags(e), r = d.addressDescription(e),
+                    a = d.parcelPrice(u(this.operators, t => t.operator == e.operator)),
+                    l = d.openingHoursDescription(e), h = "" != a, h = d.submitButtonOrText(h, this.isPosAvailable(e));
                 return `
                             <div class="bp-point-desc">
                                 <div class="bp-point-desc-header">
@@ -8299,7 +8364,7 @@ function posId(t) {
                                         </div>
                                     </div>
                                     <div class="bp-point-desc-point-block-close">
-                                            <img src="${c.asset("images/icons/icon_close.svg")}">
+                                            <img src="${d.asset("images/icons/icon_close.svg")}" alt="${i18n.t("partials.close_icon")}">
                                     </div>
                                 </div>
                                 <div class="bp-point-desc-address-row">
@@ -8333,14 +8398,14 @@ function posId(t) {
                                     ${s}
                                 </div>
                                 <div class="bp-point-desc-operator-row">
-                                    ${i18n.t("markers.operator")} ${c.getOperatorName(n)}
+                                    ${i18n.t("markers.operator")} ${d.getOperatorName(n)}
                                 </div>
                             </div>
                     `
             }
 
             showMarkerDescription() {
-                o(this.posListElement, "active")
+                o(this.posListElement, "active"), this.posListElement.focus()
             }
 
             hideMarkerDescription() {
@@ -8359,24 +8424,27 @@ function posId(t) {
             }
 
             updateErrorDescription(t, e, i) {
-                t = p.createErrorDescription(t, e, i);
-                this.updateMarkerDescriptionWithTemplate(t, null), p.submitButton().disabled = !0
+                t = f.createErrorDescription(t, e, i);
+                this.updateMarkerDescriptionWithTemplate(t, null), f.submitButton().disabled = !0
             }
 
             updateMarkerDescriptionWithTemplate(t, e) {
                 this.showMarkerDescription();
-                var i = document.createElement("DIV");
-                i.className = "bp-pos-info-element", i.id = "BPWidgetPOSInfoElement", i.innerHTML = t, e && this.isPosAvailable(e) && ((t = i.getElementsByClassName("bp-map-submit-button")[0]).setAttribute("data-test", "pos-submit-button"), t.addEventListener("click", t => {
-                    t.stopPropagation(), t.cancelBubble = !0, this.submitPointCallback(e)
-                })), i.getElementsByClassName("bp-point-desc-point-block-close")[0].addEventListener("click", t => {
-                    t.stopPropagation(), t.cancelBubble = !0, this.unselectMarker(), s(this.posListElement, "open")
-                }), i.getElementsByClassName("bp-point-desc-header")[0].addEventListener("click", t => {
+                var i = document.createElement("DIV"),
+                    t = (i.className = "bp-pos-info-element", i.id = "BPWidgetPOSInfoElement", i.innerHTML = t, i.setAttribute("tabindex", "0"), i.addEventListener("keydown", t => {
+                        "Escape" === t.key && (t.preventDefault(), this.unselectMarker(), s(this.posListElement, "open"), t = document.getElementById("BPWidgetListButton")) && t.click()
+                    }), e && this.isPosAvailable(e) && ((t = i.getElementsByClassName("bp-map-submit-button")[0]).setAttribute("data-test", "pos-submit-button"), t.setAttribute("tabindex", "0"), t.addEventListener("click", t => {
+                        t.stopPropagation(), t.cancelBubble = !0, this.submitPointCallback(e)
+                    })), i.getElementsByClassName("bp-point-desc-point-block-close")[0]), t = (a(t, t => {
+                        t.stopPropagation(), t.cancelBubble = !0, this.unselectMarker(), s(this.posListElement, "open")
+                    }), i.getElementsByClassName("bp-point-desc-header")[0]);
+                a(t, t => {
                     t.stopPropagation(), t.cancelBubble = !0, (n(this.posListElement, "open") ? s : o)(this.posListElement, "open")
                 }), this.hammerTime = new Hammer(i.getElementsByClassName("bp-point-desc-header")[0]), this.hammerTime.get("swipe").set({direction: Hammer.DIRECTION_VERTICAL}), this.hammerTime.on("swipeup", () => {
                     n(this.posListElement, "open") || o(this.posListElement, "open")
                 }), this.hammerTime.on("swipedown", () => {
                     n(this.posListElement, "open") && s(this.posListElement, "open")
-                }), this.findPosElement() ? this.posListContentElement.replaceChild(i, this.findPosElement()) : this.posListContentElement.appendChild(i)
+                }), this.findPosElement() ? this.posListContentElement.replaceChild(i, this.findPosElement()) : this.posListContentElement.appendChild(i), i.focus()
             }
 
             cleanup() {
@@ -8422,7 +8490,7 @@ function posId(t) {
             }
         }
 
-        class f {
+        class m {
             constructor() {
                 this.findMe = () => {
                     this.map.locate({setView: !0})
@@ -8434,7 +8502,7 @@ function posId(t) {
             }
 
             initButtons() {
-                navigator.geolocation && this.secureLocation() ? document.getElementById("BPFindMe").addEventListener("click", this.findMe) : document.getElementById("BPFindMe").style.display = "none"
+                navigator.geolocation && this.secureLocation() ? a(document.getElementById("BPFindMe"), () => this.findMe()) : document.getElementById("BPFindMe").style.display = "none"
             }
 
             getSearchElement() {
@@ -8447,7 +8515,7 @@ function posId(t) {
                         <div class="bp-search-wrapper">
                             <div class="bp-search-buttons">
                                 <div class="bp-search-buttons-switchable-block">
-                                    <div class="bp-search-panel-button switchable" id="BPWidgetListButton" data-test="list">
+                                    <div class="bp-search-panel-button switchable" id="BPWidgetListButton" tabindex="0" data-test="list">
                                         <svg class="bp-search-panel-button-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M6.25 5C6.25 4.83424 6.31585 4.67527 6.43306 4.55806C6.55027 4.44085 6.70924 4.375 6.875 4.375H16.875C17.0408 4.375 17.1997 4.44085 17.3169 4.55806C17.4342 4.67527 17.5 4.83424 17.5 5C17.5 5.16576 17.4342 5.32473 17.3169 5.44194C17.1997 5.55915 17.0408 5.625 16.875 5.625H6.875C6.70924 5.625 6.55027 5.55915 6.43306 5.44194C6.31585 5.32473 6.25 5.16576 6.25 5ZM16.875 9.375H6.875C6.70924 9.375 6.55027 9.44085 6.43306 9.55806C6.31585 9.67527 6.25 9.83424 6.25 10C6.25 10.1658 6.31585 10.3247 6.43306 10.4419C6.55027 10.5592 6.70924 10.625 6.875 10.625H16.875C17.0408 10.625 17.1997 10.5592 17.3169 10.4419C17.4342 10.3247 17.5 10.1658 17.5 10C17.5 9.83424 17.4342 9.67527 17.3169 9.55806C17.1997 9.44085 17.0408 9.375 16.875 9.375ZM16.875 14.375H6.875C6.70924 14.375 6.55027 14.4408 6.43306 14.5581C6.31585 14.6753 6.25 14.8342 6.25 15C6.25 15.1658 6.31585 15.3247 6.43306 15.4419C6.55027 15.5592 6.70924 15.625 6.875 15.625H16.875C17.0408 15.625 17.1997 15.5592 17.3169 15.4419C17.4342 15.3247 17.5 15.1658 17.5 15C17.5 14.8342 17.4342 14.6753 17.3169 14.5581C17.1997 14.4408 17.0408 14.375 16.875 14.375ZM3.4375 4.0625C3.25208 4.0625 3.07082 4.11748 2.91665 4.2205C2.76248 4.32351 2.64232 4.46993 2.57136 4.64123C2.50041 4.81254 2.48184 5.00104 2.51801 5.1829C2.55419 5.36475 2.64348 5.5318 2.77459 5.66291C2.9057 5.79402 3.07275 5.88331 3.2546 5.91949C3.43646 5.95566 3.62496 5.93709 3.79627 5.86614C3.96757 5.79518 4.11399 5.67502 4.217 5.52085C4.32002 5.36668 4.375 5.18542 4.375 5C4.375 4.75136 4.27623 4.5129 4.10041 4.33709C3.9246 4.16127 3.68614 4.0625 3.4375 4.0625ZM3.4375 9.0625C3.25208 9.0625 3.07082 9.11748 2.91665 9.2205C2.76248 9.32351 2.64232 9.46993 2.57136 9.64123C2.50041 9.81254 2.48184 10.001 2.51801 10.1829C2.55419 10.3648 2.64348 10.5318 2.77459 10.6629C2.9057 10.794 3.07275 10.8833 3.2546 10.9195C3.43646 10.9557 3.62496 10.9371 3.79627 10.8661C3.96757 10.7952 4.11399 10.675 4.217 10.5208C4.32002 10.3667 4.375 10.1854 4.375 10C4.375 9.75136 4.27623 9.5129 4.10041 9.33709C3.9246 9.16127 3.68614 9.0625 3.4375 9.0625ZM3.4375 14.0625C3.25208 14.0625 3.07082 14.1175 2.91665 14.2205C2.76248 14.3235 2.64232 14.4699 2.57136 14.6412C2.50041 14.8125 2.48184 15.001 2.51801 15.1829C2.55419 15.3648 2.64348 15.5318 2.77459 15.6629C2.9057 15.794 3.07275 15.8833 3.2546 15.9195C3.43646 15.9557 3.62496 15.9371 3.79627 15.8661C3.96757 15.7952 4.11399 15.675 4.217 15.5208C4.32002 15.3667 4.375 15.1854 4.375 15C4.375 14.7514 4.27623 14.5129 4.10041 14.3371C3.9246 14.1613 3.68614 14.0625 3.4375 14.0625Z"/>
                                         </svg>
@@ -8455,7 +8523,7 @@ function posId(t) {
                                             ${i18n.t("menubar.point_list")}
                                         </div>
                                     </div>
-                                    <div class="bp-search-panel-button switchable" id="BPWidgetFiltersButton" data-test="filters">
+                                    <div class="bp-search-panel-button switchable" id="BPWidgetFiltersButton" tabindex="0" data-test="filters">
                                         <svg class="bp-search-panel-button-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M15.625 10C15.625 10.1658 15.5592 10.3247 15.4419 10.4419C15.3247 10.5592 15.1658 10.625 15 10.625H5C4.83424 10.625 4.67527 10.5592 4.55806 10.4419C4.44085 10.3247 4.375 10.1658 4.375 10C4.375 9.83424 4.44085 9.67527 4.55806 9.55806C4.67527 9.44085 4.83424 9.375 5 9.375H15C15.1658 9.375 15.3247 9.44085 15.4419 9.55806C15.5592 9.67527 15.625 9.83424 15.625 10ZM18.125 5.625H1.875C1.70924 5.625 1.55027 5.69085 1.43306 5.80806C1.31585 5.92527 1.25 6.08424 1.25 6.25C1.25 6.41576 1.31585 6.57473 1.43306 6.69194C1.55027 6.80915 1.70924 6.875 1.875 6.875H18.125C18.2908 6.875 18.4497 6.80915 18.5669 6.69194C18.6842 6.57473 18.75 6.41576 18.75 6.25C18.75 6.08424 18.6842 5.92527 18.5669 5.80806C18.4497 5.69085 18.2908 5.625 18.125 5.625ZM11.875 13.125H8.125C7.95924 13.125 7.80027 13.1908 7.68306 13.3081C7.56585 13.4253 7.5 13.5842 7.5 13.75C7.5 13.9158 7.56585 14.0747 7.68306 14.1919C7.80027 14.3092 7.95924 14.375 8.125 14.375H11.875C12.0408 14.375 12.1997 14.3092 12.3169 14.1919C12.4342 14.0747 12.5 13.9158 12.5 13.75C12.5 13.5842 12.4342 13.4253 12.3169 13.3081C12.1997 13.1908 12.0408 13.125 11.875 13.125Z"/>
                                         </svg>
@@ -8464,7 +8532,7 @@ function posId(t) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="bp-search-panel-button" id="BPFindMe" data-test="find-me">
+                                <div class="bp-search-panel-button" id="BPFindMe" tabindex="0" data-test="find-me">
                                     <svg class="bp-search-panel-button-icon" width="20" height="20" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                          <path d="M8.96289 4C8.46844 4 7.98509 4.14662 7.57397 4.42133C7.16284 4.69603 6.84241 5.08648 6.65319 5.54329C6.46397 6.00011 6.41446 6.50277 6.51093 6.98773C6.60739 7.47268 6.84549 7.91814 7.19512 8.26777C7.54475 8.6174 7.99021 8.8555 8.47516 8.95196C8.96012 9.04843 9.46278 8.99892 9.9196 8.8097C10.3764 8.62048 10.7669 8.30005 11.0416 7.88893C11.3163 7.4778 11.4629 6.99445 11.4629 6.5C11.4629 5.83696 11.1995 5.20107 10.7307 4.73223C10.2618 4.26339 9.62593 4 8.96289 4ZM8.96289 8C8.66622 8 8.37621 7.91203 8.12954 7.7472C7.88286 7.58238 7.6906 7.34811 7.57707 7.07403C7.46354 6.79994 7.43383 6.49834 7.49171 6.20736C7.54959 5.91639 7.69245 5.64912 7.90223 5.43934C8.11201 5.22956 8.37928 5.0867 8.67026 5.02882C8.96123 4.97094 9.26283 5.00065 9.53692 5.11418C9.81101 5.22771 10.0453 5.41997 10.2101 5.66664C10.3749 5.91332 10.4629 6.20333 10.4629 6.5C10.4629 6.89782 10.3049 7.27936 10.0236 7.56066C9.74225 7.84196 9.36072 8 8.96289 8ZM8.96289 1C7.50471 1.00165 6.10672 1.58165 5.07563 2.61274C4.04454 3.64383 3.46454 5.04182 3.46289 6.5C3.46289 8.4625 4.36977 10.5425 6.08789 12.5156C6.8599 13.4072 7.7288 14.2101 8.67852 14.9094C8.76259 14.9683 8.86274 14.9999 8.96539 14.9999C9.06804 14.9999 9.1682 14.9683 9.25227 14.9094C10.2002 14.2098 11.0674 13.4069 11.8379 12.5156C13.5535 10.5425 14.4629 8.4625 14.4629 6.5C14.4612 5.04182 13.8812 3.64383 12.8502 2.61274C11.8191 1.58165 10.4211 1.00165 8.96289 1ZM8.96289 13.875C7.92977 13.0625 4.46289 10.0781 4.46289 6.5C4.46289 5.30653 4.937 4.16193 5.78091 3.31802C6.62482 2.47411 7.76942 2 8.96289 2C10.1564 2 11.301 2.47411 12.1449 3.31802C12.9888 4.16193 13.4629 5.30653 13.4629 6.5C13.4629 10.0769 9.99602 13.0625 8.96289 13.875Z"/>
                                     </svg>
@@ -8483,7 +8551,7 @@ function posId(t) {
             }
         }
 
-        var m = this && this.__awaiter || function (t, r, a, l) {
+        var _ = this && this.__awaiter || function (t, r, a, l) {
             return new (a = a || Promise)(function (i, e) {
                 function n(t) {
                     try {
@@ -8512,7 +8580,7 @@ function posId(t) {
             })
         };
 
-        class _ {
+        class g {
             constructor(t) {
                 this.http = t
             }
@@ -8526,7 +8594,7 @@ function posId(t) {
             }
 
             autocomplete(t) {
-                this.addWrapper(t), t.addEventListener("input", a(t => this.handleInput(t), 500)), t.addEventListener("keydown", t => this.handleKeydown(t)), t.addEventListener("focus", t => this.handleInput(t, !0)), t.addEventListener("blur", () => this.handleBlur(t))
+                this.addWrapper(t), t.addEventListener("input", r(t => this.handleInput(t), 500)), t.addEventListener("keydown", t => this.handleKeydown(t)), t.addEventListener("focus", t => this.handleInput(t, !0)), t.addEventListener("blur", () => this.handleBlur(t))
             }
 
             handleBlur(t) {
@@ -8536,7 +8604,7 @@ function posId(t) {
             handleInput(t, e) {
                 e || (this.selectedValue = ""), this.targetInput = t.target;
                 const n = this.targetInput.value;
-                if (this.closeAllLists(this.targetInput), n && !(n.length < 3)) {
+                if (this.closeAllLists(this.targetInput), !(!n || n.length < 3 || this.isNullOrEmptyArray(this.operatorsOrBrands()))) {
                     const o = this.createBox(this.targetInput), i = document.createElement("DIV"),
                         s = (i.setAttribute("id", "point-list"), document.createElement("DIV"));
                     s.setAttribute("id", "localization-list"), this.http.findLocalizationsByText(n, this.options.countryCodes || "pl", i => {
@@ -8565,12 +8633,12 @@ function posId(t) {
 
             handleKeydown(t) {
                 var e = t.target, i = document.getElementById(e.id + "-autocomplete-list"),
-                    i = i ? Array.prototype.slice.call(i.getElementsByClassName("pac-item")) : null;
-                i && i.length && this.controlItemFocus(t, i), this.submitItem(t, i), i && !i.length && document.getElementById(e.id + "-autocomplete-list").setAttribute("style", "display: none")
+                    n = i ? Array.prototype.slice.call(i.getElementsByClassName("pac-item")) : null;
+                i && ("Tab" !== t.key && "Tab" !== t.code || n && n.length) && ("Escape" === t.key ? (this.closeAllLists(e), e.focus()) : (n && n.length && this.controlItemFocus(t, n), this.submitItem(t, n), n && !n.length && document.getElementById(e.id + "-autocomplete-list").setAttribute("style", "display: none")))
             }
 
             submitItem(t, e) {
-                "Enter" === t.code && (t.preventDefault(), -1 < this.currentFocus) && e && this.handlePointClick(e[this.currentFocus]), "Tab" === t.code && (t.preventDefault(), this.currentFocus += 1, this.handlePointClick(e[this.currentFocus]))
+                !e || this.currentFocus < 0 || this.currentFocus >= e.length || (e = e[this.currentFocus], "Enter" !== t.code && "Tab" !== t.key && "Tab" !== t.code) || (t.preventDefault(), e.dataset && void 0 !== e.dataset.code && void 0 !== e.dataset.operator ? this.handlePointClick(e) : e.dataset && void 0 !== e.dataset.lat && void 0 !== e.dataset.lon && this.handlePlaceClick(e))
             }
 
             addWrapper(t) {
@@ -8587,7 +8655,7 @@ function posId(t) {
             }
 
             handlePlaceClick(t) {
-                this.map.setView(new L.LatLng(Number(t.dataset.lat), Number(t.dataset.lon)), c.correctMapZoom(this.map.getZoom())), this.closeAllLists(this.targetInput)
+                this.map.setView(new L.LatLng(Number(t.dataset.lat), Number(t.dataset.lon)), d.correctMapZoom(this.map.getZoom())), this.closeAllLists(this.targetInput)
             }
 
             createBox(t) {
@@ -8596,7 +8664,7 @@ function posId(t) {
             }
 
             createItem(t, e) {
-                var i = document.createElement("DIV"), n = c.getPointLogo(t), o = document.createElement("DIV");
+                var i = document.createElement("DIV"), n = d.getPointLogo(t), o = document.createElement("DIV");
                 return i.appendChild(o), i.setAttribute("class", "pac-item"), i.setAttribute("data-operator", t.operator), i.setAttribute("data-code", t.code), o.innerHTML += this.boldInterestingPart(t.code, e), o.innerHTML += `<div><span>${this.boldInterestingPart(t.street, e)}</span> <span>${this.boldInterestingPart(t.city, e)}</span></div>`, i.innerHTML += `<div class="bp-brand-logo">${n}</div>`, i.addEventListener("mousedown", ({currentTarget: t}) => this.handlePointClick(t)), i
             }
 
@@ -8606,7 +8674,10 @@ function posId(t) {
             }
 
             addActive(t) {
-                t && (this.removeActive(t), this.currentFocus >= t.length && (this.currentFocus = 0), this.currentFocus < 0 && (this.currentFocus = t.length - 1), t[this.currentFocus].classList.add("code-search-autocomplete-active"))
+                t && (this.removeActive(t), this.currentFocus >= t.length && (this.currentFocus = 0), this.currentFocus < 0 && (this.currentFocus = t.length - 1), (t = t[this.currentFocus]).classList.add("code-search-autocomplete-active"), t.scrollIntoView({
+                    block: "nearest",
+                    behavior: "smooth"
+                }))
             }
 
             removeActive(t) {
@@ -8630,6 +8701,10 @@ function posId(t) {
                 }), i
             }
 
+            isNullOrEmptyArray(t) {
+                return !t || 0 === t.length
+            }
+
             display() {
                 return `
                   <input
@@ -8645,9 +8720,9 @@ function posId(t) {
             }
         }
 
-        class g {
+        class v {
             constructor() {
-                this.changeFiltersPositionState = !1, this.itemsPerLoad = 100, this.visiblePointsCounter = 0, this.allFetchedPointsForView = [], this.observer = new IntersectionObserver(t => {
+                this.changeFiltersPositionState = !1, this.currentIndex = 0, this.itemsPerLoad = 100, this.visiblePointsCounter = 0, this.allFetchedPointsForView = [], this.observer = new IntersectionObserver(t => {
                     t.forEach(t => {
                         t.isIntersecting && (this.appendElementsAndResetObserver(), this.observer.unobserve(t.target))
                     })
@@ -8655,61 +8730,93 @@ function posId(t) {
             }
 
             init(t, e) {
-                this.selectPointCallback = t, this.listButtonElement.addEventListener("click", () => {
-                    this.isCollapsed() ? this.expandList() : this.collapseList()
-                }), this.closeButton.addEventListener("click", () => {
+                this.selectPointCallback = t, this.operators = e.operators, a(this.listButtonElement, () => {
+                    var t;
+                    this.isCollapsed() ? (this.expandList(), (t = document.querySelector(".bp-list-content .item")) && (t.setAttribute("tabindex", "0"), t.focus())) : this.collapseList()
+                }), a(this.closeButton, () => {
                     this.collapseList()
-                }), this.changeFiltersPositionState = e && !!document.querySelector(".bp-media-lg")
+                }), this.changeFiltersPositionState = !!e.changeFiltersPosition && !!document.querySelector(".bp-media-lg")
             }
 
             updateList(t) {
-                this.listOfElements.replaceChildren(), this.visiblePointsCounter = 0, this.allFetchedPointsForView = t, this.posListElementWrapper.scrollTop = 0, this.appendElementsAndResetObserver()
+                this.clearList(), this.allFetchedPointsForView = t, this.appendElementsAndResetObserver()
+            }
+
+            clearList() {
+                this.listOfElements.replaceChildren(), this.visiblePointsCounter = 0, this.posListElementWrapper.scrollTop = 0
             }
 
             appendElementsAndResetObserver() {
-                this.allFetchedPointsForView.slice(this.visiblePointsCounter, this.visiblePointsCounter + this.itemsPerLoad).forEach((t, e) => {
+                this.allFetchedPointsForView.slice(this.visiblePointsCounter, this.visiblePointsCounter + this.itemsPerLoad).forEach(t => {
                     t = this.createPosItem(t);
-                    0 === e && t.setAttribute("data-test", "pos-first-item"), this.listOfElements.appendChild(t), this.visiblePointsCounter++
+                    this.listOfElements.appendChild(t), this.visiblePointsCounter++
+                }), this.initArrowNavigation();
+                var t = this.listOfElements.firstElementChild;
+                t && (t.setAttribute("data-test", "pos-first-item"), t.setAttribute("tabindex", "0")), Array.from(this.listOfElements.children).forEach((t, e) => {
+                    0 !== e && t.setAttribute("tabindex", "-1")
                 }), this.listOfElements.lastElementChild && this.observer.observe(this.listOfElements.lastElementChild)
             }
 
+            initArrowNavigation() {
+                var t = document.querySelector(".bp-list-content");
+                const i = t.querySelectorAll(".item");
+                if (i.length) {
+                    let e = 0;
+                    t.onkeydown = null, i.forEach((t, e) => {
+                        t.setAttribute("tabindex", 0 === e ? "0" : "-1")
+                    }), t.addEventListener("keydown", t => {
+                        "ArrowDown" !== t.key && "ArrowUp" !== t.key || (t.preventDefault(), i[e].setAttribute("tabindex", "-1"), e = "ArrowDown" === t.key ? (e + 1) % i.length : (e - 1 + i.length) % i.length, i[e].setAttribute("tabindex", "0"), i[e].focus()), "Escape" === t.key && (t.preventDefault(), this.collapseList(), null != (t = this.listButtonElement)) && t.focus()
+                    }), i[0].focus()
+                }
+            }
+
             display() {
-                var t = c.asset("images/icons/icon_close.svg"),
+                var t = d.asset("images/icons/icon_close.svg"),
                     e = (this.listOfElements = document.createElement("DIV"), this.listOfElements.setAttribute("class", "bp-list-elements"), i18n.t("list.label")),
                     i = document.createElement("DIV");
-                i.setAttribute("class", "bp-list-content"), i.innerHTML = `
+                i.setAttribute("class", "bp-list-content"), i.setAttribute("tabindex", "0"), i.innerHTML = `
                   <div class="list-header">
                     <div class="title">${e}</div>
                     <div id="closeList">
-                      <img src="${t}">
+                      <img src="${t}" alt="${i18n.t("partials.close_icon")}">
                     </div>
                   </div>`, i.appendChild(this.listOfElements), this.posListElementWrapper.appendChild(i)
             }
 
             createPosItem(t) {
-                var e = document.createElement("DIV"), i = c.getPointLogo(t), n = document.createElement("DIV"),
-                    o = c.getPointName(t);
-                return e.setAttribute("data-code", t.code), e.setAttribute("data-operator", t.operator), e.appendChild(n), e.setAttribute("class", "item"), n.innerHTML = `
+                var e = document.createElement("DIV"), i = d.getPointLogo(t), n = this.getParcelPrice(t),
+                    o = document.createElement("DIV"), s = d.getPointName(t);
+                return e.setAttribute("data-code", t.code), e.setAttribute("data-operator", t.operator), e.setAttribute("tabindex", "-1"), e.appendChild(o), e.setAttribute("class", "item"), o.innerHTML = `
                   <div class="flex">
                     <div>
-                      <p class="bp-list-item-name">${o}</p><p class="bp-list-item-code">${t.code}</p>
+                      <p class="bp-list-item-name">${s}</p><p class="bp-list-item-code">${t.code}</p>
                     </div>
-                    <div class="bp-brand-logo">${i}</div>
+                    <div class="bp-brand-logo">
+                      ${i} 
+                      <p class="bp-list-item-price">${n}</p>
+                    </div>
+
                   </div>
                   <p>${i18n.t("partials.st")} ${t.street}</p>
-                  <p>${t.postalCode} ${t.city}</p>`, e.addEventListener("mousedown", ({currentTarget: t}) => this.handleClick(t)), e
+                  <p>${t.postalCode} ${t.city}</p>`, a(e, t => this.handleClick(t.currentTarget)), e
+            }
+
+            getParcelPrice(e) {
+                var t = u(this.operators, t => t.operator === e.operator);
+                return d.parcelPrice(t)
             }
 
             handleClick(t) {
-                r("active", "switchable"), s(this.filtersContent, "opened-side-panel"), this.selectPointCallback(t.dataset.operator + "/" + t.dataset.code, !0)
+                i("active", "switchable"), s(this.filtersContent, "opened-side-panel"), this.selectPointCallback(t.dataset.operator + "/" + t.dataset.code, !0)
             }
 
             expandList() {
-                this.changeFiltersPositionState || r("active", "switchable"), o(this.listButtonElement, "active"), o(this.posListElementWrapper, "active"), o(this.filtersContent, "opened-side-panel"), this.selectPointCallback(void 0, !1)
+                this.changeFiltersPositionState || i("active", "switchable"), o(this.listButtonElement, "active"), o(this.posListElementWrapper, "active"), o(this.filtersContent, "opened-side-panel"), this.selectPointCallback(void 0, !1)
             }
 
             collapseList() {
-                this.isCollapsed() || (s(this.listButtonElement, "active"), s(this.posListElementWrapper, "active"), s(this.filtersContent, "opened-side-panel"))
+                var t;
+                this.isCollapsed() || ((t = document.querySelector(".bp-list-content").querySelectorAll(".item"))[this.currentIndex].setAttribute("tabindex", "-1"), this.currentIndex = 0, t[this.currentIndex].setAttribute("tabindex", "0"), s(this.listButtonElement, "active"), s(this.posListElementWrapper, "active"), s(this.filtersContent, "opened-side-panel"))
             }
 
             isCollapsed() {
@@ -8739,7 +8846,7 @@ function posId(t) {
                     center: {
                         lat: 52.226376,
                         lng: 21.009979
-                    }, globalZoom: c.DEFAULT_GLOBAL_ZOOM, pointZoom: c.DEFAULT_POINT_ZOOM, gestureHandling: !0
+                    }, globalZoom: d.DEFAULT_GLOBAL_ZOOM, pointZoom: d.DEFAULT_POINT_ZOOM, gestureHandling: !0
                 }, this.DEFAULT_LANG = "pl", this.submit = t => {
                     this.http.countPointSelection(t.operator, t.code), this.options.callback && this.options.callback({
                         code: t.code,
@@ -8784,40 +8891,21 @@ function posId(t) {
             }
 
             initWidget(t, e) {
-                this.options = e, this.options.operators = this.options.operators || [{operator: "RUCH"}, {operator: "INPOST"}, {operator: "POCZTA"}, {operator: "DPD"}, {operator: "UPS"}, {operator: "FEDEX"}, {operator: "DHL"}], this.updatePointsTimeout = 0, this.currentlySelectedPoint = void 0, this.http = new i(e.testMode), e.alias && this.http.loadConfiguration(e.alias, t => {
+                this.options = e, this.options.operators = this.options.operators || [{operator: "RUCH"}, {operator: "INPOST"}, {operator: "POCZTA"}, {operator: "DPD"}, {operator: "UPS"}, {operator: "FEDEX"}, {operator: "DHL"}], this.updatePointsTimeout = 0, this.currentlySelectedPoint = void 0, this.http = new c(e.testMode), e.alias && this.http.loadConfiguration(e.alias, t => {
                     this.brandColor = null == t ? void 0 : t.mainColorHex, this.customLogoUrl = null == t ? void 0 : t.logoUrl, this.brandUrl = null == t ? void 0 : t.shopUrl
-                }, t => console.error(t)), /*console.log('BL WIDGET OBJECT:'), console.log(t),*/ t.innerHTML = this.display(), this.updateRwd(), BPWidget.ResizeSensor(this.rootElement, this.updateRwd), this.createModules(), this.initMap(), this.options.callback || (this.rootElement.className += " bp-no-callback"), this.options.mapOnly && o(this.rootElement, "map-only"), this.options.changeFiltersPosition && o(this.rootElement, "changed-filters-position"), this.options.codeSearch && o(this.rootElement, "map-with-code-search")
+                }, t => console.error(t)), t.innerHTML = this.display(), this.updateRwd(), BPWidget.ResizeSensor(this.rootElement, this.updateRwd), this.createModules(), this.initMap(), this.options.callback || (this.rootElement.className += " bp-no-callback"), this.options.mapOnly && o(this.rootElement, "map-only"), this.options.changeFiltersPosition && o(this.rootElement, "changed-filters-position"), this.options.codeSearch && o(this.rootElement, "map-with-code-search")
             }
 
             initTranslations(e) {
-				return m(this, void 0, void 0, function* () {
-					try {
-						// Try original language
-						const response = yield fetch(`https://widget.bliskapaczka.pl/v8.2/translations/${e}.json`);
-						const t = yield response.json();
-						i18n.locale = e;
-						i18n.store(t);
-					} catch (error) {
-						console.error(`Failed to load ${e} translations, falling back to English:`, error);
-						
-						try {
-							// Fallback to English
-							const enResponse = yield fetch('https://widget.bliskapaczka.pl/v8.2/translations/en.json');
-							const enTranslations = yield enResponse.json();
-							i18n.locale = 'en';
-							i18n.store(enTranslations);
-						} catch (fallbackError) {
-							console.error('Failed to load English fallback translations:', fallbackError);
-							i18n.locale = e;
-							i18n.store({}); // Empty fallback if everything fails
-						}
-					}
-				});
-			}
+                return _(this, void 0, void 0, function* () {
+                    var t = yield(yield fetch(`https://map.alsendo.com/v8.6/translations/${e}.json`)).json();
+                    i18n.locale = e, i18n.store(t)
+                })
+            }
 
             initMap() {
                 var i;
-                return m(this, void 0, void 0, function* () {
+                return _(this, void 0, void 0, function* () {
                     if (this.options.brandMode && !this.options.brands) {
                         this.options.brands = [];
                         var t = yield this.http.getBrandsSync();
@@ -8825,30 +8913,28 @@ function posId(t) {
                         t.forEach(t => this.options.brands.push({brand: t}))
                     }
                     null != (i = this.options.selectedPos) && i.code && null != (i = this.options.selectedPos) && i.operator && ((t = yield this.http.getPosSync(this.options.selectedPos.operator + "/" + this.options.selectedPos.code)) ? this.currentlySelectedPoint = t : console.error("Couldn't fetch point for selectedPos: " + this.options.selectedPos.operator + "/" + this.options.selectedPos.code));
-                    var t = this.createMapOptions(this.options.mapOptions), e = new GeoSearch.OpenStreetMapProvider;
-                    console.log('GeoSearch.OpenStreetMapProvider:');
-                    console.log(e[0]);
-                    console.log(typeof e[0]);
-                    if ( 'undefined' == typeof e[0] ) {
-                        console.log('GeoSearch.OpenStreetMapProvider == undefined');
-                        let e = [];
-                        e[0] = {};
-                        e[0].y = bliskapaczka_alsendo_y;
-                        e[0].x = bliskapaczka_alsendo_x;
-                    }
-                    this.options.initialAddress && !this.options.selectedPos ? (e = yield e.search({query: this.options.initialAddress}), this.map = L.map("BPWidgetMap", {zoomControl: !1}).setView(e && e[0] && e[0].y !== undefined && e[0].x !== undefined
-                        ? [e[0].y, e[0].x]
-                        : [bliskapaczka_alsendo_y, bliskapaczka_alsendo_x], (null == (i = this.options.mapOptions) ? void 0 : i.zoom) || c.DEFAULT_GLOBAL_ZOOM)) : this.map = L.map("BPWidgetMap", {zoomControl: !1}).setView([null == (i = t.center) ? void 0 : i.lat, null == (i = t.center) ? void 0 : i.lng], t.zoom), L.control.zoom({position: "bottomright"}).addTo(this.map), L.tileLayer(this.TILE_LAYER_URL_TEMPLATE, {
-                        attribution: this.TILE_LAYER_ATTRIBUTION,
-                        maxZoom: 19
-                    }).addTo(this.map), this.options.readyCallback && this.map.on("load", this.options.readyCallback), this.search && this.search.init(this.map), this.options.mapState = {
+
+
+                    var t = this.createMapOptions(this.options.mapOptions), e = new GeoSearch.OpenStreetMapProvider,
+                        e = (this.options.initialAddress && !this.options.selectedPos ? (e = yield e.search({query: this.options.initialAddress}), this.map = L.map("BPWidgetMap", {zoomControl: !1}).setView([
+                            e[0]?.y || bliskapaczka_alsendo_y,
+                            e[0]?.x || bliskapaczka_alsendo_x
+                        ], (null == (i = this.options.mapOptions) ? void 0 : i.zoom) || d.DEFAULT_GLOBAL_ZOOM)) : this.map = L.map("BPWidgetMap", {zoomControl: !1}).setView([null == (i = t.center) ? void 0 : i.lat, null == (i = t.center) ? void 0 : i.lng], t.zoom), L.control.zoom({position: "bottomright"}).addTo(this.map), L.tileLayer(this.TILE_LAYER_URL_TEMPLATE, {
+                            attribution: this.TILE_LAYER_ATTRIBUTION,
+                            maxZoom: 19
+                        }).addTo(this.map), this.options.readyCallback && this.map.on("load", this.options.readyCallback), this.search && this.search.init(this.map), document.getElementById("leaflet-keyboard-focus"));
+
+
+                    null != e && e.addEventListener("keydown", t => {
+                        this.handleMapKeyDown(t)
+                    }), this.options.mapState = {
                         coordinates: (null == (i = this.options.mapOptions) ? void 0 : i.center) || this.DEFAULT_MAP_OPTIONS.center,
                         zoom: (null == (i = this.options.mapOptions) ? void 0 : i.zoom) || this.DEFAULT_MAP_OPTIONS.globalZoom,
                         radius: 0
-                    }, this.map.on("zoomend moveend", this.checkPointsUpdate.bind(this)), this.markers.init(this.map, this.options.operators, this.selectPoint, this.submit, this.unselectPoint), this.filters && (e = {
+                    }, this.map.on("zoomend moveend", this.checkPointsUpdate.bind(this)), this.markers.init(this.map, this.options.operators, this.selectPoint, this.submit, this.unselectPoint), this.filters && (t = {
                         showFilter: this.options.showCod,
                         filterValue: this.options.codOnly
-                    }, this.brandMode ? (this.filters.initWithBrands(this.options.brands, e, !!this.options.hideFilters, !!this.options.changeFiltersPosition), o(document.getElementById("BPWidgetMap"), "brands"), this.updateMarkersPointsVisibility()) : this.filters.initWithOperators(this.options.operators, e, !!this.options.hideFilters, !!this.options.changeFiltersPosition), this.filters.onChange(a(() => this.updatePoints(this.updatePointsCallback.bind(this)), 1e3))), this.isCodeSearch() && (this.codeSearch.init(this.selectPointByCode, this.map, () => this.getOperatorsOrBrandsToUpdate(), this.options), this.codeSearch.autocomplete(document.getElementById("BPWidgetCodeSearch"))), this.list.init(this.selectPointByCode, !!this.options.changeFiltersPosition), this.updatePoints(this.updatePointsCallback.bind(this)), setTimeout(() => {
+                    }, this.brandMode ? (this.filters.initWithBrands(this.options.brands, t, !!this.options.hideFilters, !!this.options.changeFiltersPosition), o(document.getElementById("BPWidgetMap"), "brands"), this.updateMarkersPointsVisibility()) : this.filters.initWithOperators(this.options.operators, t, !!this.options.hideFilters, !!this.options.changeFiltersPosition), this.filters.onChange(r(() => this.updatePoints(this.updatePointsCallback.bind(this)), 1e3))), this.isCodeSearch() && (this.codeSearch.init(this.selectPointByCode, this.map, () => this.getOperatorsOrBrandsToUpdate(), this.options), this.codeSearch.autocomplete(document.getElementById("BPWidgetCodeSearch"))), this.list.init(this.selectPointByCode, this.options), this.updatePoints(this.updatePointsCallback.bind(this)), setTimeout(() => {
                         this.map.invalidateSize()
                     }, 100)
                 })
@@ -8890,13 +8976,37 @@ function posId(t) {
                 return t && e && i ? t * (40075.016 * Math.cos(Math.PI * e / 180) / Math.pow(2, Math.floor(i) + 8)) : 0
             }
 
+            handleMapKeyDown(t) {
+                switch (t.key) {
+                    case"ArrowUp":
+                        this.map.panBy([0, -100]);
+                        break;
+                    case"ArrowDown":
+                        this.map.panBy([0, 100]);
+                        break;
+                    case"ArrowLeft":
+                        this.map.panBy([-100, 0]);
+                        break;
+                    case"ArrowRight":
+                        this.map.panBy([100, 0]);
+                        break;
+                    case"+":
+                    case"=":
+                        this.map.zoomIn();
+                        break;
+                    case"-":
+                    case"_":
+                        this.map.zoomOut()
+                }
+            }
+
             createModules() {
-                this.markers = new p, this.filters = new d, this.search = new f, this.codeSearch = new _(this.http), this.list = new g
+                this.markers = new f, this.filters = new p, this.search = new m, this.codeSearch = new g(this.http), this.list = new v
             }
 
             updatePoints(e) {
                 var t;
-                this.options.mapState.zoom < c.MIN_MAP_ZOOM ? (this.showZoomInRequirement(!0), this.markers.clearMarkers(), this.options.mapState.isZoomWarningVisible = !0) : (this.options.mapState.isZoomWarningVisible = !1, this.showZoomInRequirement(!1), t = this.getOperatorsOrBrandsToUpdate(), this.options.mapState.coordinates = this.map.getCenter(), this.options.mapState.radius = this.calculatePixelDistanceInKilometers(.5 * (this.rootElement.offsetHeight + this.rootElement.offsetWidth), this.map.getCenter().lat, this.map.getZoom()), this.http.listPos(this.options, t, this.getCodFilter(), t => {
+                this.options.mapState.zoom < d.MIN_MAP_ZOOM ? (this.showZoomInRequirement(!0), this.markers.clearMarkers(), this.options.mapState.isZoomWarningVisible = !0) : (this.options.mapState.isZoomWarningVisible = !1, this.showZoomInRequirement(!1), t = this.getOperatorsOrBrandsToUpdate(), this.options.mapState.coordinates = this.map.getCenter(), this.options.mapState.radius = this.calculatePixelDistanceInKilometers(.5 * (this.rootElement.offsetHeight + this.rootElement.offsetWidth), this.map.getCenter().lat, this.map.getZoom()), this.isNullOrEmptyArray(t) ? (this.markers.clearMarkers(), this.list.clearList()) : this.http.listPos(this.options, t, this.getCodFilter(), t => {
                     this.markers.clearMarkers(), this.markers.updateMarkers(t), this.list.updateList(t), e()
                 }, t => {
                     console.error(t), this.markers.clearMarkers()
@@ -8920,6 +9030,10 @@ function posId(t) {
                 return this.filters.getCod()
             }
 
+            isNullOrEmptyArray(t) {
+                return !t || 0 === t.length
+            }
+
             showZoomInRequirement(t) {
                 var e = document.getElementById("BPWidgetOverlayShadow"),
                     i = document.getElementById("BPWidgetZoomWarning");
@@ -8931,14 +9045,17 @@ function posId(t) {
             }
 
             display() {
-                var t = c.footer(!!this.options.alias, this.customLogoUrl, this.brandUrl);
+                var t = d.footer(!!this.options.alias, this.customLogoUrl, this.brandUrl);
                 let e;
                 return e = this.options.alias ? this.brandColor || "#6D3ADF" : "#282828", `
                   <div id="BPWidget" class="bp-media-lg">
                     <div id="BPWidgetSearch" class="bp-search-panel"></div>
                     <div id="BPWidgetFilters" class="bp-filters switchable"></div>
-                    <div id="BPWidgetMap" class="bp-map" data-test="map"></div>
-                    <div id="BPWidgetPOSInfo" class="bp-pos-info switchable"></div>
+                    <div id="leaflet-keyboard-focus" tabindex="0" role="region" aria-label="Mapa wynikÃ³w">
+                      <div id="map" class="map-container"></div>
+                    </div>
+                    <div id="BPWidgetMap" class="bp-map" data-test="map" tabindex="0"></div>
+                    <div id="BPWidgetPOSInfo" tabindex="0" class="bp-pos-info switchable"></div>
                     <div id="BPWidgetOverlayShadow" class="hidden"></div>
                     <div id="BPWidgetZoomWarning" class="hidden">${i18n.t("zoom_to_see_points")}</div>
                     <div id="BPWidgetList" class="bp-list switchable"></div>
@@ -9025,7 +9142,7 @@ function posId(t) {
         var o = window, N = document, y = void 0;
 
         function Z(t, e, i) {
-            return setTimeout(D(t, i), e)
+            return setTimeout(R(t, i), e)
         }
 
         function i(t, e, i) {
@@ -9036,7 +9153,7 @@ function posId(t) {
             if (t) if (t.forEach) t.forEach(e, i); else if (t.length !== y) for (n = 0; n < t.length;) e.call(i, t[n], n, t), n++; else for (var n in t) t.hasOwnProperty(n) && e.call(i, t[n], n, t)
         }
 
-        function R(i, t, e) {
+        function D(i, t, e) {
             var n = "DEPRECATED METHOD: " + t + "\n" + e + " AT \n";
             return function () {
                 var t = new Error("get-stack-trace"),
@@ -9048,10 +9165,10 @@ function posId(t) {
 
         function t(t, e, i) {
             var e = e.prototype, n = t.prototype = Object.create(e);
-            n.constructor = t, n._super = e, i && x(n, i)
+            n.constructor = t, n._super = e, i && L(n, i)
         }
 
-        function D(t, e) {
+        function R(t, e) {
             return function () {
                 return t.apply(e, arguments)
             }
@@ -9147,13 +9264,13 @@ function posId(t) {
                 }, _ = p.offsetDelta = {
                     x: m.x,
                     y: m.y
-                }), f.deltaX = g.x + (m.x - _.x), f.deltaY = g.y + (m.y - _.y), c.offsetDirection = Y(c.deltaX, c.deltaY), o = $(c.deltaTime, c.deltaX, c.deltaY), c.overallVelocityX = o.x, c.overallVelocityY = o.y, c.overallVelocity = L(o.x) > L(o.y) ? o.x : o.y, c.scale = s ? function (t, e) {
+                }), f.deltaX = g.x + (m.x - _.x), f.deltaY = g.y + (m.y - _.y), c.offsetDirection = Y(c.deltaX, c.deltaY), o = $(c.deltaTime, c.deltaX, c.deltaY), c.overallVelocityX = o.x, c.overallVelocityY = o.y, c.overallVelocity = x(o.x) > x(o.y) ? o.x : o.y, c.scale = s ? function (t, e) {
                     return b(e[0], e[1], Mt) / b(t[0], t[1], Mt)
                 }(s.pointers, e) : 1, c.rotation = s ? function (t, e) {
                     return K(e[1], e[0], Mt) + K(t[1], t[0], Mt)
                 }(s.pointers, e) : 0, c.maxPointers = !d.prevInput || c.pointers.length > d.prevInput.maxPointers ? c.pointers.length : d.prevInput.maxPointers, d),
                 p = c, f = v.lastInterval || p, g = p.timeStamp - f.timeStamp;
-            p.eventType != E && (Pt < g || f.velocity === y) ? (n = p.deltaX - f.deltaX, m = p.deltaY - f.deltaY, g = $(g, n, m), l = g.x, h = g.y, a = L(g.x) > L(g.y) ? g.x : g.y, n = Y(n, m), v.lastInterval = p) : (a = f.velocity, l = f.velocityX, h = f.velocityY, n = f.direction), p.velocity = a, p.velocityX = l, p.velocityY = h, p.direction = n, r = u.element, U(c.srcEvent.target, r) && (r = c.srcEvent.target), c.target = r, t.emit("hammer.input", i), t.recognize(i), t.session.prevInput = i
+            p.eventType != E && (Pt < g || f.velocity === y) ? (n = p.deltaX - f.deltaX, m = p.deltaY - f.deltaY, g = $(g, n, m), l = g.x, h = g.y, a = x(g.x) > x(g.y) ? g.x : g.y, n = Y(n, m), v.lastInterval = p) : (a = f.velocity, l = f.velocityX, h = f.velocityY, n = f.direction), p.velocity = a, p.velocityX = l, p.velocityY = h, p.direction = n, r = u.element, U(c.srcEvent.target, r) && (r = c.srcEvent.target), c.target = r, t.emit("hammer.input", i), t.recognize(i), t.session.prevInput = i
         }
 
         function V(t) {
@@ -9176,7 +9293,7 @@ function posId(t) {
         }
 
         function Y(t, e) {
-            return t === e ? Ct : L(t) >= L(e) ? t < 0 ? T : M : e < 0 ? S : k
+            return t === e ? Ct : x(t) >= x(e) ? t < 0 ? T : M : e < 0 ? k : S
         }
 
         function b(t, e, i) {
@@ -9194,7 +9311,7 @@ function posId(t) {
         }
 
         function X() {
-            this.evEl = At, this.evWin = It, c.apply(this, arguments), this.store = this.manager.session.pointerEvents = []
+            this.evEl = Ot, this.evWin = It, c.apply(this, arguments), this.store = this.manager.session.pointerEvents = []
         }
 
         function J() {
@@ -9207,7 +9324,7 @@ function posId(t) {
 
         function Q() {
             c.apply(this, arguments);
-            var t = D(this.handler, this);
+            var t = R(this.handler, this);
             this.touch = new p(this.manager, t), this.mouse = new d(this.manager, t), this.primaryTouch = null, this.lastTouches = []
         }
 
@@ -9227,7 +9344,7 @@ function posId(t) {
         }
 
         function f(t) {
-            this.options = x({}, this.defaults, t || {}), this.id = bt++, this.manager = null, this.options.enable = F(this.options.enable, !0), this.state = 1, this.simultaneous = {}, this.requireFail = []
+            this.options = L({}, this.defaults, t || {}), this.id = bt++, this.manager = null, this.options.enable = F(this.options.enable, !0), this.state = 1, this.simultaneous = {}, this.requireFail = []
         }
 
         function it(t) {
@@ -9235,7 +9352,7 @@ function posId(t) {
         }
 
         function nt(t) {
-            return t == k ? "down" : t == S ? "up" : t == T ? "left" : t == M ? "right" : ""
+            return t == S ? "down" : t == k ? "up" : t == T ? "left" : t == M ? "right" : ""
         }
 
         function m(t, e) {
@@ -9276,7 +9393,7 @@ function posId(t) {
         }
 
         function ut(t, e) {
-            this.options = x({}, g.defaults, e || {}), this.options.inputTarget = this.options.inputTarget || t, this.handlers = {}, this.session = {}, this.recognizers = [], this.oldCssProps = {}, this.element = t, this.input = new ((e = this).options.inputClass || (xt ? X : wt ? p : Lt ? Q : d))(e, G), this.touchAction = new et(this, this.options.touchAction), ct(this, !0), r(this.options.recognizers, function (t) {
+            this.options = L({}, g.defaults, e || {}), this.options.inputTarget = this.options.inputTarget || t, this.handlers = {}, this.session = {}, this.recognizers = [], this.oldCssProps = {}, this.element = t, this.input = new ((e = this).options.inputClass || (Lt ? X : wt ? p : xt ? Q : d))(e, G), this.touchAction = new et(this, this.options.touchAction), ct(this, !0), r(this.options.recognizers, function (t) {
                 var e = this.add(new t[0](t[1]));
                 t[2] && e.recognizeWith(t[2]), t[3] && e.requireFailure(t[3])
             }, this)
@@ -9290,31 +9407,31 @@ function posId(t) {
         }
 
         var dt, pt, ft = ["", "webkit", "Moz", "MS", "ms", "o"], mt = N.createElement("div"), _t = "function",
-            v = Math.round, L = Math.abs, gt = Date.now, x = "function" != typeof Object.assign ? function (t) {
+            v = Math.round, x = Math.abs, gt = Date.now, L = "function" != typeof Object.assign ? function (t) {
                 if (t === y || null === t) throw new TypeError("Cannot convert undefined or null to object");
                 for (var e = Object(t), i = 1; i < arguments.length; i++) {
                     var n = arguments[i];
                     if (n !== y && null !== n) for (var o in n) n.hasOwnProperty(o) && (e[o] = n[o])
                 }
                 return e
-            } : Object.assign, vt = R(function (t, e, i) {
+            } : Object.assign, vt = D(function (t, e, i) {
                 for (var n = Object.keys(e), o = 0; o < n.length;) i && t[n[o]] !== y || (t[n[o]] = e[n[o]]), o++;
                 return t
-            }, "extend", "Use `assign`."), yt = R(function (t, e) {
+            }, "extend", "Use `assign`."), yt = D(function (t, e) {
                 return vt(t, e, !0)
-            }, "merge", "Use `assign`."), bt = 1, Lt = "ontouchstart" in o, xt = u(o, "PointerEvent") !== y,
-            wt = Lt && /mobile|tablet|ip(ad|hone|od)|android/i.test(navigator.userAgent), w = "touch", Pt = 25, P = 1,
-            C = 4, E = 8, Ct = 1, T = 2, M = 4, S = 8, k = 16, O = T | M, A = S | k, Et = O | A, Tt = ["x", "y"],
-            Mt = ["clientX", "clientY"], St = (c.prototype = {
+            }, "merge", "Use `assign`."), bt = 1, xt = "ontouchstart" in o, Lt = u(o, "PointerEvent") !== y,
+            wt = xt && /mobile|tablet|ip(ad|hone|od)|android/i.test(navigator.userAgent), w = "touch", Pt = 25, P = 1,
+            C = 4, E = 8, Ct = 1, T = 2, M = 4, k = 8, S = 16, A = T | M, O = k | S, Et = A | O, Tt = ["x", "y"],
+            Mt = ["clientX", "clientY"], kt = (c.prototype = {
                 handler: function () {
                 }, init: function () {
                     this.evEl && e(this.element, this.evEl, this.domHandler), this.evTarget && e(this.target, this.evTarget, this.domHandler), this.evWin && e(W(this.element), this.evWin, this.domHandler)
                 }, destroy: function () {
                     this.evEl && n(this.element, this.evEl, this.domHandler), this.evTarget && n(this.target, this.evTarget, this.domHandler), this.evWin && n(W(this.element), this.evWin, this.domHandler)
                 }
-            }, {mousedown: P, mousemove: 2, mouseup: C}), kt = (t(d, c, {
+            }, {mousedown: P, mousemove: 2, mouseup: C}), St = (t(d, c, {
                 handler: function (t) {
-                    var e = St[t.type];
+                    var e = kt[t.type];
                     e & P && 0 === t.button && (this.pressed = !0), 2 & e && 1 !== t.which && (e = C), this.pressed && (e & C && (this.pressed = !1), this.callback(this.manager, e, {
                         pointers: [t],
                         changedPointers: [t],
@@ -9323,12 +9440,12 @@ function posId(t) {
                     }))
                 }
             }), {pointerdown: P, pointermove: 2, pointerup: C, pointercancel: E, pointerout: E}),
-            Ot = {2: w, 3: "pen", 4: "mouse", 5: "kinect"}, At = "pointerdown",
+            At = {2: w, 3: "pen", 4: "mouse", 5: "kinect"}, Ot = "pointerdown",
             It = "pointermove pointerup pointercancel",
-            zt = (o.MSPointerEvent && !o.PointerEvent && (At = "MSPointerDown", It = "MSPointerMove MSPointerUp MSPointerCancel"), t(X, c, {
+            zt = (o.MSPointerEvent && !o.PointerEvent && (Ot = "MSPointerDown", It = "MSPointerMove MSPointerUp MSPointerCancel"), t(X, c, {
                 handler: function (t) {
-                    var e = this.store, i = !1, n = t.type.toLowerCase().replace("ms", ""), n = kt[n],
-                        o = Ot[t.pointerType] || t.pointerType, s = o == w, r = a(e, t.pointerId, "pointerId");
+                    var e = this.store, i = !1, n = t.type.toLowerCase().replace("ms", ""), n = St[n],
+                        o = At[t.pointerType] || t.pointerType, s = o == w, r = a(e, t.pointerId, "pointerId");
                     n & P && (0 === t.button || s) ? r < 0 && (e.push(t), r = e.length - 1) : n & (C | E) && (i = !0), r < 0 || (e[r] = t, this.callback(this.manager, n, {
                         pointers: e,
                         changedPointers: [t],
@@ -9386,20 +9503,20 @@ function posId(t) {
                 }, destroy: function () {
                     this.touch.destroy(), this.mouse.destroy()
                 }
-            }), u(mt.style, "touchAction")), Rt = Zt !== y, Dt = "manipulation", I = "none", z = "pan-x", B = "pan-y",
-            jt = Rt && (dt = {}, pt = o.CSS && o.CSS.supports, ["auto", "manipulation", "pan-y", "pan-x", "pan-x pan-y", "none"].forEach(function (t) {
+            }), u(mt.style, "touchAction")), Dt = Zt !== y, Rt = "manipulation", I = "none", z = "pan-x", B = "pan-y",
+            jt = Dt && (dt = {}, pt = o.CSS && o.CSS.supports, ["auto", "manipulation", "pan-y", "pan-x", "pan-x pan-y", "none"].forEach(function (t) {
                 dt[t] = !pt || o.CSS.supports("touch-action", t)
             }), dt);
         et.prototype = {
             set: function (t) {
-                "compute" == t && (t = this.compute()), Rt && this.manager.element.style && jt[t] && (this.manager.element.style[Zt] = t), this.actions = t.toLowerCase().trim()
+                "compute" == t && (t = this.compute()), Dt && this.manager.element.style && jt[t] && (this.manager.element.style[Zt] = t), this.actions = t.toLowerCase().trim()
             }, update: function () {
                 this.set(this.manager.options.touchAction)
             }, compute: function () {
                 var t, e, i, n = [];
                 return r(this.manager.recognizers, function (t) {
                     j(t.options.enable, [t]) && (n = n.concat(t.getTouchAction()))
-                }), l(t = n.join(" "), I) || (e = l(t, z), i = l(t, B), e && i) ? I : e || i ? e ? z : B : l(t, Dt) ? Dt : "auto"
+                }), l(t = n.join(" "), I) || (e = l(t, z), i = l(t, B), e && i) ? I : e || i ? e ? z : B : l(t, Rt) ? Rt : "auto"
             }, preventDefaults: function (t) {
                 var e = t.srcEvent, i = t.offsetDirection;
                 if (!this.manager.session.prevented) {
@@ -9408,7 +9525,7 @@ function posId(t) {
                         var r = 1 === t.pointers.length, a = t.distance < 2, t = t.deltaTime < 250;
                         if (r && a && t) return
                     }
-                    return (!n || !s) && (o || s && i & O || n && i & A) ? this.preventSrc(e) : void 0
+                    return (!n || !s) && (o || s && i & A || n && i & O) ? this.preventSrc(e) : void 0
                 }
                 e.preventDefault()
             }, preventSrc: function (t) {
@@ -9416,7 +9533,7 @@ function posId(t) {
             }
         }, f.prototype = {
             defaults: {}, set: function (t) {
-                return x(this.options, t), this.manager && this.manager.touchAction.update(), this
+                return L(this.options, t), this.manager && this.manager.touchAction.update(), this
             }, recognizeWith: function (t) {
                 var e;
                 return i(t, "recognizeWith", this) || (e = this.simultaneous)[(t = m(t, this)).id] || (e[t.id] = t).recognizeWith(this), this
@@ -9447,7 +9564,7 @@ function posId(t) {
                 }
                 return !0
             }, recognize: function (t) {
-                t = x({}, t);
+                t = L({}, t);
                 return j(this.options.enable, [this, t]) ? (56 & this.state && (this.state = 1), this.state = this.process(t), void (30 & this.state && this.tryEmit(t))) : (this.reset(), void (this.state = 32))
             }, process: function (t) {
             }, getTouchAction: function () {
@@ -9464,10 +9581,10 @@ function posId(t) {
         }), t(ot, _, {
             defaults: {event: "pan", threshold: 10, pointers: 1, direction: Et}, getTouchAction: function () {
                 var t = this.options.direction, e = [];
-                return t & O && e.push(B), t & A && e.push(z), e
+                return t & A && e.push(B), t & O && e.push(z), e
             }, directionTest: function (t) {
                 var e = this.options, i = !0, n = t.distance, o = t.direction, s = t.deltaX, r = t.deltaY;
-                return o & e.direction || (n = e.direction & O ? (o = 0 === s ? Ct : s < 0 ? T : M, i = s != this.pX, Math.abs(t.deltaX)) : (o = 0 === r ? Ct : r < 0 ? S : k, i = r != this.pY, Math.abs(t.deltaY))), t.direction = o, i && n > e.threshold && o & e.direction
+                return o & e.direction || (n = e.direction & A ? (o = 0 === s ? Ct : s < 0 ? T : M, i = s != this.pX, Math.abs(t.deltaX)) : (o = 0 === r ? Ct : r < 0 ? k : S, i = r != this.pY, Math.abs(t.deltaY))), t.direction = o, i && n > e.threshold && o & e.direction
             }, attrTest: function (t) {
                 return _.prototype.attrTest.call(this, t) && (2 & this.state || !(2 & this.state) && this.directionTest(t))
             }, emit: function (t) {
@@ -9506,13 +9623,13 @@ function posId(t) {
                 return this._super.attrTest.call(this, t) && (Math.abs(t.rotation) > this.options.threshold || 2 & this.state)
             }
         }), t(lt, _, {
-            defaults: {event: "swipe", threshold: 10, velocity: .3, direction: O | A, pointers: 1},
+            defaults: {event: "swipe", threshold: 10, velocity: .3, direction: A | O, pointers: 1},
             getTouchAction: function () {
                 return ot.prototype.getTouchAction.call(this)
             },
             attrTest: function (t) {
                 var e, i = this.options.direction;
-                return i & (O | A) ? e = t.overallVelocity : i & O ? e = t.overallVelocityX : i & A && (e = t.overallVelocityY), this._super.attrTest.call(this, t) && i & t.offsetDirection && t.distance > this.options.threshold && t.maxPointers == this.options.pointers && L(e) > this.options.velocity && t.eventType & C
+                return i & (A | O) ? e = t.overallVelocity : i & A ? e = t.overallVelocityX : i & O && (e = t.overallVelocityY), this._super.attrTest.call(this, t) && i & t.offsetDirection && t.distance > this.options.threshold && t.maxPointers == this.options.pointers && x(e) > this.options.velocity && t.eventType & C
             },
             emit: function (t) {
                 var e = nt(t.offsetDirection);
@@ -9528,7 +9645,7 @@ function posId(t) {
                 threshold: 9,
                 posThreshold: 10
             }, getTouchAction: function () {
-                return [Dt]
+                return [Rt]
             }, process: function (t) {
                 var e = this.options, i = t.pointers.length === e.pointers, n = t.distance < e.threshold,
                     o = t.deltaTime < e.time;
@@ -9556,7 +9673,7 @@ function posId(t) {
             enable: !0,
             inputTarget: null,
             inputClass: null,
-            preset: [[at, {enable: !1}], [st, {enable: !1}, ["rotate"]], [lt, {direction: O}], [ot, {direction: O}, ["swipe"]], [ht], [ht, {
+            preset: [[at, {enable: !1}], [st, {enable: !1}, ["rotate"]], [lt, {direction: A}], [ot, {direction: A}, ["swipe"]], [ht], [ht, {
                 event: "doubletap",
                 taps: 2
             }, ["tap"]], [rt]],
@@ -9570,7 +9687,7 @@ function posId(t) {
             }
         }, ut.prototype = {
             set: function (t) {
-                return x(this.options, t), t.touchAction && this.touchAction.update(), t.inputTarget && (this.input.destroy(), this.input.target = t.inputTarget, this.input.init()), this
+                return L(this.options, t), t.touchAction && this.touchAction.update(), t.inputTarget && (this.input.destroy(), this.input.target = t.inputTarget, this.input.init()), this
             }, stop: function (t) {
                 this.session.stopped = t ? 2 : 1
             }, recognize: function (t) {
@@ -9613,7 +9730,7 @@ function posId(t) {
             }, destroy: function () {
                 this.element && ct(this, !1), this.handlers = {}, this.session = {}, this.input.destroy(), this.element = null
             }
-        }, x(g, {
+        }, L(g, {
             INPUT_START: P,
             INPUT_MOVE: 2,
             INPUT_END: C,
@@ -9628,10 +9745,10 @@ function posId(t) {
             DIRECTION_NONE: Ct,
             DIRECTION_LEFT: T,
             DIRECTION_RIGHT: M,
-            DIRECTION_UP: S,
-            DIRECTION_DOWN: k,
-            DIRECTION_HORIZONTAL: O,
-            DIRECTION_VERTICAL: A,
+            DIRECTION_UP: k,
+            DIRECTION_DOWN: S,
+            DIRECTION_HORIZONTAL: A,
+            DIRECTION_VERTICAL: O,
             DIRECTION_ALL: Et,
             Manager: ut,
             Input: c,
@@ -9654,9 +9771,9 @@ function posId(t) {
             each: r,
             merge: yt,
             extend: vt,
-            assign: x,
+            assign: L,
             inherit: t,
-            bindFn: D,
+            bindFn: R,
             prefixed: u
         }), (void 0 !== o ? o : "undefined" != typeof self ? self : {}).Hammer = g, "function" == typeof define && define.amd ? define(function () {
             return g

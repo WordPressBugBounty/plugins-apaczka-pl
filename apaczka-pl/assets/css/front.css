@@ -81,7 +81,7 @@
     background-color: #29bb15;
     border-radius: 3px;
     line-height: 1em;
-    padding: 7px 10px 12px 10px;
+    padding: 17px 30px;
     max-width: 200px;
 }
 
@@ -98,8 +98,12 @@
     background-color: #29bb15;
     border-radius: 3px;
     line-height: 1em;
-    padding: 7px 10px 12px 10px;
+    padding: 17px 30px;
     max-width: 200px;
+}
+
+.apaczka_pl_geowidget_classic:hover, .apaczka_pl_geowidget_block:hover {
+    cursor: pointer;
 }
 
 #apaczka_selected_point_data {

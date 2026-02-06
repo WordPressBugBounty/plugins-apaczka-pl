@@ -229,6 +229,8 @@
         const FedexInternationalEconomy = 153;
         const UPSstandard = 5;
         const UPSexpressSaver = 6;
+		const DPDPickupPunktPunkt = 26;
+        const DPDPickupPunktDzrwi = 30;
 
 
         /**
@@ -322,6 +324,7 @@
             apaczka_pl_add_border();
 
             let shipping_method = $('#_apaczka\\[package_properties\\]\\[shipping_method\\]').val();
+            let method = null;
 
             let debug = serviceIdToApmSupplierId(selectedService);
             console.log('Apaczka PL: serviceIdToApmSupplierId:');
@@ -331,9 +334,7 @@
                 $('#apaczka_delivery_point_id_wrapper').removeClass('apaczka-hidden');
             } else {
                 $('#apaczka_delivery_point_id_wrapper').addClass('apaczka-hidden');
-            }
-
-            method = null;
+            }           
 
             if ((selectedService === PocztaKurier48
                 || selectedService === PocztaKurier48Punkty
@@ -371,11 +372,12 @@
             }
 
             if (selectedService === AllegroSMARTDPDPickup
+                || selectedService === DPDPickupPunktPunkt
+                || selectedService === DPDPickupPunktDzrwi
                 //|| selectedService === DPDCourierEurope
                 //|| selectedService === DPDPickupEurope
             ) {
                 method = 'dpd';
-
             }
 
             /*if ( selectedService === FedexInternationalEconomy

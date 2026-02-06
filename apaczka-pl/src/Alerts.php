@@ -3,6 +3,9 @@
 
 namespace Inspire_Labs\Apaczka_Woocommerce;
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit; // Exit if accessed directly.
+}
 
 class Alerts {
 

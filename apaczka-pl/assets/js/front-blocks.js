@@ -314,7 +314,6 @@
 
 									apaczka_geowidget_supplier = shipping_config.hasOwnProperty( "geowidget_supplier" ) ? shipping_config.geowidget_supplier : null;
 									if (apaczka_geowidget_supplier !== null) {
-
 										operators = apaczka_geowidget_supplier.map(
 											function (operator) {
 												return apaczka_pl_create_operator_block( 'operators - ' + operator, operator );
@@ -334,6 +333,20 @@
 
 									// console.log( 'Apaczka PL: country_code map_init: ', shipping_country_code );
 									// console.log( 'map_initial_address: ', initial_map_address );
+
+									let bp_widget_params = {
+										posType: 'DELIVERY',
+										mapOptions: { zoom: 14 },
+										codOnly: apaczka_only_cod,
+										operatorMarkers: true,
+										countryCodes: shipping_country_code,
+										initialAddress: initial_map_address,
+										operators: operators,
+										codeSearch: true
+									};
+
+									console.log('Apaczka block: bp_widget_params');
+									console.log(bp_widget_params);
 
 									BPWidget.init(
 										document.getElementById( 'apaczka_pl_geowidget_modal_inner_content' ),
@@ -388,7 +401,7 @@
 
 			// console.log("wcSettings");
 			// console.log(wcSettings );
-			console.log( 'Apaczka 2.0 WC Blocks' );
+			console.log( 'Apaczka.pl, version: ' + apaczka_block.plugin_version );
 			// console.log( apaczka_block.plugin_version );
 
 			let apaczka_geowidget_modal       = document.createElement( 'div' );

@@ -51,7 +51,7 @@ class FSHooks {
 	function integration_options( $options ) {
 		$shipping_methods = $this->_get_shipping_methods();
 		if ( $shipping_methods['apaczka']->enabled == 'yes' ) {
-			$options['apaczka'] = __( 'Apaczka', 'woocommerce-apaczka' );
+			$options['apaczka'] = esc_html__( 'Apaczka', 'apaczka-pl' );
 		}
 
 		return $options;
@@ -71,7 +71,10 @@ class FSHooks {
 			?>
 			<td width="1%" class="integration default">
                 <span class="tips" data-tip="<?php echo esc_attr( $services ); ?>">
-                    <?php echo ucfirst( esc_html( $shipping_method['method_integration'] ) ); ?>
+                    <?php $smi = trim($shipping_method['method_integration']);
+                    $smi = esc_html($shipping_method['method_integration']);
+                    $smi = ucfirst($shipping_method['method_integration']);
+                    echo esc_html( $shipping_method['method_integration'] ); ?>
                 </span>
 			</td>
 			<?php

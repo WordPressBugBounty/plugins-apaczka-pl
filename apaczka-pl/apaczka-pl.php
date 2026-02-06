@@ -4,8 +4,8 @@
  * Plugin URI: https://www.apaczka.com/zostan-sprzedawca
  * Description: Nadawaj przesyłki za pośrednictwem Apaczka.pl bezpośrednio z panelu swojego sklepu
  * Product: Apaczka Woocommerce
- * Version: 1.3.4
- * Tested up to: 6.8
+ * Version: 1.3.9
+ * Tested up to: 6.9
  * Requires at least: 5.3
  * Requires PHP: 7.2
  * Author: iLabs LTD
@@ -61,15 +61,14 @@ add_action(
 				'text_domain' => 'apaczka-pl',
 			);
 
-            load_plugin_textdomain(
-                'apaczka-pl',
-                false,
-                dirname( plugin_basename( APACZKA_PL_PLUGIN_FILE ) ) . '/lang/'
-            );
+			load_plugin_textdomain(
+				'apaczka-pl',
+				false,
+				dirname( plugin_basename( APACZKA_PL_PLUGIN_FILE ) ) . '/lang/'
+			);
 
 			apaczka()->execute( $config );
 			apaczka()->plugins_loaded_hooks();
-
 
 		} else {
 			add_action( 'admin_notices', 'apaczka_woo_needed_notice' );
@@ -120,6 +119,5 @@ register_deactivation_hook( __FILE__, 'apaczka_delete_service_cache' );
 function apaczka_delete_service_cache() {
 	delete_option( 'apaczka_woocommerce_SC_CACHE' );
 	delete_option( 'apaczka_woocommerce_SC_CACHE_TIMESTAMP' );
-    apaczka()->clear_zones_cache();
+	apaczka()->clear_zones_cache();
 }
-

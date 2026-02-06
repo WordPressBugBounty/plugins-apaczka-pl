@@ -2,6 +2,10 @@
 
 namespace Inspire_Labs\Apaczka_Woocommerce;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 class Service_Structure_Helper {
 
 	const SERVICES_OPTION = Plugin::APP_PREFIX . '_SERVICES';
@@ -17,10 +21,14 @@ class Service_Structure_Helper {
 		object $service_structure
 	) {
 		update_option( self::SERVICES_OPTION, $service_structure->services );
-		update_option( self::PACKAGE_TYPE_OPTION,
-			$service_structure->package_type );
-		update_option( self::POINTS_TYPE_OPTION,
-			$service_structure->points_type );
+		update_option(
+			self::PACKAGE_TYPE_OPTION,
+			$service_structure->package_type
+		);
+		update_option(
+			self::POINTS_TYPE_OPTION,
+			$service_structure->points_type
+		);
 		update_option( self::OPTIONS_OPTION, $service_structure->options );
 	}
 
@@ -54,10 +62,8 @@ class Service_Structure_Helper {
 	/**
 	 * @return false|mixed|void
 	 */
-	public function get_options() {
-		$this->refresh();
-
-		return get_option( self::OPTIONS_OPTION );
+	public function refresh_service_structure_forced() {
+		( new Web_Api_V2() )->service_structure( true );
 	}
 
 	/**
@@ -66,5 +72,4 @@ class Service_Structure_Helper {
 	private function refresh() {
 		( new Web_Api_V2() )->service_structure();
 	}
-
 }

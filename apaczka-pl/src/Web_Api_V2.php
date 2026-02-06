@@ -78,8 +78,8 @@ class Web_Api_V2 {
 	 * Contstructor
 	 */
 	public function __construct() {
-		$this->app_id     = Plugin::get_option( 'app_id' );
-		$this->app_secret = Plugin::get_option( 'app_secret' );
+		$this->app_id     = trim( Plugin::get_option( 'app_id' ) );
+		$this->app_secret = trim( Plugin::get_option( 'app_secret' ) );
 	}
 
 	/**
@@ -92,6 +92,8 @@ class Web_Api_V2 {
 	 */
 	private function wp_remote_post( $route, $data = null ) {
 
+		$current_plugin_version = apaczka()->get_plugin_version();
+
 		$result = wp_remote_post(
 			self::API_URL . $route,
 			array(
@@ -99,12 +101,15 @@ class Web_Api_V2 {
 				'method'    => 'POST',
 				'sslverify' => true,
 				'timeout'   => 30,
+				'headers'   => array(
+					'plugin-source' => 'apaczka-woo-2.0-version: ' . $current_plugin_version,
+				),
 			)
 		);
 
 		if ( ! $result || $result instanceof WP_Error ) {
 			$error_msg = $result->get_error_message();
-			throw new Exception( $error_msg );
+			throw new Exception( esc_html( $error_msg ) );
 		}
 
 		return wp_remote_retrieve_body( $result );
@@ -119,12 +124,18 @@ class Web_Api_V2 {
 	 * @return mixed
 	 */
 	private function request( $route, $data = null ) {
+
+		if ( empty( $this->app_id ) || empty( $this->app_secret ) ) {
+			return false;
+		}
+
 		try {
 			ob_start();
 			var_dump( $data );
 			$debug_dump = ob_get_clean();
 
 			$response = $this->wp_remote_post( $route . '/', $data );
+
 		} catch ( Exception $e ) {
 
 			if ( defined( 'WOOCOMMERCE_APACZKA_DEBUG' ) ) {
@@ -136,7 +147,7 @@ class Web_Api_V2 {
 			( new Alerts() )->add_error(
 				$this->prepare_error_message(
 					sanitize_text_field( $route ),
-					$e->getMessage() . $debug_extra_info
+					'APACZKA.PL: ' . $e->getMessage() . $debug_extra_info
 				),
 				$route
 			);
@@ -198,7 +209,7 @@ class Web_Api_V2 {
 				);
 			} else {
 				$error_message = $this->parse_api_error_message( $response_decoded->message );
-				( new Alerts() )->add_error( $error_message, $route );
+				( new Alerts() )->add_error( 'Apaczka.pl, error during sending request to ' . $route . ': ' . $error_message, $route );
 			}
 
 			if ( function_exists( 'wc_get_logger' ) ) {
@@ -388,13 +399,27 @@ class Web_Api_V2 {
 	/**
 	 * Service structure
 	 *
+	 * @param boolean $forced $forced.
+	 *
 	 * @return false|mixed|null
 	 */
-	public function service_structure() {
-		if ( defined( 'APACZKA_DISABLE_CACHE' ) || time()
+	public function service_structure( $forced = false ) {
+		if ( $forced || ( defined( 'APACZKA_DISABLE_CACHE' ) || time()
 													- (int) get_option( self::SERVICE_STRUCTURE_CACHE_TIMESTAMP_OPTION )
-													> self::SECONDS_24H
+													> self::SECONDS_24H )
 		) {
+
+			if ( $forced ) {
+				delete_option( 'apaczka_pl_api_returned_error' );
+			}
+
+			$maybe_timeout = get_option( 'apaczka_pl_api_returned_error' );
+			$now           = time();
+			if ( $maybe_timeout && $maybe_timeout > $now ) {
+				return false;
+			} else {
+				delete_option( 'apaczka_pl_api_returned_error' );
+			}
 
 			$service_structure = $this->request( __FUNCTION__ );
 
@@ -408,17 +433,21 @@ class Web_Api_V2 {
 					( new Alerts() )->add_error(
 						$this->prepare_error_message(
 							__FUNCTION__,
-							'service_structure object cannot be parsed!'
+							'Apaczka.pl: service_structure object cannot be parsed!'
 						)
 					);
 				}
 
 				( new Alerts() )->add_error(
-					__(
+					'Apaczka.pl: ' . esc_html__(
 						'Unable to get the site structure from API. Make sure credentials are correct.',
 						'apaczka-pl'
 					)
 				);
+
+				$current_timestamp = time();
+				$timeout           = $current_timestamp + 300;
+				update_option( 'apaczka_pl_api_returned_error', $timeout );
 
 				return false;
 			}
@@ -439,6 +468,7 @@ class Web_Api_V2 {
 		} else {
 			$service_structure = get_option( self::SERVICE_STRUCTURE_CACHE_OPTION );
 		}
+
 
 		return $service_structure;
 	}
@@ -567,7 +597,7 @@ class Web_Api_V2 {
 			}
 		}
 
-		return __( 'Invalid phone number.', 'apaczka-pl' );
+		return esc_html__( 'Invalid phone number.', 'apaczka-pl' );
 	}
 
 
@@ -588,7 +618,7 @@ class Web_Api_V2 {
 			= sprintf(
 				"******************\n\n%s\n%s\nURL:%s\nREQUEST:\n%s\nRESPONSE:\n%s\n",
 				$method,
-				date( 'Y-m-d H:i:s', time() ),
+				gmdate( 'Y-m-d H:i:s', time() ),
 				$url,
 				preg_replace( '/[\x00-\x1F\x7F]/u', '', serialize( $request ) ),
 				// remove non printable characters.
@@ -609,11 +639,11 @@ class Web_Api_V2 {
 
 		return $ret;
 	}
-	
+
 	/**
 	 * Parse error message from API
 	 *
-	 * @param mixed $error_message
+	 * @param mixed $error_message $error_message.
 	 * @return mixed
 	 */
 	public function parse_api_error_message( $error_message ) {
@@ -626,11 +656,11 @@ class Web_Api_V2 {
 				if ( strpos( $error_message, 'receiver.buildingNumber' ) !== false ) {
 					$too_long_data = esc_html__( 'Receiver building number', 'apaczka-pl' );
 				}
-				
+
 				if ( strpos( $error_message, 'sender.buildingNumber' ) !== false ) {
 					$too_long_data = esc_html__( 'Sender building number', 'apaczka-pl' );
 				}
-				
+
 				if ( strpos( $error_message, 'receiver.street' ) !== false ) {
 					$too_long_data = esc_html__( 'Receiver street', 'apaczka-pl' );
 				}
@@ -651,6 +681,4 @@ class Web_Api_V2 {
 
 		return $error_message;
 	}
-	
-	
 }
