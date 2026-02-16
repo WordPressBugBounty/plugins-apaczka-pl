@@ -1,13 +1,13 @@
 (function ($) {
 
+	let apaczka_pl_country_code = '';
+
 	$( document ).ready(
 		function () {
 
-			var country_code_apaczka = 'PL';
 			var initial_map_address  = '';
 
 			console.log( 'Apaczka.pl, ver: ' + apaczka_checkout.plugin_version );
-			//console.log( apaczka_checkout.plugin_version );
 
 			let apaczka_geowidget_modal;
 			let cod_only       = false;
@@ -46,8 +46,12 @@
 				if ('description' in point) {
 					visible_point_desc += point.description;
 				}
+				let pointstreet = '';
 				if ('street' in point) {
 					visible_point_desc += '<br>' + point.street;
+					pointstreet = point.street;
+				} else if ( 'description' in point ) {
+					pointstreet = point.description;
 				}
 				if ('city' in point) {
 					visible_point_desc += '<br>' + point.city;
@@ -58,24 +62,6 @@
 
 				$( '#selected-parcel-machine-desc' ).html( visible_point_desc );
 
-				let shipping_country = $( '#shipping_country' );
-				if (typeof shipping_country != 'undefined' && shipping_country !== null) {
-					let shipping_country_code = $( shipping_country ).val();
-					if (typeof shipping_country_code != 'undefined' && shipping_country_code !== null) {
-						apaczka_point_data.apm_country_code = shipping_country_code;
-						console.log( 'apaczka_pl_country' );
-						console.log( shipping_country_code );
-					}
-				}
-
-				//$( '#apm_name' ).val( point.description );
-				//$( '#apm_city' ).val( point.city );
-				//$( '#apm_street' ).val( point.street );
-				//$( '#apm_postal_code' ).val( point.postalCode );
-				//$( '#apm_country_code' ).val( country_code_apaczka );
-				//$( '#apm_supplier' ).val( point.operator );
-				//$( '#apm_access_point_id' ).val( point.code );
-				//$( '#apm_foreign_access_point_id' ).val( point.code );
 
 				$( '#apm_name' ).each(
 					function (i, elem) {
@@ -89,7 +75,7 @@
 				);
 				$( '#apm_street' ).each(
 					function (i, elem) {
-						$( elem ).val( point.street );
+						$( elem ).val( pointstreet );
 					}
 				);
 				$( '#apm_postal_code' ).each(
@@ -99,7 +85,7 @@
 				);
 				$( '#apm_country_code' ).each(
 					function (i, elem) {
-						$( elem ).val( country_code_apaczka );
+						$( elem ).val( apaczka_pl_country_code );
 					}
 				);
 				$( '#apm_supplier' ).each(
@@ -486,21 +472,23 @@
 							let apaczkaShippingDataObject = JSON.parse( apaczkaShippingData );
 
 							if ( 'shipping_country' in apaczkaShippingDataObject ) {
-								country_code_apaczka = apaczkaShippingDataObject.shipping_country;
+								apaczka_pl_country_code = apaczkaShippingDataObject.shipping_country;
 							}
 
 						} else {
-							let shipping_country_input = $( '#shipping_country' );
-							if (typeof shipping_country_input != 'undefined' && shipping_country_input !== null) {
-								let country_code_shipping = $( shipping_country_input ).val();
-								if (typeof country_code_shipping != 'undefined' && country_code_shipping !== null) {
-									country_code_apaczka = country_code_shipping;
-								} else {
-									let billing_country = $( '#billing_country' );
-									if (typeof billing_country != 'undefined' && billing_country !== null) {
-										country_code_billing = $( billing_country ).val();
-										if (typeof country_code_billing != 'undefined' && country_code_billing !== null) {
-											country_code_apaczka = country_code_billing;
+							if ('' === apaczka_pl_country_code || typeof apaczka_pl_country_code == 'undefined' || apaczka_pl_country_code === null) {
+								let shipping_country_input = $('#shipping_country');
+								if (typeof shipping_country_input != 'undefined' && shipping_country_input !== null) {
+									let country_code_shipping = $(shipping_country_input).val();
+									if (typeof country_code_shipping != 'undefined' && country_code_shipping !== null) {
+										apaczka_pl_country_code = country_code_shipping;
+									} else {
+										let billing_country = $('#billing_country');
+										if (typeof billing_country != 'undefined' && billing_country !== null) {
+											country_code_billing = $(billing_country).val();
+											if (typeof country_code_billing != 'undefined' && country_code_billing !== null) {
+												apaczka_pl_country_code = country_code_billing;
+											}
 										}
 									}
 								}
@@ -526,7 +514,7 @@
 							}
 						}
 
-						console.log( 'apaczka_pl_country_code_before_map_init: ', country_code_apaczka );
+						console.log( 'apaczka_pl_country_code_before_map_init: ', apaczka_pl_country_code );
 						console.log( 'apaczka_pl_map_initial_address: ', initial_map_address );
 						console.log( 'cod_only: ', bp_is_cod_only );
 
@@ -543,7 +531,7 @@
 							mapOptions: { zoom: 14 },
 							codOnly: bp_is_cod_only,
 							operatorMarkers: true,
-							countryCodes: country_code_apaczka,
+							countryCodes: apaczka_pl_country_code,
 							initialAddress: initial_map_address,
 							operators: operators,
 							codeSearch: true
@@ -562,7 +550,7 @@
 								mapOptions: { zoom: 14 },
 								codOnly: bp_is_cod_only,
 								operatorMarkers: true,
-								countryCodes: country_code_apaczka,
+								countryCodes: apaczka_pl_country_code,
 								initialAddress: initial_map_address,
 								operators: operators,
 								codeSearch: true
@@ -587,6 +575,40 @@
 					let map_modal = document.getElementById( 'apaczka_pl_geowidget_modal_dynamic' );
 					if (typeof map_modal != 'undefined' && map_modal !== null) {
 						map_modal.style.display = 'none';
+					}
+				}
+			);
+
+
+			$( '#billing_country' ).on(
+				'change',
+				function () {
+					apaczka_pl_country_code = $( this ).val();
+				}
+			);
+			$( '#shipping_country' ).on(
+				'change',
+				function () {
+					apaczka_pl_country_code = $( this ).val();
+				}
+			);
+			$( '#billing_country' ).on(
+				'change select2:select',
+				function (e) {
+					if (e.type === 'select2:select') {
+						apaczka_pl_country_code = e.params.data.id;
+					} else {
+						apaczka_pl_country_code = $( this ).val();
+					}
+				}
+			);
+			$( '#shipping_country' ).on(
+				'change select2:select',
+				function (e) {
+					if (e.type === 'select2:select') {
+						apaczka_pl_country_code = e.params.data.id;
+					} else {
+						apaczka_pl_country_code = $( this ).val();
 					}
 				}
 			);

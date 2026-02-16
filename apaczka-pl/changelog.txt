@@ -164,3 +164,7 @@
 ## [1.3.9] - 2026-02-02
 ### Fix.
 - map enqueue script if virtual products in cart
+
+## [1.4.0] - 2026-02-16
+### Feat.
+- support of GLS services

@@ -222,8 +222,6 @@ class Plugin extends Abstract_Ilabs_Plugin {
 
 			$current_plugin_version = apaczka()->get_plugin_version();
 
-			$bp_css_path = apaczka()->get_plugin_dir() . 'assets/css/bliskapaczka-map.css';
-			// $bp_css_ver  = file_exists( $bp_css_path ) ? filemtime( $bp_css_path ) : $current_plugin_version;
 			$bp_css_ver = '8.6';
 			wp_enqueue_style(
 				self::APP_PREFIX . '_bliskapaczka_map',
@@ -237,8 +235,6 @@ class Plugin extends Abstract_Ilabs_Plugin {
 				$this->get_plugin_css_url() . '/front.css'
 			);
 
-			$bp_js_path = apaczka()->get_plugin_dir() . 'assets/js/bliskapaczka-map.js';
-			// $bp_js_ver  = file_exists( $bp_js_path ) ? filemtime( $bp_js_path ) : $current_plugin_version;
 			$bp_js_ver = '8.6';
 			wp_enqueue_script(
 				self::APP_PREFIX . '_bliskapaczka-map',
@@ -329,8 +325,6 @@ class Plugin extends Abstract_Ilabs_Plugin {
 				$this->get_plugin_css_url() . '/admin.css'
 			);
 
-			$bp_css_path = apaczka()->get_plugin_dir() . 'assets/css/bliskapaczka-map.css';
-			// $bp_css_ver  = file_exists( $bp_css_path ) ? filemtime( $bp_css_path ) : $current_plugin_version;
 			$bp_css_ver = '8.6';
 			wp_enqueue_style(
 				self::APP_PREFIX . '_bliskapaczka_map',
@@ -366,8 +360,6 @@ class Plugin extends Abstract_Ilabs_Plugin {
 						)
 					);
 
-					$bp_js_path = apaczka()->get_plugin_dir() . 'assets/js/bliskapaczka-map.js';
-					// $bp_js_ver  = file_exists( $bp_js_path ) ? filemtime( $bp_js_path ) : $current_plugin_version;
 					$bp_js_ver = '8.6';
 					wp_enqueue_script(
 						self::APP_PREFIX . '_bliskapaczka-map.js',
@@ -415,8 +407,6 @@ class Plugin extends Abstract_Ilabs_Plugin {
 					)
 				);
 
-				$bp_js_path = apaczka()->get_plugin_dir() . 'assets/js/bliskapaczka-map.js';
-				// $bp_js_ver  = file_exists( $bp_js_path ) ? filemtime( $bp_js_path ) : $current_plugin_version;
 				$bp_js_ver = '8.6';
 				wp_enqueue_script(
 					self::APP_PREFIX . '_bliskapaczka-map',
@@ -530,6 +520,7 @@ class Plugin extends Abstract_Ilabs_Plugin {
 							'DPD',
 							'UPS',
 							'DHL',
+							'GLS',
 						);
 					} else {
 						$single_carrier = $shipping_method->instance_settings['supplier_apaczka_map'];

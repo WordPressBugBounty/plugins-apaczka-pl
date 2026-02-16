@@ -2019,6 +2019,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 					'apaczka-pl'
 				),
 				'UPS'                  => esc_html__( 'UPS', 'apaczka-pl' ),
+				'GLS'                  => esc_html__( 'GLS', 'apaczka-pl' ),
 			),
 		);
 
@@ -2222,14 +2223,14 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	/**
 	 * Gets the logo identifier for a given service ID.
 	 *
-	 * @param int $serviceId The service ID.
+	 * @param int $service_id The service ID.
 	 * @return string|null The logo identifier or null if not found.
 	 *
 	 * @since 1.0.0
 	 * @access public
 	 */
-	public function get_logo( $serviceId ) {
-		switch ( (int) $serviceId ) {
+	public function get_logo( $service_id ) {
+		switch ( (int) $service_id ) {
 			case 1:
 			case 2:
 			case 3:
@@ -2289,6 +2290,12 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			case 191:
 				return 'apaczka-niemcy';
 			case 200:
+			case 202:
+			case 203:
+			case 204:
+			case 206:
+			case 207:
+			case 208:
 				return 'gls';
 			case 211:
 				return 'wawa';

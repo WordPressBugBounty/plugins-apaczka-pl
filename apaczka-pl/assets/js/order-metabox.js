@@ -281,6 +281,9 @@
                     return 'DHL';
                 case 68:
                     return 'POCZTA';
+                case 203:
+                case 206:
+                    return 'GLS';
                 default:
                     return null
             }
