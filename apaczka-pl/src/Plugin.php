@@ -222,10 +222,10 @@ class Plugin extends Abstract_Ilabs_Plugin {
 
 			$current_plugin_version = apaczka()->get_plugin_version();
 
-			$bp_css_ver = '8.6';
+			$bp_css_ver = '8.7';
 			wp_enqueue_style(
 				self::APP_PREFIX . '_bliskapaczka_map',
-				'https://map.alsendo.com/v8.6/main.css',
+				'https://map.alsendo.com/v8.7/main.css',
 				array(),
 				$bp_css_ver
 			);
@@ -235,10 +235,10 @@ class Plugin extends Abstract_Ilabs_Plugin {
 				$this->get_plugin_css_url() . '/front.css'
 			);
 
-			$bp_js_ver = '8.6';
+			$bp_js_ver = '8.7';
 			wp_enqueue_script(
 				self::APP_PREFIX . '_bliskapaczka-map',
-				'https://map.alsendo.com/v8.6/main.js',
+				'https://map.alsendo.com/v8.7/main.js',
 				array( 'jquery' ),
 				$bp_js_ver,
 				array( 'in_footer' => true )
@@ -325,10 +325,10 @@ class Plugin extends Abstract_Ilabs_Plugin {
 				$this->get_plugin_css_url() . '/admin.css'
 			);
 
-			$bp_css_ver = '8.6';
+			$bp_css_ver = '8.7';
 			wp_enqueue_style(
 				self::APP_PREFIX . '_bliskapaczka_map',
-				'https://map.alsendo.com/v8.6/main.css',
+				'https://map.alsendo.com/v8.7/main.css',
 				array(),
 				$bp_css_ver
 			);
@@ -360,10 +360,10 @@ class Plugin extends Abstract_Ilabs_Plugin {
 						)
 					);
 
-					$bp_js_ver = '8.6';
+					$bp_js_ver = '8.7';
 					wp_enqueue_script(
 						self::APP_PREFIX . '_bliskapaczka-map.js',
-						'https://map.alsendo.com/v8.6/main.js',
+						'https://map.alsendo.com/v8.7/main.js',
 						array( 'jquery' ),
 						$bp_js_ver,
 						array( 'in_footer' => true )
@@ -407,10 +407,10 @@ class Plugin extends Abstract_Ilabs_Plugin {
 					)
 				);
 
-				$bp_js_ver = '8.6';
+				$bp_js_ver = '8.7';
 				wp_enqueue_script(
 					self::APP_PREFIX . '_bliskapaczka-map',
-					'https://map.alsendo.com/v8.6/main.js',
+					'https://map.alsendo.com/v8.7/main.js',
 					array( 'jquery' ),
 					$bp_js_ver,
 					array( 'in_footer' => true )
@@ -475,6 +475,25 @@ class Plugin extends Abstract_Ilabs_Plugin {
 				$this->cached_zones = $cached_zones;
 			}
 		}
+
+		if ( empty( $this->cached_zones ) ) {
+			if ( class_exists( 'WC_Shipping_Zones' ) ) {
+				$worldwide_zone = \WC_Shipping_Zones::get_zone( 0 );
+				if ( ! empty( $worldwide_zone ) ) {
+					// Add the worldwide zone to our cached zones.
+					$this->cached_zones[0] = array(
+						'zone_id'                 => 0,
+						'zone_name'               => $worldwide_zone->get_zone_name(),
+						'zone_order'              => 0,
+						'zone_locations'          => $worldwide_zone->get_zone_locations(),
+						'zone_location_code'      => array(),
+						'formatted_zone_location' => $worldwide_zone->get_formatted_location(),
+						'shipping_methods'        => $worldwide_zone->get_shipping_methods(),
+					);
+				}
+			}
+		}
+
 		return $cached_zones;
 	}
 

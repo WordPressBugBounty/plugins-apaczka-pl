@@ -19,6 +19,11 @@ use Inspire_Labs\Apaczka_Woocommerce\Plugin;
 use Inspire_Labs\Apaczka_Woocommerce\Service_Structure_Helper; ?>
 
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 $custom_attributes = array();
 if ( $package_send ) {
 	$custom_attributes['disabled'] = 'disabled';
@@ -472,19 +477,21 @@ $id = 'gateway';
 				$custom_attributes['disabled'] = 'disabled';
 			}
 
+			$value = ! empty( $apaczka_wc_order_data['receiver'][ $key ] ) ? $apaczka_wc_order_data['receiver'][ $key ] : '';
+
 			woocommerce_wp_text_input(
 				array(
 					'id'                => sprintf(
 						'_apaczka[receiver][%s]',
 						$key
 					),
-					'label'             => __( 'Country', 'apaczka-pl' ),
+					'label'             => esc_html__( 'Country', 'apaczka-pl' ),
 					'desc_tip'          => false,
 					'type'              => 'text',
 					'custom_attributes' => $custom_attributes,
 					'data_type'         => 'text',
-					'value'             => $apaczka_wc_order_data['receiver'][ $key ],
-					'placeholder'       => __( 'Country', 'apaczka-pl' ),
+					'value'             => $value,
+					'placeholder'       => esc_html__( 'Country', 'apaczka-pl' ),
 				)
 			);
 			?>
@@ -522,6 +529,8 @@ $id = 'gateway';
 				$custom_attributes['disabled'] = 'disabled';
 			}
 
+			$value = ! empty( $apaczka_wc_order_data['receiver'][ $key ] ) ? $apaczka_wc_order_data['receiver'][ $key ] : '';
+
 			woocommerce_wp_text_input(
 				array(
 					'id'                => sprintf(
@@ -529,16 +538,16 @@ $id = 'gateway';
 						$key
 					),
 					'label'             => ! empty( $order->get_billing_company() ) || ! empty( $order->get_shipping_company() )
-						? __( 'Company name', 'apaczka-pl' )
-						: __( 'First name', 'apaczka-pl' ),
+						? esc_html__( 'Company name', 'apaczka-pl' )
+						: esc_html__( 'First name', 'apaczka-pl' ),
 					'desc_tip'          => false,
 					'type'              => 'text',
 					'custom_attributes' => $custom_attributes,
 					'data_type'         => 'text',
-					'value'             => ! empty( $order->get_shipping_company() ) ? $order->get_shipping_company() : $apaczka_wc_order_data['receiver'][ $key ],
+					'value'             => ! empty( $order->get_shipping_company() ) ? $order->get_shipping_company() : $value,
 					'placeholder'       => ! empty( $order->get_billing_company() ) || ! empty( $order->get_shipping_company() )
-						? __( 'Company name', 'apaczka-pl' )
-						: __( 'First name', 'apaczka-pl' ),
+						? esc_html__( 'Company name', 'apaczka-pl' )
+						: esc_html__( 'First name', 'apaczka-pl' ),
 				)
 			);
 			?>
@@ -551,13 +560,15 @@ $id = 'gateway';
 				$custom_attributes['disabled'] = 'disabled';
 			}
 
+			$value = ! empty( $apaczka_wc_order_data['receiver'][ $key ] ) ? $apaczka_wc_order_data['receiver'][ $key ] : '';
+
 			woocommerce_wp_text_input(
 				array(
 					'id'                => sprintf(
 						'_apaczka[receiver][%s]',
 						$key
 					),
-					'label'             => __(
+					'label'             => esc_html__(
 						'Address line 1',
 						'apaczka-pl'
 					),
@@ -565,8 +576,8 @@ $id = 'gateway';
 					'type'              => 'text',
 					'custom_attributes' => $custom_attributes,
 					'data_type'         => 'text',
-					'value'             => $apaczka_wc_order_data['receiver'][ $key ],
-					'placeholder'       => __( 'Address line 1', 'apaczka-pl' ),
+					'value'             => $value,
+					'placeholder'       => esc_html__( 'Address line 1', 'apaczka-pl' ),
 				)
 			);
 			?>
@@ -578,6 +589,8 @@ $id = 'gateway';
 			if ( $package_send ) {
 				$custom_attributes['disabled'] = 'disabled';
 			}
+
+			$value = ! empty( $apaczka_wc_order_data['receiver'][ $key ] ) ? $apaczka_wc_order_data['receiver'][ $key ] : '';
 
 			woocommerce_wp_text_input(
 				array(
@@ -593,7 +606,7 @@ $id = 'gateway';
 					'type'              => 'text',
 					'custom_attributes' => $custom_attributes,
 					'data_type'         => 'text',
-					'value'             => $apaczka_wc_order_data['receiver'][ $key ],
+					'value'             => $value,
 					'placeholder'       => __( 'Address line 2', 'apaczka-pl' ),
 				)
 			);
@@ -607,6 +620,8 @@ $id = 'gateway';
 				$custom_attributes['disabled'] = 'disabled';
 			}
 
+			$value = ! empty( $apaczka_wc_order_data['receiver'][ $key ] ) ? $apaczka_wc_order_data['receiver'][ $key ] : '';
+
 			woocommerce_wp_text_input(
 				array(
 					'id'                => sprintf(
@@ -618,7 +633,7 @@ $id = 'gateway';
 					'type'              => 'text',
 					'custom_attributes' => $custom_attributes,
 					'data_type'         => 'text',
-					'value'             => $apaczka_wc_order_data['receiver'][ $key ],
+					'value'             => $value,
 					'placeholder'       => __( 'Postcode', 'apaczka-pl' ),
 				)
 			);
@@ -632,6 +647,8 @@ $id = 'gateway';
 				$custom_attributes['disabled'] = 'disabled';
 			}
 
+			$value = ! empty( $apaczka_wc_order_data['receiver'][ $key ] ) ? $apaczka_wc_order_data['receiver'][ $key ] : '';
+
 			woocommerce_wp_text_input(
 				array(
 					'id'                => sprintf(
@@ -643,7 +660,7 @@ $id = 'gateway';
 					'type'              => 'text',
 					'custom_attributes' => $custom_attributes,
 					'data_type'         => 'text',
-					'value'             => $apaczka_wc_order_data['receiver'][ $key ],
+					'value'             => $value,
 					'placeholder'       => __( 'City', 'apaczka-pl' ),
 				)
 			);
@@ -658,6 +675,7 @@ $id = 'gateway';
 			}
 
 			// $contact_person = $order->get_shipping_first_name() . ' ' . $order->get_shipping_last_name();
+			$value = ! empty( $apaczka_wc_order_data['receiver'][ $key ] ) ? $apaczka_wc_order_data['receiver'][ $key ] : '';
 
 			woocommerce_wp_text_input(
 				array(
@@ -673,7 +691,7 @@ $id = 'gateway';
 					'type'              => 'text',
 					'custom_attributes' => $custom_attributes,
 					'data_type'         => 'text',
-					'value'             => $apaczka_wc_order_data['receiver'][ $key ],
+					'value'             => $value,
 					'placeholder'       => __( 'Contact person', 'apaczka-pl' ),
 				)
 			);
@@ -687,6 +705,8 @@ $id = 'gateway';
 				$custom_attributes['disabled'] = 'disabled';
 			}
 
+			$value = ! empty( $apaczka_wc_order_data['receiver'][ $key ] ) ? $apaczka_wc_order_data['receiver'][ $key ] : '';
+
 			woocommerce_wp_text_input(
 				array(
 					'id'                => sprintf(
@@ -698,7 +718,7 @@ $id = 'gateway';
 					'type'              => 'text',
 					'custom_attributes' => $custom_attributes,
 					'data_type'         => 'text',
-					'value'             => $apaczka_wc_order_data['receiver'][ $key ],
+					'value'             => $value,
 					'placeholder'       => __( 'Phone', 'apaczka-pl' ),
 				)
 			);
@@ -712,19 +732,21 @@ $id = 'gateway';
 				$custom_attributes['disabled'] = 'disabled';
 			}
 
+			$value = ! empty( $apaczka_wc_order_data['receiver'][ $key ] ) ? $apaczka_wc_order_data['receiver'][ $key ] : '';
+
 			woocommerce_wp_text_input(
 				array(
 					'id'                => sprintf(
 						'_apaczka[receiver][%s]',
 						$key
 					),
-					'label'             => __( 'E-mail', 'apaczka-pl' ),
+					'label'             => esc_html__( 'E-mail', 'apaczka-pl' ),
 					'desc_tip'          => false,
 					'type'              => 'email',
 					'custom_attributes' => $custom_attributes,
 					'data_type'         => 'text',
-					'value'             => $apaczka_wc_order_data['receiver'][ $key ],
-					'placeholder'       => __( 'E-mail', 'apaczka-pl' ),
+					'value'             => $value,
+					'placeholder'       => esc_html__( 'E-mail', 'apaczka-pl' ),
 				)
 			);
 			?>
@@ -791,6 +813,9 @@ $id = 'gateway';
 			if ( $package_send ) {
 				$custom_attributes['disabled'] = 'disabled';
 			}
+
+			$value = ! empty( $apaczka_wc_order_data['package_properties'][ $key ] ) ? $apaczka_wc_order_data['package_properties'][ $key ] : '';
+
 			woocommerce_wp_select(
 				array(
 					'id'                => sprintf(
@@ -804,7 +829,7 @@ $id = 'gateway';
 					'desc_tip'          => false,
 					'type'              => 'number',
 					'options'           => $package_properties_parcel_types,
-					'value'             => $apaczka_wc_order_data['package_properties'][ $key ],
+					'value'             => $value,
 					'custom_attributes' => $custom_attributes,
 				)
 			);
@@ -817,6 +842,9 @@ $id = 'gateway';
 			if ( $package_send ) {
 				$custom_attributes['disabled'] = 'disabled';
 			}
+
+			$value = ! empty( $apaczka_wc_order_data['package_properties'][ $key ] ) ? $apaczka_wc_order_data['package_properties'][ $key ] : 'no';
+
 			woocommerce_wp_select(
 				array(
 					'id'                => sprintf(
@@ -833,7 +861,7 @@ $id = 'gateway';
 						'yes' => __( 'Tak', 'apaczka-pl' ),
 						'no'  => __( 'Nie', 'apaczka-pl' ),
 					),
-					'value'             => $apaczka_wc_order_data['package_properties'][ $key ],
+					'value'             => $value,
 					'custom_attributes' => $custom_attributes,
 				)
 			);
@@ -970,6 +998,8 @@ $id = 'gateway';
 				$custom_attributes['disabled'] = 'disabled';
 			}
 
+			$value = ! empty( $apaczka_wc_order_data['package_properties'][ $key ] ) ? $apaczka_wc_order_data['package_properties'][ $key ] : '';
+
 			woocommerce_wp_text_input(
 				array(
 					'id'                => sprintf(
@@ -984,7 +1014,7 @@ $id = 'gateway';
 					'type'              => 'text',
 					'custom_attributes' => $custom_attributes,
 					'data_type'         => 'text',
-					'value'             => $apaczka_wc_order_data['package_properties'][ $key ],
+					'value'             => $value,
 				)
 			);
 			?>
@@ -1113,6 +1143,9 @@ $id = 'gateway';
 			if ( $package_send ) {
 				$custom_attributes['disabled'] = 'disabled';
 			}
+
+			$value = ! empty( $apaczka_wc_order_data['package_properties'][ $key ] ) ? $apaczka_wc_order_data['package_properties'][ $key ] : '';
+
 			woocommerce_wp_select(
 				array(
 					'id'                => sprintf(
@@ -1126,7 +1159,7 @@ $id = 'gateway';
 					'desc_tip'          => false,
 					'type'              => 'number',
 					'options'           => $package_properties_hours,
-					'value'             => $apaczka_wc_order_data['package_properties'][ $key ],
+					'value'             => $value,
 					'custom_attributes' => $custom_attributes,
 				)
 			);
@@ -1139,6 +1172,9 @@ $id = 'gateway';
 			if ( $package_send ) {
 				$custom_attributes['disabled'] = 'disabled';
 			}
+
+			$value = ! empty( $apaczka_wc_order_data['package_properties'][ $key ] ) ? $apaczka_wc_order_data['package_properties'][ $key ] : '';
+
 			woocommerce_wp_select(
 				array(
 					'id'                => sprintf(
@@ -1152,7 +1188,7 @@ $id = 'gateway';
 					'desc_tip'          => false,
 					'type'              => 'number',
 					'options'           => $package_properties_hours,
-					'value'             => $apaczka_wc_order_data['package_properties'][ $key ],
+					'value'             => $value,
 					'custom_attributes' => $custom_attributes,
 				)
 			);

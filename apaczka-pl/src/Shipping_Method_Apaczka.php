@@ -700,7 +700,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	/**
 	 * Sets default values for order data if not already set.
 	 *
-	 * @param array    $apaczka_wc_order_data The current order data.
+	 * @param mixed    $apaczka_wc_order_data The current order data.
 	 * @param WC_Order $order The WooCommerce order object.
 	 * @return array The updated order data with defaults applied.
 	 *
@@ -708,13 +708,17 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 	 * @access private static
 	 */
 	private static function set_defaults_to_wc_order_data(
-		array $apaczka_wc_order_data,
-		WC_Order $order
+		$apaczka_wc_order_data,
+		$order
 	): array {
 
 		// sender.
 		// Package properties.
 		// Additional options.
+
+		if ( empty( $apaczka_wc_order_data ) || ! is_array( $apaczka_wc_order_data ) ) {
+			$apaczka_wc_order_data = array();
+		}
 
 		$payment_method = $order->get_payment_method();
 
@@ -2147,28 +2151,27 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 		global $post;
 
 		$need_popup = false;
-		$post_id    = null;
+		$order_id   = null;
 
 		if ( 'yes' === get_option( 'woocommerce_custom_orders_table_enabled' ) ) {
 
-			$post_id = isset( $_GET['id'] ) ? sanitize_text_field( $_GET['id'] ) : null;
+			$order_id = isset( $_GET['id'] ) ? sanitize_text_field( $_GET['id'] ) : null;
 
-			if ( $post_id ) {
-
-				$post_type = get_post_type( $post_id );
-
-				if ( 'shop_order_placehold' === $post_type ) {
-					$need_popup = true;
-				}
-			}
 		} elseif ( is_object( $post ) ) {
 
-			$post_id   = $post->ID;
-			$post_type = get_post_type( $post_id );
-			if ( 'shop_order' === $post_type ) {
-				if ( 'post.php' === $pagenow || 'post-new.php' === $pagenow ) {
-					$need_popup = true;
-				}
+			$order_id = $post->ID;
+
+		}
+
+		if ( $order_id ) {
+			$wc_order = wc_get_order( $order_id );
+			if ( ! $wc_order || is_wp_error( $wc_order ) ) {
+				return;
+			}
+
+			$apaczka_meta_data = $this->helper->get_woo_order_meta( $order_id, '_apaczka' );
+			if ( ! empty( $apaczka_meta_data ) ) {
+				$need_popup = true;
 			}
 		}
 
@@ -2237,6 +2240,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			case 4:
 			case 5:
 			case 6:
+			case 8:
 			case 13:
 			case 14:
 			case 15:
@@ -2275,6 +2279,8 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			case 83:
 			case 84:
 			case 87:
+			case 91:
+			case 92:
 				return 'dhl';
 			case 50:
 			case 53:
@@ -2293,6 +2299,7 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 			case 202:
 			case 203:
 			case 204:
+			case 205:
 			case 206:
 			case 207:
 			case 208:
@@ -2310,8 +2317,20 @@ class Shipping_Method_Apaczka extends WC_Shipping_Method {
 				return 'ambro';
 			case 250:
 				return 'geodis';
+
+			case 90:
+			case 310:
+			case 311:
 			case 312:
-				return 'cblog';
+			case 315:
+				return 'alsendo-international';
+
+			case 313:
+			case 314:
+			case 316:
+			case 317:
+				return 'red-packeta';
+
 			default:
 				return null;
 

@@ -5,6 +5,10 @@
 
 namespace Inspire_Labs\Apaczka_Woocommerce\Plugin;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 use Exception;
 
 abstract class Abstract_Ilabs_Plugin {

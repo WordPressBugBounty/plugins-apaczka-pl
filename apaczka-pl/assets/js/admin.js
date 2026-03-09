@@ -244,6 +244,7 @@
 				}
 
 				if ( 'apaczka_woocommerce_settings_general_dispath_point_dpd' === target.getAttribute( 'id' )
+				|| 'apaczka_woocommerce_settings_general_dispath_point_dhl' === target.getAttribute( 'id' )
 				|| 'apaczka_woocommerce_settings_general_dispath_point_ups' === target.getAttribute( 'id' )
 				|| 'apaczka_woocommerce_settings_general_dispath_point_kurier48' === target.getAttribute( 'id' )
 				|| 'apaczka_woocommerce_settings_general_dispath_point_inpost' === target.getAttribute( 'id' )
@@ -255,6 +256,9 @@
 					console.log( map_sender_initial_address );
 					let operators = '';
 
+					if ( 'apaczka_woocommerce_settings_general_dispath_point_dhl' === target.getAttribute( 'id' ) ) {
+						operators = [{ operator: 'DHL' }];
+					}
 					if ( 'apaczka_woocommerce_settings_general_dispath_point_dpd' === target.getAttribute( 'id' ) ) {
 						operators = [{ operator: 'DPD' }];
 					}

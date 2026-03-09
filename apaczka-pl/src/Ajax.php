@@ -13,15 +13,17 @@ class Ajax {
 	 * Ajax handler
 	 */
 	public function init() {
-		add_action( 'wp_ajax_apaczka', [ $this, 'ajax_apaczka' ] );
-		add_action( 'admin_head',
-				[ $this, 'wp_footer_apaczka_nonce' ] );
+		add_action( 'wp_ajax_apaczka', array( $this, 'ajax_apaczka' ) );
+		add_action(
+			'admin_head',
+			array( $this, 'wp_footer_apaczka_nonce' )
+		);
 	}
 
 	public function wp_footer_apaczka_nonce() {
 		?>
 		<script type="text/javascript">
-			var apaczka_ajax_nonce = '<?php echo wp_create_nonce( 'apaczka_ajax_nonce' ); ?>';
+			var apaczka_ajax_nonce = '<?php echo esc_attr( wp_create_nonce( 'apaczka_ajax_nonce' ) ); ?>';
 		</script>
 		<?php
 	}
@@ -29,20 +31,20 @@ class Ajax {
 	public function ajax_apaczka() {
 		check_ajax_referer( 'apaczka_ajax_nonce', 'security' );
 		if ( isset( $_REQUEST['apaczka_action'] ) ) {
-			$action = sanitize_text_field( $_REQUEST['apaczka_action'] );
-			if ( $action == 'create_package' ) {
+			$action = sanitize_text_field( wp_unslash( $_REQUEST['apaczka_action'] ) );
+			if ( 'create_package' === $action ) {
 				$this->create_package( Shipping_Method_Apaczka::APACZKA_PICKUP_COURIER );
 			}
-			if ( $action == 'calculate' ) {
+			if ( 'calculate' === $action ) {
 				$this->calculate( Shipping_Method_Apaczka::APACZKA_PICKUP_COURIER );
 			}
-			if ( $action == 'cancel_package' ) {
+			if ( 'cancel_package' === $action ) {
 				$this->cancel();
 			}
-			if ( $action == 'create_package_pickup_self' ) {
+			if ( 'create_package_pickup_self' === $action ) {
 				$this->create_package( Shipping_Method_Apaczka::APACZKA_PICKUP_SELF );
 			}
-			if ( $action == 'download_turn_in' ) {
+			if ( 'download_turn_in' === $action ) {
 				$this->download_turn_in();
 			}
 		}

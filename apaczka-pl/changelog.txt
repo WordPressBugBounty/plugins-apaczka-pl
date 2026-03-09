@@ -168,3 +168,10 @@
 ## [1.4.0] - 2026-02-16
 ### Feat.
 - support of GLS services
+
+## [1.4.1] - 2026-03-09
+### Fix.
+- icons of the services
+- DHL on map
+### Feat.
+- map ver 8.7

@@ -748,8 +748,21 @@
                 console.log('apaczka_calculate_selected_service:');
                 console.log(apaczka_calculate_selected_service);
 
+                let shipping_country = document.getElementById("_apaczka[receiver][country_code]").value;
+
                 let operatorsArray = [];
                 operatorsArray = [serviceIdToApmSupplierId( parseInt( apaczka_calculate_selected_service ) )];
+
+                if ( Array.isArray( operatorsArray ) ) {
+                    // Find index of 'DHL' in array.
+                    let dhlIndex = operatorsArray.indexOf( 'DHL' );
+
+                    if (dhlIndex !== -1 && 'PL' !== shipping_country.toUpperCase() ) {
+                        console.log('Apaczka_metabox_map: not PL map for DHL');
+                        // Replace 'DHL' with 'DHL_PARCEL' at the same position.
+                        operatorsArray[dhlIndex] = 'DHL_PARCEL';
+                    }
+                }
 
                 var operators = operatorsArray.map(
                     function (operator) {
@@ -761,7 +774,18 @@
                 console.log('operators');
                 console.log(operators);
 
-                let shipping_country = document.getElementById("_apaczka[receiver][country_code]").value;
+                let widget_config = {
+                    posType: 'DELIVERY',
+                    mapOptions: {zoom: 12},
+                    codOnly: is_cod_only,
+                    operatorMarkers: true,
+                    countryCodes: shipping_country,
+                    initialAddress: receiver_city_for_map,
+                    operators: operators,
+                    codeSearch: true
+                };
+                console.log( 'Apaczka metabox map widget config:' );
+                console.log( widget_config );
 
                 BPWidget.init(
                     document.getElementById('apaczka_pl_geowidget_modal_inner_content'),

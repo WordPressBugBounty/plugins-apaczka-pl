@@ -98,6 +98,7 @@ class Global_Settings_Integration extends WC_Settings_Page {
 			$this->config->get_setting_id( 'dispath_point_kurier48' ),
 			$this->config->get_setting_id( 'dispath_point_inpost' ),
 			$this->config->get_setting_id( 'dispath_point_dpd' ),
+			$this->config->get_setting_id( 'dispath_point_dhl' ),
 			$this->config->get_setting_id( 'pickup_hour_to' ),
 			$this->config->get_setting_id( 'pickup_hour_from' ),
 			$this->config->get_setting_id( 'shipping_method' ),

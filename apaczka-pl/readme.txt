@@ -3,7 +3,7 @@ Contributors: inspirelabs
 Tags: apaczka, woocommerce
 Requires at least: 5.3
 Tested up to: 6.9
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 Requires PHP: 7.2
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -58,6 +58,11 @@ Tak. Zarejestruj się bezpłatnie na [Apaczka.pl](https://panel.apaczka.pl/rejes
 7.
 
 == Changelog ==
+
+= 1.4.1 =
+* Fix: icons of the services
+* Fix: DHL on map
+* Feat: map ver. 8.7
 
 = 1.4.0 =
 * Feat: support of GLS services

@@ -72,7 +72,7 @@
 			$( '#selected-parcel-machine-id' ).html( point.code );
 		}
 
-		if ('description' in point) {
+		if ('description' in point && typeof point.description != 'undefined' ) {
 			visible_point_desc += point.description;
 		}
 		if ('street' in point) {
@@ -110,7 +110,7 @@
 
 		/*  New Checkout */
 		visible_point_desc = '';
-		
+
 		if ('code' in point) {
 			if ('brand' in point) {
 				apaczka_point_data.apm_access_point_id = point.code;
@@ -125,7 +125,7 @@
 			apaczka_point_data.apm_supplier = point.operator;
 		}
 
-		if ('description' in point) {
+		if ('description' in point && typeof point.description != 'undefined' ) {
 			apaczka_point_data.apm_name = point.description;
 			visible_point_desc         += point.description;
 		}
@@ -314,6 +314,34 @@
 
 									apaczka_geowidget_supplier = shipping_config.hasOwnProperty( "geowidget_supplier" ) ? shipping_config.geowidget_supplier : null;
 									if (apaczka_geowidget_supplier !== null) {
+										if ( Array.isArray( apaczka_geowidget_supplier ) ) {
+											// Find index of 'DHL' in array.
+											let dhlIndex = apaczka_geowidget_supplier.indexOf( 'DHL' );
+
+											if (dhlIndex !== -1 ) {
+												if( 'PL' !== shipping_country_code.toUpperCase() ) {
+													console.log('Apaczka: not PL map');
+													// Replace 'DHL' with 'DHL_PARCEL' at the same position.
+													apaczka_geowidget_supplier[dhlIndex] = 'DHL_PARCEL';
+												} else {
+													apaczka_geowidget_supplier[dhlIndex] = 'DHL';
+												}
+												
+											} else {
+												dhlIndex = apaczka_geowidget_supplier.indexOf( 'DHL_PARCEL' );
+												if (dhlIndex !== -1 ) {
+													if( 'PL' !== shipping_country_code.toUpperCase() ) {
+														console.log('Apaczka: not PL map');
+														// Replace 'DHL' with 'DHL_PARCEL' at the same position.
+														apaczka_geowidget_supplier[dhlIndex] = 'DHL_PARCEL';
+													} else {
+														apaczka_geowidget_supplier[dhlIndex] = 'DHL';
+													}
+
+												}
+											}
+										}
+
 										operators = apaczka_geowidget_supplier.map(
 											function (operator) {
 												return apaczka_pl_create_operator_block( 'operators - ' + operator, operator );
@@ -379,9 +407,9 @@
 			}
 
 			if (target.classList.contains( 'wc-block-components-checkout-place-order-button' )
-			|| target.classList.contains( 'wc-block-checkout__actions_row' )
-			|| target.classList.contains( 'wc-block-components-button__text' )
-			|| target.closest( '.wc-block-components-checkout-place-order-button' )) {
+				|| target.classList.contains( 'wc-block-checkout__actions_row' )
+				|| target.classList.contains( 'wc-block-components-button__text' )
+				|| target.closest( '.wc-block-components-checkout-place-order-button' )) {
 
 				let reactjs_input       = document.getElementById( 'apaczka-point' );
 				let reactjs_input_lalue = false;
@@ -406,13 +434,13 @@
 
 			let apaczka_geowidget_modal       = document.createElement( 'div' );
 			let modal_html                    = '<div ' +
-			'class="apaczka_pl_geowidget_modal" style="display:none;"' +
-			' id="apaczka_pl_geowidget_modal_dynamic" style="display: none">' +
-			'<div class="apaczka_pl_geowidget_modal_inner">' +
-			'<span id="apaczka_pl_geowidget_modal_cross">&times;</span>' +
-			'<div id="apaczka_pl_geowidget_modal_inner_content"></div>' +
-			'</div>' +
-			'</div>';
+				'class="apaczka_pl_geowidget_modal" style="display:none;"' +
+				' id="apaczka_pl_geowidget_modal_dynamic" style="display: none">' +
+				'<div class="apaczka_pl_geowidget_modal_inner">' +
+				'<span id="apaczka_pl_geowidget_modal_cross">&times;</span>' +
+				'<div id="apaczka_pl_geowidget_modal_inner_content"></div>' +
+				'</div>' +
+				'</div>';
 			apaczka_geowidget_modal.innerHTML = modal_html;
 			document.body.appendChild( apaczka_geowidget_modal );
 
@@ -443,47 +471,47 @@
 
 			let modal       = document.createElement( 'div' );
 			modal.innerHTML =
-			'<div id="apaczka_pl_checkout_validation_modal" style="' +
-			'display: none;' +
-			'position: fixed;' +
-			'top: 0;' +
-			'left: 0;' +
-			'width: 100%;' +
-			'height: 100%;' +
-			'background-color: rgba( 0, 0, 0, 0.5 );' +
-			'justify-content: center;' +
-			'align-items: center;' +
-			'z-index: 1000;">' +
-			'<div style="' +
-			'background-color: white;' +
-			'width: 90%;' +
-			'max-width: 300px;' +
-			'padding: 20px;' +
-			'position: relative;' +
-			'text-align: center;' +
-			'border-radius: 10px;' +
-			'box-shadow: 0px 4px 10px rgba( 0, 0, 0, 0.1 );">' +
-			'<span id="apaczka_pl_close_modal_cross" style="' +
-			'position: absolute;' +
-			'top: 10px;' +
-			'right: 15px;' +
-			'font-size: 20px;' +
-			'cursor: pointer;">&times;</span>' +
-			'<div style="margin:20px 0; font-size:18px;">' +
-			apaczka_block.alert_text +
-			'</div>' +
-			'<button id="apaczka_pl_close_modal_button" style="' +
-			'padding: 10px 20px;' +
-			'background-color: #007BFF;' +
-			'color: white;' +
-			'border: none;' +
-			'border-radius: 5px;' +
-			'cursor: pointer;' +
-			'font-size: 16px;">' +
-			'Ok' +
-			'</button>' +
-			'</div>' +
-			'</div>';
+				'<div id="apaczka_pl_checkout_validation_modal" style="' +
+				'display: none;' +
+				'position: fixed;' +
+				'top: 0;' +
+				'left: 0;' +
+				'width: 100%;' +
+				'height: 100%;' +
+				'background-color: rgba( 0, 0, 0, 0.5 );' +
+				'justify-content: center;' +
+				'align-items: center;' +
+				'z-index: 1000;">' +
+				'<div style="' +
+				'background-color: white;' +
+				'width: 90%;' +
+				'max-width: 300px;' +
+				'padding: 20px;' +
+				'position: relative;' +
+				'text-align: center;' +
+				'border-radius: 10px;' +
+				'box-shadow: 0px 4px 10px rgba( 0, 0, 0, 0.1 );">' +
+				'<span id="apaczka_pl_close_modal_cross" style="' +
+				'position: absolute;' +
+				'top: 10px;' +
+				'right: 15px;' +
+				'font-size: 20px;' +
+				'cursor: pointer;">&times;</span>' +
+				'<div style="margin:20px 0; font-size:18px;">' +
+				apaczka_block.alert_text +
+				'</div>' +
+				'<button id="apaczka_pl_close_modal_button" style="' +
+				'padding: 10px 20px;' +
+				'background-color: #007BFF;' +
+				'color: white;' +
+				'border: none;' +
+				'border-radius: 5px;' +
+				'cursor: pointer;' +
+				'font-size: 16px;">' +
+				'Ok' +
+				'</button>' +
+				'</div>' +
+				'</div>';
 
 			document.body.appendChild( modal );
 			document.getElementById( 'apaczka_pl_close_modal_cross' ).addEventListener( 'click', apaczka_pl_close_modal );

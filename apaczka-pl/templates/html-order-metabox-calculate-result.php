@@ -1,11 +1,16 @@
 <?php
 /**
  * @var array $calculate
+ * @var array $apaczka_order
  */
 
 $skip_this_service = [27, 20, 81];
 
 use Inspire_Labs\Apaczka_Woocommerce\Shipping_Method_Apaczka;
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit; // Exit if accessed directly.
+}
 
 ?>
 

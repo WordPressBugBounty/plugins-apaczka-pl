@@ -2,6 +2,10 @@
 
 use Inspire_Labs\Apaczka_Woocommerce\Plugin;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 $parcel_machine_selected = false;
 $selected                = '';
 
@@ -13,21 +17,21 @@ $selected                = '';
 	</th>
 	<td class="apaczka-parcel-machine-select">
 		<?php if ( defined( 'DOING_AJAX' ) && true === DOING_AJAX ) { ?>
-            <input
-                    type="button"
-                    class="button alt"
-                    name="apaczka_pl_geowidget_classic"
-                    id="apaczka_pl_geowidget_classic"
-                    value="<?php echo esc_html__( 'Select point', 'apaczka-pl' ); ?>"
-                    data-value="<?php echo esc_html__( 'Select point', 'apaczka-pl' ); ?>"
-            >
-            <div id="selected-parcel-machine" class="apaczka-hidden">
-                <div><span class="font-height-600">
-                    <?php echo esc_html__( 'Selected Parcel Locker:', 'apaczka-pl' ); ?>
-                    </span></div>
-                <span class="italic" id="selected-parcel-machine-id"></span>
-                <span class="italic" id="selected-parcel-machine-desc"></span>
-            </div>
+			<input
+					type="button"
+					class="button alt"
+					name="apaczka_pl_geowidget_classic"
+					id="apaczka_pl_geowidget_classic"
+					value="<?php echo esc_html__( 'Select point', 'apaczka-pl' ); ?>"
+					data-value="<?php echo esc_html__( 'Select point', 'apaczka-pl' ); ?>"
+			>
+			<div id="selected-parcel-machine" class="apaczka-hidden">
+				<div><span class="font-height-600">
+					<?php echo esc_html__( 'Selected Parcel Locker:', 'apaczka-pl' ); ?>
+					</span></div>
+				<span class="italic" id="selected-parcel-machine-id"></span>
+				<span class="italic" id="selected-parcel-machine-desc"></span>
+			</div>
 
 			<input type="hidden" id="apm_access_point_id" name="apm_access_point_id"/>
 			<input type="hidden" id="apm_supplier" name="apm_supplier"/>

@@ -16,12 +16,21 @@
 
 			window.apaczka_mp_map_callback = function (point) {
 
+				let several_checkout_forms = $( 'form[name="checkout"]' ).length > 1;
+
 				console.log( 'apaczka_cl_point_callback' );
+				console.log( 'point code:', point );
 				console.log( 'point code:', point.code );
 				console.log( 'point operator:', point.operator );
 
 
 				$('.apaczka_pl_after_rate_description').each(
+					function (i, elem) {
+						$( elem ).remove();
+					}
+				);
+
+				$( '.apaczka_pl_several_checkout_forms' ).each(
 					function (i, elem) {
 						$( elem ).remove();
 					}
@@ -43,14 +52,14 @@
 					$( '#selected-parcel-machine-id' ).html( point.code );
 				}
 
-				if ('description' in point) {
+				if ('description' in point && typeof point.description != 'undefined' ) {
 					visible_point_desc += point.description;
 				}
 				let pointstreet = '';
 				if ('street' in point) {
 					visible_point_desc += '<br>' + point.street;
 					pointstreet = point.street;
-				} else if ( 'description' in point ) {
+				} else if ( 'description' in point && typeof point.description != 'undefined' ) {
 					pointstreet = point.description;
 				}
 				if ('city' in point) {
@@ -61,7 +70,6 @@
 				}
 
 				$( '#selected-parcel-machine-desc' ).html( visible_point_desc );
-
 
 				$( '#apm_name' ).each(
 					function (i, elem) {
@@ -122,7 +130,7 @@
 					apaczka_point_data.apm_supplier = point.operator;
 				}
 
-				if ('description' in point) {
+				if ('description' in point && typeof point.description != 'undefined' ) {
 					apaczka_point_data.apm_name = point.description;
 					visible_point_desc         += point.description;
 				}
@@ -203,6 +211,23 @@
 					$('.apaczka_pl_after_rate_btn').after( apaczka_point );
 				}
 
+				if ( several_checkout_forms ) {
+					$( 'form[name="checkout"]' ).each( function () {
+						if ( $( this ).find( '.apaczka_pl_several_checkout_forms' ).length === 0 ) {
+							$( this ).append(
+								'<span class="apaczka_pl_several_checkout_forms"><input type="hidden" id="apm_access_point_id" name="apm_access_point_id" value="'+point.code+'"/>\n' +
+								'<input type="hidden" id="apm_supplier" name="apm_supplier" value="'+point.operator+'"/>\n' +
+								'<input type="hidden" id="apm_name" name="apm_name" value="'+point.description+'"/>\n' +
+								'<input type="hidden" id="apm_foreign_access_point_id" name="apm_foreign_access_point_id" value="'+point.code+'"/>\n' +
+								'<input type="hidden" id="apm_street" name="apm_street" value="'+point.street+'"/>\n' +
+								'<input type="hidden" id="apm_city" name="apm_city" value="'+point.city+'"/>\n' +
+								'<input type="hidden" id="apm_postal_code" name="apm_postal_code" value="'+point.postalCode+'"/>\n' +
+								'<input type="hidden" id="apm_country_code" name="apm_country_code" value="'+apaczka_point_data.apm_country_code+'"/></span>'
+							);
+						}
+					});
+				}
+
 			}
 
 			function apaczka_cl_change_react_input(input, value) {
@@ -281,7 +306,8 @@
 
 				if (typeof shipping_country_input != 'undefined' && shipping_country_input !== null) {
 					let country_code_shipping = $( shipping_country_input ).val();
-					if (typeof country_code_shipping != 'undefined' && country_code_shipping !== null) {
+					let is_diff_address = $( '#ship-to-different-address-checkbox' ).is( ':checked' );
+					if ( is_diff_address && typeof country_code_shipping != 'undefined' && country_code_shipping !== null) {
 						country_code = $( '#shipping_city' ).val();
 					} else {
 						let billing_country = $( '#billing_country' );
@@ -294,11 +320,12 @@
 					}
 				}
 
-				let city = $( '#billing_city' ).val();
-				if (typeof city != 'undefined' && city !== null) {
+				let city = $( '#shipping_city' ).val();
+				let is_diff_address = $( '#ship-to-different-address-checkbox' ).is( ':checked' );
+				if ( is_diff_address && typeof city != 'undefined' && city !== null ) {
 					initial_map_address = city;
 				} else {
-					let city_2 = $( '#shipping_city' ).val();
+					let city_2 = $( '#billing_city' ).val();
 					if (typeof city_2 != 'undefined' && city_2 !== null) {
 						initial_map_address = city_2;
 					}
@@ -338,7 +365,10 @@
 					$( shipping_city ).on(
 						'keyup',
 						function () {
-							initial_map_address = $( this ).val();
+							let is_diff_address = $( '#ship-to-different-address-checkbox' ).is( ':checked' );
+							if( is_diff_address ) {
+								initial_map_address = $(this).val();
+							}
 						}
 					);
 				}
@@ -396,7 +426,7 @@
 
 			document.body.appendChild( apaczka_geowidget_modal );
 
-			$( '#shipping_country' ).on(
+			/*$( '#shipping_country' ).on(
 				'change',
 				function () {
 					apaczkaShippingDataObject = { 'shipping_country': $( this ).val() };
@@ -410,7 +440,7 @@
 					apaczkaShippingDataObject = { 'shipping_country': $( this ).val() };
 					localStorage.setItem( 'apaczkaShippingData', JSON.stringify( apaczkaShippingDataObject ) );
 				}
-			);
+			);*/
 
 			document.addEventListener(
 				'change',
@@ -467,37 +497,29 @@
 
 						let bp_is_cod_only = false;
 
-						let apaczkaShippingData = localStorage.getItem( 'apaczkaShippingData' );
-						if ( apaczkaShippingData !== null) {
-							let apaczkaShippingDataObject = JSON.parse( apaczkaShippingData );
+						if ('' === apaczka_pl_country_code || typeof apaczka_pl_country_code == 'undefined' || apaczka_pl_country_code === null) {
+							let shipping_country_input = $('#shipping_country');
+							if (typeof shipping_country_input != 'undefined' && shipping_country_input !== null) {
+								let country_code_shipping = $(shipping_country_input).val();
+								let is_diff_address = $( '#ship-to-different-address-checkbox' ).is( ':checked' );
 
-							if ( 'shipping_country' in apaczkaShippingDataObject ) {
-								apaczka_pl_country_code = apaczkaShippingDataObject.shipping_country;
-							}
-
-						} else {
-							if ('' === apaczka_pl_country_code || typeof apaczka_pl_country_code == 'undefined' || apaczka_pl_country_code === null) {
-								let shipping_country_input = $('#shipping_country');
-								if (typeof shipping_country_input != 'undefined' && shipping_country_input !== null) {
-									let country_code_shipping = $(shipping_country_input).val();
-									if (typeof country_code_shipping != 'undefined' && country_code_shipping !== null) {
-										apaczka_pl_country_code = country_code_shipping;
-									} else {
-										let billing_country = $('#billing_country');
-										if (typeof billing_country != 'undefined' && billing_country !== null) {
-											country_code_billing = $(billing_country).val();
-											if (typeof country_code_billing != 'undefined' && country_code_billing !== null) {
-												apaczka_pl_country_code = country_code_billing;
-											}
+								if ( is_diff_address && typeof country_code_shipping != 'undefined' && country_code_shipping !== null) {
+									apaczka_pl_country_code = country_code_shipping;
+								} else {
+									let billing_country = $('#billing_country');
+									if (typeof billing_country != 'undefined' && billing_country !== null) {
+										country_code_billing = $(billing_country).val();
+										if (typeof country_code_billing != 'undefined' && country_code_billing !== null) {
+											apaczka_pl_country_code = country_code_billing;
 										}
 									}
 								}
 							}
 						}
 
-						if ('' === initial_map_address || typeof initial_map_address == 'undefined' || initial_map_address === null) {
+						//if ('' === initial_map_address || typeof initial_map_address == 'undefined' || initial_map_address === null) {
 							initial_map_address = apaczka_pl_get_initial_map_address();
-						}
+						//}
 
 						let shipping_method_data = apaczka_pl_get_chosen_shipping_method();
 						if ( 'instance_id' in shipping_method_data ) {
@@ -517,6 +539,34 @@
 						console.log( 'apaczka_pl_country_code_before_map_init: ', apaczka_pl_country_code );
 						console.log( 'apaczka_pl_map_initial_address: ', initial_map_address );
 						console.log( 'cod_only: ', bp_is_cod_only );
+
+						if ( Array.isArray( operatorsArray ) ) {
+							// Find index of 'DHL' in array.
+							let dhlIndex = operatorsArray.indexOf( 'DHL' );
+
+							if (dhlIndex !== -1 ) {
+								if( 'PL' !== apaczka_pl_country_code.toUpperCase() ) {
+									console.log('Apaczka: not PL map');
+									// Replace 'DHL' with 'DHL_PARCEL' at the same position.
+									operatorsArray[dhlIndex] = 'DHL_PARCEL';
+								} else {
+									operatorsArray[dhlIndex] = 'DHL';
+								}
+
+							} else {
+								dhlIndex = operatorsArray.indexOf( 'DHL_PARCEL' );
+								if (dhlIndex !== -1 ) {
+									if( 'PL' !== apaczka_pl_country_code.toUpperCase() ) {
+										console.log('Apaczka: not PL map');
+										// Replace 'DHL' with 'DHL_PARCEL' at the same position.
+										operatorsArray[dhlIndex] = 'DHL_PARCEL';
+									} else {
+										operatorsArray[dhlIndex] = 'DHL';
+									}
+
+								}
+							}
+						}
 
 						let operators = operatorsArray.map(
 							function (operator) {
@@ -589,7 +639,10 @@
 			$( '#shipping_country' ).on(
 				'change',
 				function () {
-					apaczka_pl_country_code = $( this ).val();
+					let is_diff_address = $( '#ship-to-different-address-checkbox' ).is( ':checked' );
+					if( is_diff_address ) {
+						apaczka_pl_country_code = $(this).val();
+					}
 				}
 			);
 			$( '#billing_country' ).on(
@@ -605,10 +658,37 @@
 			$( '#shipping_country' ).on(
 				'change select2:select',
 				function (e) {
-					if (e.type === 'select2:select') {
-						apaczka_pl_country_code = e.params.data.id;
+					let is_diff_address = $( '#ship-to-different-address-checkbox' ).is( ':checked' );
+					if( is_diff_address ) {
+						if (e.type === 'select2:select') {
+							apaczka_pl_country_code = e.params.data.id;
+						} else {
+							apaczka_pl_country_code = $(this).val();
+						}
+					}
+				}
+			);
+
+			$( '#ship-to-different-address-checkbox' ).on(
+				'change',
+				function () {
+					let is_diff_address = $( this ).is( ':checked' );
+					if( is_diff_address ) {
+						let shipping_country = $( '#shipping_country' );
+						if (typeof shipping_country != 'undefined' && shipping_country !== null) {
+							let country_code_val = $( shipping_country ).val();
+							if ( typeof country_code_val != 'undefined' && country_code_val !== null) {
+								apaczka_pl_country_code = country_code_val;
+							}
+						}
 					} else {
-						apaczka_pl_country_code = $( this ).val();
+						let billing_country = $( '#billing_country' );
+						if ( typeof billing_country != 'undefined' && billing_country !== null ) {
+							let country_code_val = $( billing_country ).val();
+							if (typeof country_code_val != 'undefined' && country_code_val !== null) {
+								apaczka_pl_country_code = country_code_val;
+							}
+						}
 					}
 				}
 			);
