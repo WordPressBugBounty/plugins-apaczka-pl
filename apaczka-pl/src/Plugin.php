@@ -335,7 +335,10 @@ class Plugin extends Abstract_Ilabs_Plugin {
 
 			wp_enqueue_script(
 				'jquery_maskedinput',
-				$this->get_plugin_js_url() . '/jquery.maskedinput.js'
+				$this->get_plugin_js_url() . '/jquery.maskedinput.js',
+				array( 'jquery' ),
+				$current_plugin_version,
+				array( 'in_footer' => true )
 			);
 
 			$admin_js_path = $this->get_plugin_dir() . 'assets/js/admin.js';
@@ -348,7 +351,8 @@ class Plugin extends Abstract_Ilabs_Plugin {
 						$this->get_admin_script_id(),
 						$this->get_plugin_js_url() . '/admin.js',
 						array( 'jquery' ),
-						$admin_js_ver
+						$admin_js_ver,
+						array( 'in_footer' => true )
 					);
 					wp_localize_script(
 						$this->get_admin_script_id(),

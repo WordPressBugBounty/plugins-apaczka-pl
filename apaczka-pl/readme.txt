@@ -1,32 +1,81 @@
-﻿=== Apaczka.pl WooCommerce 2.0 ===
+﻿=== Apaczka: integracja z WooCommerce ===
 Contributors: inspirelabs
-Tags: apaczka, woocommerce
+Tags: apaczka, woocommerce, dpd, dhl, inpost
 Requires at least: 5.3
 Tested up to: 6.9
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 Requires PHP: 7.2
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Nowa wtyczka na platformie WooCommerce umożliwiająca integrację z liderem na rynku logistycznym - Apaczka.pl. Oferowana dostępność większości przewoźników, a także ogromna liczba punktów nadań i doręczeń, gwarantuje łatwe i efektywne zarządzanie wysyłką zamówień zarówno krajowych, jak i zagranicznych. Zainstaluj już teraz i korzystaj z wygody jaką oferuje Apaczka.pl WooCommerce 2.0
+Zarządzaj wysyłkami różnych kurierów w jednym miejscu
 
 == Description ==
 
-Apaczka.pl WooCommerce 2.0
+Prowadzisz sklep WooCommerce i szukasz jednego miejsca do obsługi wysyłek bez ręcznego wprowadzania danych? Wybierz wtyczkę, która umożliwia integrację sklepu WooCommerce z platformą wysyłkową Apaczka. Pozwala ona na tworzenie, zarządzanie i obsługę przesyłek kurierskich bezpośrednio z poziomu panelu administracyjnego WordPress.
 
-Wtyczka Apaczka.pl WooCommerce 2.0 pozwala na wycenę przesyłki oraz zamówienie kuriera bezpośrednio z panelu sklepu WooCommerce. Wykorzystaj prosty formularz, aby w łatwy sposób nadać przesyłki kurierskie oraz paletowe.
+###Apaczka umożliwia:
 
-Instalując wtyczkę otrzymujesz intuicyjne rozwiązanie mapy z największą liczbą punktów nadawczo – odbiorczych bez konieczności podpisywania dodatkowych umów.
-Korzystając z rozwiązania otrzymujesz:
-- możliwość wyceny i utworzenia przesyłki,
-- szablony ustawień przesyłki przyspieszające przygotowanie i wysyłkę paczek,
-- dostęp do książki adresowej,
-- opcję pobrania dokumentów przewozowych,
-- informacje o dostawie widoczne w szczegółach zlecenia,
-- intuicyjny widget mapy dla Twoich klientów z największą liczbą punktów nadawczo – odbiorczych,
-- opcję anulowania zlecenia z poziomu zamówienia.
+* obsługę wielu firm kurierskich w ramach jednego konta,
+* jedną umowę i jedno rozliczenie zamiast wielu kontraktów,
+* realizację przesyłek krajowych i międzynarodowych,
+* wysyłki do punktów odbioru i automatów paczkowych,
+* dostęp do stawek wynegocjowanych w ramach platformy,
+* wsparcie operacyjne w obsłudze przesyłek.
 
-Do korzystania z wtyczki jest wymagane założenie darmowego konta na Apaczka.pl
+
+**Uwaga! Wtyczka nie wymaga podpisywania umów bezpośrednio z firmami kurierskimi. Wszystkie nadania realizowane są w ramach konta Apaczka.**
+
+###Co otrzymasz dzięki wtyczce Apaczka i WooCommerce?
+
+* tworzenie przesyłek kurierskich na podstawie zamówień WooCommerce
+* generowanie i pobieranie etykiet/listów przewozowych
+* obsługa punktów odbioru (PUDO) w procesie zamówienia
+* zapisywanie szablonów przesyłek
+* książka adresowa nadawców i odbiorców
+* podgląd statusu przesyłki w zamówieniu
+* możliwość anulowania nadania
+* obsługa wielu przewoźników w ramach jednego konta Apaczka
+
+###Dlaczego Apaczka, a nie zwykła integracja kurierska?
+
+Apaczka nie jest tylko kolejnym narzędziem do nadawania paczek. To dojrzała platforma logistyczna, która:
+
+* oferuje to samo rozwiązanie dla małych sklepów i dużych e-commerce,
+* udostępnia stabilne API wykorzystywane przez ERP, WMS i integratory,
+* pozwala łączyć różne modele pracy: wtyczka, integrator, API,
+* zapewnia jedno wsparcie techniczne i operacyjne dla wszystkich przesyłek.
+
+Dzięki temu sklep może rozpocząć pracę od prostej integracji WooCommerce, a w miarę rozwoju przejść na bardziej zaawansowane scenariusze bez zmiany platformy logistycznej.
+
+###Jakimi kurierami wyślesz zamówienia?
+
+* InPost
+* DPD
+* UPS
+* GLS
+* DHL
+* Orlen Paczka
+* FeDex
+* Poczta Polska
+* Pocztex
+* Ambro Express
+* Rhenus Logistics
+* HellMann
+* Geis
+* WAWA Kurier
+* Raben
+
+
+###Jak działa wtyczka Apaczka?
+
+* Zainstaluj i aktywuj wtyczkę Apaczka
+* Załóż darmowe konto w serwisie [Apaczka.pl](https://konto.apaczka.pl/rejestracja).
+* Wygeneruj klucz API w panelu Apaczka.
+* Wprowadź dane API w ustawieniach WooCommerce.
+* Twórz i zarządzaj przesyłkami bezpośrednio z poziomu zamówień.
+
+Dowiedz się więcej: [integracja Apaczka z WooCommerce](https://www.apaczka.pl/integracje/woocommerce/)
 
 == Installation	 ==
 
@@ -36,10 +85,10 @@ Zainstaluj wtyczkę w panelu administracyjnym Wordpress:
 2. Przejdź do zakładki Wtyczki > Dodaj nową a następnie wskaż pobrany plik instalacyjny.
 3. Po zainstalowaniu wtyczki włącz moduł.
 4. Ustawienia wtyczki dostępne są w zakładce WooCommerce > Ustawienia > Apaczka.
-5. Wygeneruj klucze API na Apaczka.pl
-6. Uzupełnij całą konfigurację według własnych preferencji
+5. Załóż darmowe konto w serwisie [Apaczka.pl](https://konto.apaczka.pl/rejestracja).
+6. Wygeneruj klucz API w panelu Apaczka.
+7. Wprowadź dane API w ustawieniach WooCommerce, uzupełnij całą konfigurację według własnych preferencji
 
-W przypadku zapytań zapraszamy do kontaktu poprzez [Formularz kontaktowy](https://panel.apaczka.pl/formularz-kontaktowy)
 
 == Frequently Asked Questions ==
 
@@ -56,8 +105,12 @@ Tak. Zarejestruj się bezpłatnie na [Apaczka.pl](https://panel.apaczka.pl/rejes
 5.
 6.
 7.
+8.
 
 == Changelog ==
+
+= 1.4.2 =
+* Feat: new plugin description
 
 = 1.4.1 =
 * Fix: icons of the services
